@@ -1,0 +1,30 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "dotenv -e .env.test",
+    "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
+    "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
+    "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.8.0",
+    "next": "16.2.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "dotenv-cli": "^11.0.0",
+    "prisma": "^7.8.0",
+    "typescript": "^5",
+    "vitest": "^4.1.7"
+  }
+}

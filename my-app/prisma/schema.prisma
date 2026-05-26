@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  common
+  admin
+  superAdmin
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  email       String     @unique
+  username    String     @unique
+  password    String
+  description String?
+  pic         String
+  picPublicId String?
+  state       Boolean    @default(true)
+  visibility  Boolean    @default(true)
+
+  rol         UserRole   @default(common)
+}
