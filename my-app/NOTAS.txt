@@ -1,0 +1,6 @@
+User:
+- crear service para verificar email valido
+- seguramente hacer token de confirmacion
+- poner limite de tiempo por si no confirma. Para eliminar la cuenta creada(que va a esta inactiva)
+- crear endpoint user/create/confirm
+- podriamos mandar email confirmando la creacion de cuenta
