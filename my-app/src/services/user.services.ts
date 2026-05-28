@@ -1,10 +1,10 @@
-import { RegisterUser, UserToUpload } from "@/types/user/user.register.type"
+import { RegisterUserInput, CreateUserData } from "@/types/user/user.register.type"
 import bcrypt from "bcryptjs"
 import { uploadImage, deleteImage } from "@/lib/cloudinary"
 import { userRepo } from "@/repositories/user.repository"
 
 export const userService = {
-    createAccount: async (data: RegisterUser, imageFile: File | null) => {
+    createAccount: async (data: RegisterUserInput, imageFile: File | null) => {
         let { email, username, password, description } = data
 
         let hashedPassword = await bcrypt.hash(password, 10)
@@ -20,7 +20,7 @@ export const userService = {
                 imageUrl = uploadResult.url
                 imagePublicId = uploadResult.publicId
             }
-            const user: UserToUpload = {
+            const user: CreateUserData = {
                 email,
                 username,
                 password: hashedPassword,
@@ -29,7 +29,8 @@ export const userService = {
                 picPublicId: imagePublicId
             }
 
-            const res = await userRepo.createAccount(user)
+            return await userRepo.create(user)
+            
             
         } catch (error) {
             // rollback si falla DB

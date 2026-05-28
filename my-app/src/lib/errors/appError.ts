@@ -13,12 +13,12 @@ export class BadRequestError extends AppError {
 }
 
 export class NotFoundError extends AppError {
-    constructor(mesagge = 'Recurso no encontrado') {
-        super(mesagge, 404)
+    constructor(message = 'Recurso no encontrado') {
+        super(message, 404)
     }
 }
 
-export class UnAuthorizacionError extends AppError {
+export class UnauthorizedError extends AppError {
     constructor(message = 'Sin autorizacion') {
         super(message, 401)
     }

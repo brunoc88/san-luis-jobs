@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const RegisterUserSchema = z.object({
+export const registerUserSchema = z.object({
     email: z
         .string()
         .email('email invalido')
@@ -10,7 +10,7 @@ export const RegisterUserSchema = z.object({
         .string()
         .trim()
         .max(25, 'maximo 25 caracteres')
-        .min(5, 'min 10 caracteres')
+        .min(5, 'min 5 caracteres')
         .nonempty('debe ingresar un nombre de usuario'),
 
     password: z
@@ -36,4 +36,4 @@ export const RegisterUserSchema = z.object({
     path: ['password2'],
 })
 
-export default RegisterUserSchema.transform(({ password2, ...data }) => data)
+export default registerUserSchema.transform(({ password2, ...data }) => data)

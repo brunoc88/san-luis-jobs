@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
@@ -20,8 +21,8 @@ model User {
   description String?
   pic         String
   picPublicId String?
-  state       Boolean    @default(true)
+  isActive    Boolean    @default(false)
   visibility  Boolean    @default(true)
 
-  rol         UserRole   @default(common)
+  role         UserRole   @default(common)
 }
