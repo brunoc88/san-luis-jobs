@@ -2,9 +2,11 @@ import { RegisterUserInput, CreateUserData } from "@/types/user/user.register.ty
 import bcrypt from "bcryptjs"
 import { uploadImage, deleteImage } from "@/lib/cloudinary"
 import { userRepo } from "@/repositories/user.repository"
+import crypto from 'crypto'
+import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
 
 export const userService = {
-    createAccount: async (data: RegisterUserInput, imageFile: File | null) => {
+    createAccount: async (data: RegisterUserInput, imageFile: File | null): Promise<void> => {
         let { email, username, password, description } = data
 
         let hashedPassword = await bcrypt.hash(password, 10)
@@ -29,9 +31,21 @@ export const userService = {
                 picPublicId: imagePublicId
             }
 
-            return await userRepo.create(user)
+            const createdUser = await userRepo.create(user)
+
+            const token = crypto.randomUUID()
+            const expiresAt = new Date(
+                Date.now() + 24 * 60 * 60 * 1000
+            )
+
+            await verificationTokenRepo.create({
+                token,
+                userId: createdUser.id,
+                expiresAt
+            })
             
-            
+            return 
+
         } catch (error) {
             // rollback si falla DB
             if (imagePublicId) {

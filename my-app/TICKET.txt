@@ -1,0 +1,11 @@
+Así que el orden que seguiría es:
+
+✅ Token requerido
+🔜 Token existe
+🔜 Token expirado
+🔜 Activar usuario (isActive = true)
+🔜 Eliminar token
+🔜 Test del flujo completo
+🔜 Recién después hash del token
+🔜 Recién después email real
+🔜 Recién después rate limit

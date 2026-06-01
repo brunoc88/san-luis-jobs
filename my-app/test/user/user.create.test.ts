@@ -1,7 +1,6 @@
 import { it, describe, beforeEach, afterAll, vi, expect } from "vitest"
 import { prisma } from "@/lib/prisma"
 import { POST } from "@/app/api/users/route"
-import { PrismaClient } from '@prisma/client'
 import path from "path"
 import fs from "fs"
 import bcrypt from "bcryptjs"
@@ -178,7 +177,24 @@ describe('POST /api/user', () => {
       expect(body).toHaveProperty('error')
       expect(body.error).toBe('El campo email ya está en uso')
     })
+
+    it('crear cuenta + generar token', async () =>{
+
+      const formData = new FormData()
+
+      formData.append('email', 'brunoc88@gmail.com')
+      formData.append('username', 'brunoc88')
+      formData.append('password', 'sekretsx')
+      formData.append('password2', 'sekretsx')
+      formData.append('description', '')
+
+      const res = await POST(makeRequest(formData))
+      
+      expect(res.status).toBe(201)
+     
+    })
   })
+
 })
 
 

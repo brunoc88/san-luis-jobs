@@ -1,12 +1,7 @@
 User:
-- crear service para verificar email valido
-- seguramente hacer token de confirmacion
-- poner limite de tiempo por si no confirma. Para eliminar la cuenta creada(que va a esta inactiva)
-- crear endpoint user/create/confirm
-- podriamos mandar email confirmando la creacion de cuenta
+- aplicar rate limit
 
 NOTA: 
-    - aplicar rate limit
-    - consultar por app password
     
+    - consultar por app password
     - sobre nodemailer, configurar para mandar distintos mails
