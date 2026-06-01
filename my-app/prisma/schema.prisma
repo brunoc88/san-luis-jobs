@@ -25,4 +25,14 @@ model User {
   visibility  Boolean    @default(true)
 
   role         UserRole   @default(common)
+  verificationToken EmailVerificationToken?
+}
+
+model EmailVerificationToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int      @unique
+  expiresAt DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -6,12 +6,7 @@ La arquitectura correcta sería:
 
 Flujo ideal
 POST /api/user
-Validar Zod
-Verificar email duplicado
-Verificar username duplicado
-Hashear password
-Upload imagen
-Crear usuario INACTIVO
+
 Crear token de confirmación
 Enviar mail
 Responder OK

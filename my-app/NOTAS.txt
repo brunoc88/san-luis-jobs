@@ -10,4 +10,3 @@ NOTA:
     - consultar por app password
     
     - sobre nodemailer, configurar para mandar distintos mails
-    
