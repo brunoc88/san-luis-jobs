@@ -4,6 +4,7 @@ import { uploadImage, deleteImage } from "@/lib/cloudinary"
 import { userRepo } from "@/repositories/user.repository"
 import crypto from 'crypto'
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
+import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
 
 export const userService = {
     createAccount: async (data: RegisterUserInput, imageFile: File | null): Promise<void> => {
@@ -37,7 +38,7 @@ export const userService = {
             const expiresAt = new Date(
                 Date.now() + 24 * 60 * 60 * 1000
             )
-
+            
             await verificationTokenRepo.create({
                 token,
                 userId: createdUser.id,
@@ -53,5 +54,16 @@ export const userService = {
             }
             throw error
         }
+    },
+
+    confirmAccount: async (id: number, token:string) => {
+        const user = await userRepo.findById(id)
+
+        if(!user) throw new NotFoundError()
+        if(user.isActive) throw new BadRequestError('cuenta ya activa')
+        else await userRepo.active(user.id)
+
+        await verificationTokenRepo.delete(token)
+        return
     }
 }

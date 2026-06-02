@@ -8,7 +8,15 @@ export const verificationTokenRepo = {
         })
     },
 
-    findByToken: async (token:string) => {
-        return prisma.emailVerificationToken.findUnique({where:token})
+    findByToken: async (token: string) => {
+        return prisma.emailVerificationToken.findUnique({
+            where: {
+                token
+            }
+        })
+    },
+    
+    delete: async (token:string) => {
+        return prisma.emailVerificationToken.delete({where:{token}})
     }
 }

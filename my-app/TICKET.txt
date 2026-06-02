@@ -1,11 +1,8 @@
 Así que el orden que seguiría es:
 
-✅ Token requerido
-🔜 Token existe
-🔜 Token expirado
-🔜 Activar usuario (isActive = true)
-🔜 Eliminar token
-🔜 Test del flujo completo
-🔜 Recién después hash del token
-🔜 Recién después email real
-🔜 Recién después rate limit
+1. Configurar Nodemailer.
+2. Crear template básico de email.
+3. Mandar link de confirmación.
+4. Probar el flujo completo.
+5. Recién después hashear el token.
+6. Luego rate limit.

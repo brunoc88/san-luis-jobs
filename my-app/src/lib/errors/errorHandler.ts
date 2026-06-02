@@ -3,7 +3,7 @@ import { AppError } from "./appError"
 
 const errorHandler = (error: any) => {
     if (error instanceof AppError) {
-        return NextResponse.json({ errorMessage: error.message }, { status: error.status })
+        return NextResponse.json({ error: error.message }, { status: error.status })
     }
 
     if (error.code === "P2002") {

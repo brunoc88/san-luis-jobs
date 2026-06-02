@@ -1,5 +1,6 @@
 import errorHandler from "@/lib/errors/errorHandler"
-import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
+import { requireToken } from "@/lib/requireToken"
+import { userService } from "@/services/user.services"
 import { NextResponse } from "next/server"
 
 export const GET = async (req: Request) => {
@@ -8,22 +9,10 @@ export const GET = async (req: Request) => {
 
         const token = searchParams.get("token")
 
-        if (!token) {
-            return NextResponse.json(
-                { error: "Token requerido" },
-                { status: 400 }
-            )
-        }
+        const verificationToken = await requireToken(token)
 
-        const verificationToken =
-            await verificationTokenRepo.findByToken(token)
+        await userService.confirmAccount(verificationToken.userId, verificationToken.token)
 
-        if (!verificationToken) {
-            return NextResponse.json(
-                { error: "Token inválido" },
-                { status: 404 }
-            )
-        }
         return NextResponse.json(
             { ok: true },
             { status: 200 }
