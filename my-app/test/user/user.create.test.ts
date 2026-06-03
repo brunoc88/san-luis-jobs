@@ -1,4 +1,4 @@
-import { it, describe, beforeEach, afterAll, vi, expect } from "vitest"
+import { it, describe, beforeEach, afterAll, afterEach, vi, expect } from "vitest"
 import { prisma } from "@/lib/prisma"
 import { POST } from "@/app/api/users/route"
 import path from "path"
@@ -32,6 +32,18 @@ vi.mock("@/lib/cloudinary", () => {
     })
   }
 })
+
+
+// *IMPORTANTE*:
+
+// Descomentar el mock de mail.service para recibir email real
+// Caso contrario comentar para no recibirlo
+
+vi.mock('@/services/mail.service', () => ({
+    mailService: {
+        sendEmailVerification: vi.fn()
+    }
+}))
 
 describe('POST /api/user', () => {
   describe('Test de validaciones zod', () => {
@@ -111,8 +123,8 @@ describe('POST /api/user', () => {
 
       const formData = new FormData()
 
-      formData.append('email', 'brunoc88@gmail.com')
-      formData.append('username', 'brunoc88')
+      formData.append('email', 'bruno1@test.com')
+      formData.append('username', 'bruno1')
       formData.append('password', 'sekretsx')
       formData.append('password2', 'sekretsx')
       formData.append('description', 'programador fulltack - backend oriented')
@@ -130,8 +142,8 @@ describe('POST /api/user', () => {
 
       const formData = new FormData()
 
-      formData.append('email', 'brunoc88@gmail.com')
-      formData.append('username', 'brunoc88')
+      formData.append('email', 'bruno2@test.com')
+      formData.append('username', 'bruno2')
       formData.append('password', 'sekretsx')
       formData.append('password2', 'sekretsx')
       formData.append('description', '')
@@ -154,8 +166,8 @@ describe('POST /api/user', () => {
     it('crear cuenta con duplicado de email', async () =>{
       const hashedPassword = await bcrypt.hash('sekrets', 10)
       await prisma.user.create({data:{
-        email: 'brunoc88@gmail.com',
-        username: 'brunoc88',
+        email: 'bruno3@gtest.com',
+        username: 'bruno3',
         password:hashedPassword,
         description:'sin description',
         pic:'fake.png',
@@ -164,8 +176,8 @@ describe('POST /api/user', () => {
 
       const formData = new FormData()
 
-      formData.append('email', 'brunoc88@gmail.com')
-      formData.append('username', 'brunoc88')
+      formData.append('email', 'bruno3@gtest.com')
+      formData.append('username', 'bruno3')
       formData.append('password', 'sekretsx')
       formData.append('password2', 'sekretsx')
       formData.append('description', 'intentando duplicar cuenta')
@@ -182,8 +194,8 @@ describe('POST /api/user', () => {
 
       const formData = new FormData()
 
-      formData.append('email', 'brunoc88@gmail.com')
-      formData.append('username', 'brunoc88')
+      formData.append('email', 'bruno4@test.com')
+      formData.append('username', 'bruno4')
       formData.append('password', 'sekretsx')
       formData.append('password2', 'sekretsx')
       formData.append('description', '')
@@ -193,11 +205,17 @@ describe('POST /api/user', () => {
       expect(res.status).toBe(201)
      
     })
+
+  
+    
   })
 
 })
 
 
+afterEach(() => {
+    vi.clearAllMocks()
+})
 
 afterAll(async () => {
   await prisma.$disconnect()

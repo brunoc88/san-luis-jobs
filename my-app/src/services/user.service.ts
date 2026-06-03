@@ -7,7 +7,7 @@ import { verificationTokenRepo } from "@/repositories/verificationToken.reposito
 import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
 
 export const userService = {
-    createAccount: async (data: RegisterUserInput, imageFile: File | null): Promise<void> => {
+    createAccount: async (data: RegisterUserInput, imageFile: File | null): Promise<{ email: string, token: string }> => {
         let { email, username, password, description } = data
 
         let hashedPassword = await bcrypt.hash(password, 10)
@@ -34,18 +34,26 @@ export const userService = {
 
             const createdUser = await userRepo.create(user)
 
-            const token = crypto.randomUUID()
+            const token = crypto.randomBytes(32).toString("hex")
+
+            const tokenHash = crypto
+                .createHash("sha256")
+                .update(token)
+                .digest("hex")
+
+            
+
             const expiresAt = new Date(
                 Date.now() + 24 * 60 * 60 * 1000
             )
-            
+
             await verificationTokenRepo.create({
-                token,
+                token: tokenHash,
                 userId: createdUser.id,
                 expiresAt
             })
-            
-            return 
+
+            return { email, token }
 
         } catch (error) {
             // rollback si falla DB
@@ -56,11 +64,11 @@ export const userService = {
         }
     },
 
-    confirmAccount: async (id: number, token:string) => {
+    confirmAccount: async (id: number, token: string) => {
         const user = await userRepo.findById(id)
 
-        if(!user) throw new NotFoundError()
-        if(user.isActive) throw new BadRequestError('cuenta ya activa')
+        if (!user) throw new NotFoundError()
+        if (user.isActive) throw new BadRequestError('cuenta ya activa')
         else await userRepo.active(user.id)
 
         await verificationTokenRepo.delete(token)

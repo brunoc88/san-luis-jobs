@@ -1,7 +1,3 @@
-User:
-- aplicar rate limit
+PENDIENTE:
+    - APLICAR RATE-LIMIT
 
-NOTA: 
-    
-    - consultar por app password
-    - sobre nodemailer, configurar para mandar distintos mails

@@ -1,6 +1,6 @@
 import errorHandler from "@/lib/errors/errorHandler"
 import { requireToken } from "@/lib/requireToken"
-import { userService } from "@/services/user.services"
+import { userService } from "@/services/user.service"
 import { NextResponse } from "next/server"
 
 export const GET = async (req: Request) => {

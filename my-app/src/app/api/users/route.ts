@@ -1,6 +1,7 @@
 import errorHandler from "@/lib/errors/errorHandler"
 import validateUserRequest from "@/lib/validateUserRequest"
-import { userService } from "@/services/user.services"
+import { mailService } from "@/services/mail.service"
+import { userService } from "@/services/user.service"
 import { NextResponse } from "next/server"
 
 export const POST = async (req: Request) => {
@@ -11,7 +12,9 @@ export const POST = async (req: Request) => {
 
         if (!validation.ok) return NextResponse.json({ error: validation.error }, { status: validation.status })
 
-        await userService.createAccount(validation.data, validation.file)
+        const user = await userService.createAccount(validation.data, validation.file)
+
+        await mailService.sendEmailVerification(user.email, user.token)
         
         return NextResponse.json({ ok: true }, { status: 201 })
     } catch (error) {
