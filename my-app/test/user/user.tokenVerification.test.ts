@@ -137,7 +137,7 @@ describe('api/user/confirm', () => {
 
             expect(res.status).toBe(201)
 
-        
+
             const res2 = await GET(makeRequest((capturedToken)))
             const body = await res2.json()
 
@@ -148,6 +148,7 @@ describe('api/user/confirm', () => {
             expect(userTokenAfter).toBeNull()
         })
 
+        
     })
 })
 
