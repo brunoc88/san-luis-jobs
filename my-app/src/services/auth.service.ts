@@ -18,12 +18,12 @@ export const authService = {
 
         // creamos nuevo token 
 
-        const {tokenHash, expiresAt} = generateToken()
+        const {token, tokenHash, expiresAt} = generateToken()
 
         const newToken = {token:tokenHash, userId: user.id, expiresAt}
 
-        let tokenCreated = await verificationTokenRepo.create(newToken)
+        await verificationTokenRepo.create(newToken)
 
-        return {token: tokenCreated.token, email:user.email}
+        return {token, email:user.email}
     }
 }

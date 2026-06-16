@@ -15,6 +15,7 @@ export const generateToken = () => {
     )
 
     return {
+        token,
         tokenHash,
         expiresAt
     }
