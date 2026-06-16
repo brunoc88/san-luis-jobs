@@ -1,3 +1,8 @@
 Objetivos
 
 - password recovery
+
+- Tomorrow
+
+    - funcion que reciba esquemas para validar
+    - testing
