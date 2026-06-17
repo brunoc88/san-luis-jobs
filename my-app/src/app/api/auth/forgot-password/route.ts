@@ -1,17 +1,19 @@
 import errorHandler from "@/lib/errors/errorHandler"
+import { passworRecoverySchama } from "@/lib/schemas/auth/password.recovery.schema"
+import { validateRequest } from "@/lib/validateRequest"
 import { authService } from "@/services/auth.service"
 import { mailService } from "@/services/mail.service"
 import { NextResponse } from "next/server"
 
 export const POST = async (req:Request) => {
     try {
-        const data = await req.json()
-
         // validacion de datos y respuesta
 
-
+        const validation = await validateRequest(req, passworRecoverySchama)
+        if(!validation.ok) return NextResponse.json({error: validation.error},{status:validation.status})
+        
         // si pasa la validacion llamo a auth service
-        const res = await authService.requestPasswordRecovery(data)
+        const res = await authService.requestPasswordRecovery(validation.data?.email)
 
 
         // si pasa auth servcice mando el token por email
@@ -19,6 +21,7 @@ export const POST = async (req:Request) => {
 
         return NextResponse.json({ok:true},{status:200})
     } catch (error) {
+        console.log('error', error)
         return errorHandler(error)
     }
 }

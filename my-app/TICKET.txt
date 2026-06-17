@@ -1,8 +1,13 @@
 Objetivos
 
-- password recovery
+- jueves:
+    - password recovery confirm
+    - fix ts de validateRequest, requestPasswordRecovery
 
-- Tomorrow
+- viernes:
+    - descomentar codigo
+    - documentar
+    - grabar
 
-    - funcion que reciba esquemas para validar
-    - testing
+
+    
