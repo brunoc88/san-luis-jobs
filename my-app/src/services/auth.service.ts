@@ -1,5 +1,4 @@
-import { BadRequestError, ForbiddenError, NotFoundError } from "@/lib/errors/appError"
-import { generateToken } from "@/lib/tokenCreation"
+import { generateToken } from "@/lib/generateToken"
 import { userRepo } from "@/repositories/user.repository"
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
 

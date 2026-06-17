@@ -21,7 +21,6 @@ export const POST = async (req:Request) => {
 
         return NextResponse.json({ok:true},{status:200})
     } catch (error) {
-        console.log('error', error)
         return errorHandler(error)
     }
 }
