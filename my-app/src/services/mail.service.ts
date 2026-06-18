@@ -37,5 +37,23 @@ export const mailService = {
     <a href="${link}">${link}</a>
 `
         })
+    },
+
+    sendPasswordChangedEmail: (email: string) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'Contraseña actualizada',
+            html: `
+            <p>Hola,</p>
+
+            <p>Te confirmamos que la contraseña de tu cuenta fue actualizada correctamente.</p>
+
+            <p>Si realizaste este cambio, no es necesario que hagas nada más.</p>
+
+            <p><strong>Si no reconocés esta actividad, te recomendamos contactar con soporte lo antes posible.</strong></p>
+        `
+        })
     }
+
 }

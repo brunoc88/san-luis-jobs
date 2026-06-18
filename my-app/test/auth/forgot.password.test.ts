@@ -23,6 +23,7 @@ const makeRequest = (data: { email: string }) => {
     })
 }
 
+
 describe('POST /api/auth/forgot-password', () => {
     describe('validaciones', () => {
         it('email vacio', async () => {

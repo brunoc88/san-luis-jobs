@@ -30,7 +30,7 @@ const makeRequest = (token: string | null) => {
     )
 }
 
-describe('api/user/confirm', () => {
+describe('GET api/user/confirm', () => {
     describe('crear cuenta y confirmar con token', () => {
         it('falta token', async () => {
             const res = await GET(makeRequest(''))

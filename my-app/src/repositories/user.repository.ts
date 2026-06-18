@@ -9,5 +9,10 @@ export const userRepo = {
     
     active: async(id:number) => await prisma.user.update({data:{isActive:true},where:{id}}),
 
-    findByEmail: async (email: string) : Promise<User | null> => await prisma.user.findUnique({where:{email}})
+    findByEmail: async (email: string) : Promise<User | null> => await prisma.user.findUnique({where:{email}}),
+
+    updatePassword: async (password:string, userId:number) : Promise<void> => {
+        await prisma.user.update({data:{password},where:{id:userId}})
+        return
+    }
 }

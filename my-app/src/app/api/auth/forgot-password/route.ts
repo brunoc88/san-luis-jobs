@@ -1,5 +1,5 @@
 import errorHandler from "@/lib/errors/errorHandler"
-import { passworRecoverySchama } from "@/lib/schemas/auth/password.recovery.schema"
+import { passwordRecoverySchema } from "@/lib/schemas/auth/password.recovery.schema"
 import { validateRequest } from "@/lib/validateRequest"
 import { authService } from "@/services/auth.service"
 import { mailService } from "@/services/mail.service"
@@ -9,7 +9,7 @@ export const POST = async (req:Request) => {
     try {
         // validacion de datos y respuesta
 
-        const validation = await validateRequest(req, passworRecoverySchama)
+        const validation = await validateRequest(req, passwordRecoverySchema)
         if(!validation.ok) return NextResponse.json({error: validation.error},{status:validation.status})
         
         // si pasa la validacion llamo a auth service

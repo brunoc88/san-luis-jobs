@@ -1,13 +1,12 @@
 Objetivos
 
-- jueves:
-    - password recovery confirm
-    - fix ts de validateRequest, requestPasswordRecovery
-
 - viernes:
+    - Test POST /api/auth/reset-password
+    - fix ts de validateRequest, requestPasswordRecovery
     - descomentar codigo
     - documentar
     - grabar
 
-
+- lunes 22/06
+    - empezar con el ingreso de location
     
