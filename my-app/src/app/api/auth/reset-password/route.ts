@@ -27,9 +27,9 @@ export const POST = async (req: Request) => {
     try {
         const validation = await validateRequest(req, newPasswordSchema)
         if(!validation.ok) return NextResponse.json({error: validation.error},{status:validation.status})
-
+        
         const res = await authService.resetPassword(validation.data)
-
+        
         await mailService.sendPasswordChangedEmail(res.email)
 
         return NextResponse.json({ok:true},{status:200})
