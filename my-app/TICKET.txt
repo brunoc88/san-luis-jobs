@@ -1,9 +1,10 @@
 Objetivos
 
-- viernes:
-    - grabar
+- pendiente:
+    - leer next-auht
+    - prueba de login comun 
+    - solicitar credenciales de google para oauth
+    - terminar api/location
+    - crear service & repo para location
 
-- lunes 22/06
-    - fix ts de validateRequest, requestPasswordRecovery
-    - empezar con el ingreso de location
-    
+
