@@ -1,6 +1,6 @@
 import crypto from "crypto"
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
-import { BadRequestError, NotFoundError } from "./errors/appError"
+import { BadRequestError, NotFoundError } from "../../lib/errors/appError"
 
 export const requireToken = async (token: string | null) => {
     if (!token) throw new BadRequestError('Token requerido')

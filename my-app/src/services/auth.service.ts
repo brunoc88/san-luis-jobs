@@ -1,6 +1,6 @@
 import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
-import { generateToken } from "@/lib/generateToken"
-import { requireToken } from "@/lib/requireToken"
+import { generateToken } from "@/domain/auth/generateToken"
+import { requireToken } from "@/domain/auth/requireToken"
 import { userRepo } from "@/repositories/user.repository"
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
 import bcrypt from "bcryptjs"

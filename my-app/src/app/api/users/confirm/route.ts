@@ -1,5 +1,5 @@
 import errorHandler from "@/lib/errors/errorHandler"
-import { requireToken } from "@/lib/requireToken"
+import { requireToken } from "@/domain/auth/requireToken"
 import { userService } from "@/services/user.service"
 import { NextResponse } from "next/server"
 

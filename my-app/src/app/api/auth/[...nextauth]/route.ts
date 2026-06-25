@@ -1,4 +1,4 @@
-import LoginSchema from "@/lib/schemas/login.schema"
+import LoginSchema from "@/lib/schemas/auth/login.schema"
 import NextAuth, { type AuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"

@@ -1,5 +1,5 @@
 import errorHandler from "@/lib/errors/errorHandler"
-import { requireToken } from "@/lib/requireToken"
+import { requireToken } from "@/domain/auth/requireToken"
 import { newPasswordSchema } from "@/lib/schemas/auth/password.recovery.schema"
 import { validateRequest } from "@/lib/validateRequest"
 import { authService } from "@/services/auth.service"

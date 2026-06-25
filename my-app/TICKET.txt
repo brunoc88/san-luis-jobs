@@ -1,10 +1,17 @@
 Objetivos
 
-- pendiente:
-    - leer next-auht
-    - prueba de login comun 
-    - solicitar credenciales de google para oauth
-    - terminar api/location
-    - crear service & repo para location
+- Viernes:
+    - location:
+        - endpoints GET, PAT
+        - obtener, actualizar, eliminar
 
 
+DOCUMENTAR:
+    - nextauth
+    - credentials-authorize
+    - next-auth.d.ts
+
+
+
+
+    

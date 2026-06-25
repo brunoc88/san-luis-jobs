@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from 'bcryptjs'
 
 
-export const LoadUsers = async () => {
+export const loadUsers = async () => {
     const passwordHash = await bcrypt.hash('sekrets', 10)
     const fakePic = 'fakepic.png'
 
