@@ -52,7 +52,7 @@ describe('GET /api/location/active', () => {
 
     })
 
-    it.only('obtener todas las locations pero vacias', async () => {
+    it('obtener todas las locations pero vacias', async () => {
 
         await prisma.location.deleteMany()
 
