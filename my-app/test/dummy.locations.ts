@@ -4,12 +4,12 @@ export const loadLocations = async () => {
     await prisma.location.createMany({
         data:[
             {
-                name:'Villa Mercedes'
+                name:'villa mercedes'
             },{
-                name:'San Luis'
+                name:'san luis'
             },
             {
-                name:'Justo Daract',
+                name:'justo daract',
                 isActive:false
             }
         ]

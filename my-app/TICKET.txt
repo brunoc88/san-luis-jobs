@@ -1,8 +1,11 @@
 Objetivos
 
-- Viernes:
-    - location:
-        - endpoints PAT(editar)
+- Proximo:
+    - JOBS: 
+        - model
+        - schema
+        - post
+        - test
 
 
 DOCUMENTAR:

@@ -10,5 +10,10 @@ export const locationRepo = {
 
     activateLocation: async (id: number): Promise<Location> => await prisma.location.update({ data: { isActive: true }, where: { id } }),
 
-    deactivateLocation: async (id: number): Promise<Location> => await prisma.location.update({ data: { isActive: false }, where: { id } })
+    deactivateLocation: async (id: number): Promise<Location> => await prisma.location.update({ data: { isActive: false }, where: { id } }),
+
+    renameLocation: async(id:number, name:string): Promise<Location> => await prisma.location.update({ data: { name }, where: { id } }),
+
+    findAllActiveLocations: async () => await prisma.location.findMany({where:{isActive:true}})
+
 }

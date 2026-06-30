@@ -6,7 +6,7 @@ import { NotFoundError } from "@/lib/errors/appError"
 import { Location } from "@prisma/client"
 
 export const locationService = {
-    createLocation: async (userId: number, location: string) => {   
+    createLocation: async (userId: number, location: string) => {
         let user = await requireActiveUserById(userId)
 
         requireAdmin(user.role)
@@ -23,15 +23,32 @@ export const locationService = {
         return await locationRepo.findAllLocations()
     },
 
-    toggleLocationStatus: async (userId:number, id:number) : Promise<Location>=> {
+    toggleLocationStatus: async (userId: number, id: number): Promise<Location> => {
         const user = await requireActiveUserById(userId)
 
         requireAdmin(user.role)
 
         const location = await locationRepo.findLocationById(id)
-        if(!location) throw new NotFoundError()
-        
-        if(location.isActive) return await locationRepo.deactivateLocation(id)
-        else return await locationRepo.activateLocation(id)     
+        if (!location) throw new NotFoundError()
+
+        if (location.isActive) return await locationRepo.deactivateLocation(id)
+        else return await locationRepo.activateLocation(id)
+    },
+
+    renameLocation: async (userId: number, locationId: number, name: string): Promise<Location> => {
+        const user = await requireActiveUserById(userId)
+
+        requireAdmin(user.role)
+
+        const location = await locationRepo.findLocationById(locationId)
+        if (!location) throw new NotFoundError()
+
+        return await locationRepo.renameLocation(locationId, name)
+    },
+
+    getAllActiveLocations: async (userId: number): Promise<Locations> => {
+        await requireActiveUserById(userId)
+
+        return await locationRepo.findAllActiveLocations()
     }
 }
