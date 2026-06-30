@@ -2,8 +2,7 @@ Objetivos
 
 - Viernes:
     - location:
-        - endpoints GET, PAT
-        - obtener, actualizar, eliminar
+        - endpoints PAT(editar)
 
 
 DOCUMENTAR:

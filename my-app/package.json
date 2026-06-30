@@ -10,7 +10,7 @@
     "test:u": "dotenv -e .env.test -- vitest test/user/user.tokenVerification.test.ts",
     "test:e": "dotenv -e .env.test -- vitest test/mail/mail.service.test.ts",
     "test:a": "dotenv -e .env.test -- vitest test/auth/reset.password.pt2.test.ts",
-    "test:l": "dotenv -e .env.test -- vitest test/location/location.getAll.test.ts",
+    "test:l": "dotenv -e .env.test -- vitest test/location/location.toggle.test.ts",
     "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
     "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
     "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"

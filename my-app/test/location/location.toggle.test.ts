@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { describe, it, beforeEach, afterEach, afterAll, vi, expect } from "vitest"
 import { getUsers, loadUsers } from "../fake.user"
 import { getLocations, loadLocations } from "../dummy.locations"
-import { GET } from "@/app/api/location/route"
+import { PATCH } from "@/app/api/location/[id]/toggle/route"
 
 let users: any[]
 let locations: any[]
@@ -27,7 +27,6 @@ vi.mock('next-auth', async () => {
     }
 })
 
-
 const mockAuthenticatedSession = (i: number) => {
     (getServerSession as any).mockResolvedValue({
         user: {
@@ -39,37 +38,53 @@ const mockAuthenticatedSession = (i: number) => {
     })
 }
 
-
-describe('GET api/location', () => {
-    it('sin sesion', async () => {
-        const res = await GET()
-        expect(res.status).toBe(401)
+const makeRequest = (id: string) => {
+    return new Request(`http://localhost/api/location/${id}/toggle`, {
+        method: 'PATCH'
     })
+}
 
-    it('obtener location sin problemas', async () => {
+describe('PATCH /api/location/:id', () => {
+    it('activar location', async () => {
         mockAuthenticatedSession(0)
-        const res = await GET()
+
+        const res = await PATCH(makeRequest(String(locations[2].id)), { params: { id: String(locations[2].id) } })
+
         const body = await res.json()
 
         expect(res.status).toBe(200)
-        expect(body).not.toBeNull()
-        expect(body).toHaveProperty('locations')
-        expect(body.locations.length).not.toBe(0)
+        expect(body).toHaveProperty('ok')
+        expect(body).toHaveProperty('location')
+        expect(body.location.isActive).toBe(true)
+
     })
 
-    it('obtener location sin problemas pero sin locations', async () => {
-        await prisma.location.deleteMany()
-
+    it('desactivar location', async () => {
         mockAuthenticatedSession(0)
 
-        const res = await GET()
+        const res = await PATCH(makeRequest(String(locations[0].id)), { params: { id: String(locations[0].id) } })
+
         const body = await res.json()
 
         expect(res.status).toBe(200)
-        expect(body).not.toBeNull()
-        expect(body).toHaveProperty('locations')
-        expect(body.locations.length).toBe(0)
+        expect(body).toHaveProperty('ok')
+        expect(body).toHaveProperty('location')
+        expect(body.location.isActive).toBe(false)
+
     })
+
+    it('activar location inexistente', async () => {
+        mockAuthenticatedSession(0)
+
+        const res = await PATCH(makeRequest(String(10)), { params: { id: String(10) } })
+
+        const body = await res.json()
+
+        expect(res.status).toBe(404)
+        expect(body).toHaveProperty('error')
+
+    })
+
 })
 
 afterEach(() => {
