@@ -9,6 +9,7 @@ let users: any[]
 
 beforeEach(async () => {
     await prisma.user.deleteMany()
+    await prisma.location.deleteMany()
     await loadUsers()
     users = await getUsers()
 })
@@ -104,8 +105,14 @@ describe('POST /api/location', () => {
         mockAuthenticatedSession(6)
 
         const res = await POST(makeRequest({name:'sl'}))
-        
+        const body = await res.json()
+
         expect(res.status).toBe(201)
+        expect(body).toHaveProperty('ok')
+        expect(body).toHaveProperty('location')
+        expect(body.location).toHaveProperty('name')
+        expect(body.location.name).toBe('sl')
+
     })
 })
 

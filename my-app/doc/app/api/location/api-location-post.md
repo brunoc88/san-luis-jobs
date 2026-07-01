@@ -48,7 +48,7 @@ Reglas actuales:
    - Estado activo del usuario.
    - Permisos administrativos.
 6. Crea la locación.
-7. Retorna una respuesta exitosa.
+7. Retorna una respuesta exitosa junto a la locacion creada.
 
 ## Respuesta exitosa
 
@@ -56,7 +56,12 @@ Reglas actuales:
 
 ```json
 {
-  "ok": true
+  "ok": true,
+  "location": {
+    "id": 1,
+    "name": "villa mercedes",
+    "isActive": true
+  }
 }
 ```
 

@@ -6,13 +6,12 @@ import { NotFoundError } from "@/lib/errors/appError"
 import { Location } from "@prisma/client"
 
 export const locationService = {
-    createLocation: async (userId: number, location: string) => {
+    createLocation: async (userId: number, location: string) : Promise<Location>=> {
         let user = await requireActiveUserById(userId)
 
         requireAdmin(user.role)
 
-        await locationRepo.create(location)
-        return
+        return await locationRepo.create(location)
     },
 
     getAllLocations: async (userId: number): Promise<Locations> => {

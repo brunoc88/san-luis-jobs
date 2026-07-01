@@ -9,7 +9,7 @@ Antes de realizar la operación, verifica que el usuario autenticado exista, se 
 ## Firma
 
 ```ts
-createLocation(userId: number, location: string): Promise<void>
+createLocation(userId: number, location: string): Promise<Location>
 ```
 
 ## Parámetros
@@ -28,14 +28,15 @@ createLocation(userId: number, location: string): Promise<void>
 5. Verifica que el usuario posea rol `admin` o `superAdmin`.
 6. Ejecuta `locationRepo.create(location)`.
 7. Persiste la nueva locación en la base de datos.
+8. Retorna la locación creada.
 
 ## Retorno
 
 ```ts
-Promise<void>
+Promise<Location>
 ```
 
-La función no retorna datos. Si la operación finaliza correctamente, la locación habrá sido creada.
+Devuelve la locación creada.
 
 ## Reglas de negocio
 
