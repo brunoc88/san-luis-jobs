@@ -26,6 +26,7 @@ model User {
 
   role         UserRole   @default(common)
   verificationToken EmailVerificationToken?
+  jobs         Job[]
 }
 
 model EmailVerificationToken {
@@ -41,4 +42,43 @@ model Location {
   id       Int      @id @default(autoincrement())
   name     String   @unique
   isActive Boolean  @default(true)
+  jobs     Job[]
+}
+
+enum JobState {
+  active
+  paused
+  completed
+}
+
+enum JobModality {
+  remote
+  hybrid
+  onSite
+}
+
+enum JobSchedule {
+  partTime
+  fullTime
+}
+
+model Job {
+  id               Int @id @default(autoincrement())
+  title            String
+  description      String
+  salary           Int?
+  createdAt        DateTime @default(now())
+  isActive         Boolean @default(true)
+  isSuspended      Boolean @default(false)
+  applicationLimit Int?
+  
+  state            JobState @default(active)
+  modality         JobModality
+  schedule         JobSchedule
+
+  locationId       Int
+  location         Location @relation(fields: [locationId], references: [id])
+
+  userId           Int
+  user             User @relation(fields: [userId], references: [id])
 }

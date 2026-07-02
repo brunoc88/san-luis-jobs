@@ -1,11 +1,12 @@
 Objetivos
 
-- Proximo:
-    - JOBS: 
-        - model
-        - schema
-        - post
+- AHORA:
+    - JOB: 
         - test
+
+- PROXIMAMENTE:
+    - APPLICATION:
+        - model (configurar para que un usuario solo se puede aplicar una vez a un empleo)
 
 
 DOCUMENTAR:
