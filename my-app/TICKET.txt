@@ -2,7 +2,8 @@ Objetivos
 
 - AHORA:
     - JOB: 
-        - test
+        - SUSPENDER
+        - DESACTIVAR
 
 - PROXIMAMENTE:
     - APPLICATION:

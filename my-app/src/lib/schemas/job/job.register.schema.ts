@@ -18,14 +18,14 @@ export const JobRegisterSchema = z.object({
 
   salary: z
     .coerce
-    .number()
+    .number("debe ingresar un numero")
     .int("El salario debe ser un número entero.")
     .positive("El salario debe ser mayor a 0.")
     .optional(),
 
   applicationLimit: z
     .coerce
-    .number()
+    .number("debe ingresar un numero")
     .int("El límite debe ser un número entero.")
     .positive("El límite debe ser mayor a 0.")
     .optional(),
@@ -40,7 +40,7 @@ export const JobRegisterSchema = z.object({
 
   locationId: z
     .coerce
-    .number()
+    .number("debe ingresar un numero")
     .int("La ubicación es inválida.")
     .positive("La ubicación es inválida.")
 });

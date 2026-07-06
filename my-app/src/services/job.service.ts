@@ -1,9 +1,10 @@
 import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
 import { requireActiveLocationById } from "@/domain/location/requireActiveLocationById"
 import { jobRepo } from "@/repositories/job.repository"
+import { CreateJobDto } from "@/types/job/job.type"
 
 export const jobService = {
-    create: async (userId: number, data: any): Promise<number > => {
+    create: async (userId: number, data: CreateJobDto): Promise<number > => {
         const user = await requireActiveUserById(userId)
         
         await requireActiveLocationById(data.locationId)
