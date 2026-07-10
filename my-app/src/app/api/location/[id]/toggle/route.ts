@@ -1,5 +1,6 @@
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
+import { parseId } from "@/lib/parseId"
 import { locationService } from "@/services/location.service"
 import { NextResponse } from "next/server"
 
@@ -9,7 +10,7 @@ export const PATCH = async (req: Request, { params }: { params: Promise<{ id: st
 
         const { id } = await params
 
-        const locationId = Number(id)
+        const locationId = parseId(id)
 
         const location = await locationService.toggleLocationStatus(userId, locationId)
 

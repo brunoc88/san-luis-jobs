@@ -1,5 +1,6 @@
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
+import { parseId } from "@/lib/parseId"
 import locationInputSchema from "@/lib/schemas/location/location.schema"
 import { validateRequest } from "@/lib/validateRequest"
 import { locationService } from "@/services/location.service"
@@ -11,7 +12,7 @@ export const PATCH = async (req: Request, { params }: { params: Promise<{ id: st
 
         const { id } = await params
 
-        const locationId = Number(id)
+        const locationId = parseId(id)
 
         const validate = await validateRequest(req, locationInputSchema)
         if (!validate.ok) return NextResponse.json({ error: validate.error }, { status: validate.status })

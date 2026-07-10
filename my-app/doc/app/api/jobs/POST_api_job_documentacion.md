@@ -2,7 +2,7 @@
 
 ## Ruta
 
-`POST /api/job`
+`POST /api/jobs`
 
 ## Objetivo
 

@@ -189,7 +189,7 @@ describe('POST /api/job', () => {
 
             const res = await POST(makeRequest(job))
             const body = await res.json()
-            console.log('job', body)
+            
             expect(res.status).toBe(201)
             expect(body).toHaveProperty('ok')
             expect(body).toHaveProperty('jobId')
@@ -197,6 +197,26 @@ describe('POST /api/job', () => {
             expect(body.jobId).not.toBeNull()
         })
     })
+
+    it('enum diferente', async () => {
+            mockAuthenticatedSession(0)
+
+            const job = {
+                title: "Desarrollador Backend Node.js",
+                description:
+                    "Buscamos un desarrollador backend con experiencia en Node.js, Express y PostgreSQL para trabajar en proyectos escalables.",
+                modality: "presencial",
+                schedule: "fullTime",
+                locationId: locations[0].id
+            }
+
+            const res = await POST(makeRequest(job))
+            const body = await res.json()
+            
+            expect(res.status).toBe(400)
+            expect(body.error.modality).toContain('Modalidad inválida.')
+           
+        })
 
 })
 
