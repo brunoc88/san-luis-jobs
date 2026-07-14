@@ -8,5 +8,7 @@ export const jobRepo = {
     },
 
     delete: async (id:number) => await prisma.job.update({data:{isActive:false},where:{id}}),
+
+    suspend: async (id:number) => await prisma.job.update({data:{isActive:false, isSuspended:true},where:{id}}),
     
 }

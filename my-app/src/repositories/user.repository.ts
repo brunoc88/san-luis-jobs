@@ -14,5 +14,7 @@ export const userRepo = {
     updatePassword: async (password:string, userId:number) : Promise<void> => {
         await prisma.user.update({data:{password},where:{id:userId}})
         return
-    }
+    },
+
+    suspend: async (id:number) => await prisma.user.update({data:{isActive:false},where:{id}})
 }

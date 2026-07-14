@@ -31,6 +31,7 @@ requireActiveUserById(userId: number)
 {
     id: number
     role: string
+    email: string
 }
 ```
 
@@ -40,6 +41,7 @@ Actualmente retorna:
 |---------|-------------|
 | id | Identificador del usuario |
 | role | Rol asignado al usuario |
+| email | email del usuario |
 
 La función no expone información innecesaria del usuario.
 

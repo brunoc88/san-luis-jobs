@@ -10,6 +10,7 @@ export const requireActiveUserById = async (userId: number) => {
     
     return {
         id: user.id,
-        role: user.role
+        role: user.role,
+        email: user.email
     }
 } 

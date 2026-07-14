@@ -10,6 +10,8 @@ export const requireActiveJobById = async (id: number) => {
 
     return {
         id: job.id,
-        autorId: job.userId
+        autorId: job.userId,
+        date: job.createdAt,
+        title: job.title
     }
 }

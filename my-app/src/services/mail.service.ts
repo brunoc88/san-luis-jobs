@@ -10,6 +10,7 @@ const transporter = nodemailer.createTransport({
     }
 })
 
+
 export const mailService = {
     sendEmailVerification: (email: string, token: string) => {
         const link = `${process.env.FRONT_URL}/confirm?token=${token}`
@@ -54,6 +55,51 @@ export const mailService = {
             <p><strong>Si no reconocés esta actividad, te recomendamos contactar con soporte lo antes posible.</strong></p>
         `
         })
-    }
+    },
+
+    sendJobSuspendedEmail: (
+        email: string,
+        jobTitle: string,
+        reason: string
+    ) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'Publicación suspendida',
+            html: `
+            <p>Hola,</p>
+
+            <p>Te informamos que tu publicación <strong>"${jobTitle}"</strong> fue suspendida por incumplir las normas de la plataforma.</p>
+
+            <p><strong>Motivo:</strong></p>
+            <p>${reason}</p>
+
+            <p>Esta advertencia quedará registrada en tu cuenta.</p>
+
+            <p>Si considerás que se trata de un error, podés comunicarte con el equipo de soporte para solicitar una revisión.</p>
+
+            <p>Saludos,<br>Equipo de San Luis Jobs.</p>
+        `
+        })
+    },
+
+    sendAccountSuspendedEmail: (email: string) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'Cuenta suspendida',
+            html: `
+            <p>Hola,</p>
+
+            <p>Tu cuenta ha sido suspendida debido a la acumulación de advertencias por incumplimiento de las normas de la plataforma.</p>
+
+            <p>Mientras la suspensión permanezca activa no podrás acceder a tu cuenta ni publicar nuevas ofertas de empleo.</p>
+
+            <p>Si considerás que se trata de un error, podés comunicarte con el equipo de soporte para solicitar una revisión.</p>
+
+            <p>Saludos,<br>Equipo de San Luis Jobs.</p>
+        `
+        })
+    },
 
 }
