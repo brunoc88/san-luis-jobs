@@ -86,5 +86,5 @@ export const jobService = {
         } else {
             mailService.sendJobSuspendedEmail(author.email, job.title, data.reason)
         }
-    }
+    },
 }

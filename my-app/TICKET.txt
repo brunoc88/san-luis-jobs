@@ -2,18 +2,22 @@ Objetivos
 
 - AHORA:
     - JOB: 
-        GET /API/JOBS/:ID  
-            -  ENDPOINT/SERVICE/REPO
-            -  TEST
-            -  DOCUMENTAR
+        - JOB:
+        - ESTADO
+            - ENDPOINT/SERVICE/REPO
+        - EDITAR
+            - FIGMA
+            - ENDPOINT/SERVICE/REPO
+        - REPORTAR
+            - FIGMA
+            - ENDPOINT/SERVICE/REPO
+        - GUARDAR
+            - ENDPOINT/SERVICE/REPO
 
 
        
 
 - PROXIMAMENTE:
-    - JOB:
-        - UX EDITAR
-        - ENDPOINT/SERVICE/REPO
     - APPLICATION:
         - model (configurar para que un usuario solo se puede aplicar una vez a un empleo)
 
