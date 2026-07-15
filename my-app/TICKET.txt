@@ -2,15 +2,18 @@ Objetivos
 
 - AHORA:
     - JOB: 
-
-        - SUSPENDER :
-          - TEST
-          - DOCUMENTAR
+        GET /API/JOBS/:ID  
+            -  ENDPOINT/SERVICE/REPO
+            -  TEST
+            -  DOCUMENTAR
 
 
        
 
 - PROXIMAMENTE:
+    - JOB:
+        - UX EDITAR
+        - ENDPOINT/SERVICE/REPO
     - APPLICATION:
         - model (configurar para que un usuario solo se puede aplicar una vez a un empleo)
 

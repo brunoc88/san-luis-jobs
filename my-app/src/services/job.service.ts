@@ -46,15 +46,15 @@ export const jobService = {
 
         requireAdmin(user.role)
 
-        // Un administrador no puede suspender su propia publicación.
+        
         if (user.id === job.autorId) {
             throw new ForbiddenError()
         }
 
-        // Obtengo el autor de la publicación.
+        
         const author = await requireActiveUserById(job.autorId)
 
-        // Validación de jerarquía.
+        
         const sameRole = user.role === author.role
         const adminSuspendingSuperAdmin =
             user.role === "admin" &&
@@ -63,7 +63,10 @@ export const jobService = {
         if (sameRole) throw new ForbiddenError()
         if (adminSuspendingSuperAdmin) throw new ForbiddenError()
 
-        // Crear advertencia.
+        
+        await jobRepo.suspend(jobId)
+
+       
         const warningToCreate = {
             userId: author.id,
             reason: data.reason,
@@ -72,13 +75,10 @@ export const jobService = {
 
         await warningRepo.create(warningToCreate)
 
-        // Contar advertencias del usuario.
+        
         const warningCount = await warningRepo.count(author.id)
-
-        // Suspender la publicación.
-        await jobRepo.suspend(jobId)
-
-        // Si alcanzó el límite de advertencias, suspender la cuenta.
+        
+        
         if (warningCount >= 5) {
             await userRepo.suspend(author.id)
 
