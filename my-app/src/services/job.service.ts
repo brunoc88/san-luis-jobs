@@ -6,7 +6,7 @@ import { ForbiddenError } from "@/lib/errors/appError"
 import { jobRepo } from "@/repositories/job.repository"
 import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
-import { CreateJobDto } from "@/types/job/job.type"
+import { CreateJobDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
 
 export const jobService = {
@@ -89,4 +89,19 @@ export const jobService = {
             mailService.sendJobSuspendedEmail(author.email, job.title, data.reason)
         }
     },
+
+    saveJob: async (userId:number, jobId:number) : Promise<void> => {
+        const user = await requireActiveUserById(userId)
+        const job = await requireActiveJobById(jobId)
+
+        if(user.id === job.autorId) throw new ForbiddenError()
+        
+        const data : SaveJobDto = {
+            userId:user.id,
+            jobId:job.id
+        }
+
+        await jobRepo.saveJob(data)
+        return 
+    }
 }

@@ -11,8 +11,9 @@ Objetivos
         - REPORTAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - GUARDAR
+        - GUARDAR <-- AHORA
             - ENDPOINT/SERVICE/REPO
+            - HACER PARA ELIMINAR DE FAVORITOS TAMBIEN
 
 
        

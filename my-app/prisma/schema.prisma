@@ -29,6 +29,8 @@ model User {
   jobs         Job[]
 
   warnings    Warning[]
+
+  savedJobs   SavedJob[]
 }
 
 model EmailVerificationToken {
@@ -83,7 +85,9 @@ model Job {
 
   userId           Int
   user             User @relation(fields: [userId], references: [id])
-  warning          Warning?               
+  warning          Warning?   
+
+  savedBy          SavedJob[]            
 }
 
 model Warning {
@@ -96,4 +100,15 @@ model Warning {
 
   userId     Int
   user       User    @relation(fields: [userId], references: [id])
+}
+
+model SavedJob {
+  userId    Int
+  jobId     Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  job  Job  @relation(fields: [jobId], references: [id])
+
+  @@id([userId, jobId])
 }

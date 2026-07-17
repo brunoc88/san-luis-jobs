@@ -13,3 +13,10 @@ export type CreateJobDto = {
 }
 
 export type CreateJobData = CreateJobDto & {userId:number}
+
+export type SaveJobDto = {
+    userId: number,
+    jobId: number
+}
+
+export type SaveJobData = SaveJobDto

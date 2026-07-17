@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { CreateJobData } from "@/types/job/job.type"
+import { CreateJobData, SaveJobData } from "@/types/job/job.type"
 import { Job } from "@prisma/client"
 
 export const jobRepo = {
@@ -19,5 +19,7 @@ export const jobRepo = {
             isActive: false,
             isSuspended: true,
         }
-    })
+    }),
+
+    saveJob: async (data:SaveJobData) => await prisma.savedJob.create({data})
 }
