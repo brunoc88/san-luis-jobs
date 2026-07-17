@@ -16,5 +16,6 @@ export const userRepo = {
         return
     },
 
-    suspend: async (id:number) => await prisma.user.update({data:{isActive:false},where:{id}})
+    suspend: async (id:number) => await prisma.user.update({data:{isActive:false},where:{id}}),
+  
 }

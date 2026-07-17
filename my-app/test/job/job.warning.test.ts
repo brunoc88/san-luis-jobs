@@ -140,10 +140,13 @@ describe('POST /api/job/:id/suspend', () => {
             }
 
             const res = await POST(makeRequest(data, String(jobs[2].id)), { params: { id: jobs[2].id } })
+            const job = await prisma.job.findUnique({where:{id:jobs[2].id}})
 
             expect(res.status).toBe(201)
             expect(mailService.sendJobSuspendedEmail).toHaveBeenCalled()
             expect(mailService.sendAccountSuspendedEmail).not.toHaveBeenCalled()
+            expect(job?.isActive).toBe(false)
+            expect(job?.isSuspended).toBe(true)
         })
 
         it('usuario suspendido/inactivo', async () => {
@@ -162,12 +165,16 @@ describe('POST /api/job/:id/suspend', () => {
 
             const res = await POST(makeRequest({reason:'inflige las normas'}, String(jobsByUserId[1].id)), { params: { id: jobsByUserId[1].id } })
 
+            const allJobsByAuthor = await prisma.job.findMany({where:{userId:users[3].id}})
             const user = await prisma.user.findUnique({where:{id:users[3].id}})
-
+            
             expect(res.status).toBe(201)
             expect(mailService.sendAccountSuspendedEmail).toHaveBeenCalled()
             expect(user?.isActive).toBe(false)
-           
+            expect(allJobsByAuthor[0].isActive).toBe(false)
+            expect(allJobsByAuthor[0].isActive).toBe(false)
+            expect(allJobsByAuthor[0].isSuspended).toBe(true)
+            expect(allJobsByAuthor[1].isSuspended).toBe(true)
         })
     })
 })

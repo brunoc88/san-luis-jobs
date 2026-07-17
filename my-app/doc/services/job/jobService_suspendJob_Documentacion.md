@@ -23,7 +23,7 @@ suspendJob(userId: number, jobId: number, data: { reason: string }): Promise<voi
 5.  Suspender la publicación.
 6.  Crear una advertencia.
 7.  Contar advertencias del autor.
-8.  Si alcanza el límite, suspender la cuenta; en caso contrario, enviar
+8.  Si alcanza el límite, suspender y desactivar todas las publicaciones del autor y a la vez su cuenta; en caso contrario, enviar
     el correo de suspensión del empleo.
 
 ## Reglas de negocio
@@ -33,7 +33,7 @@ suspendJob(userId: number, jobId: number, data: { reason: string }): Promise<voi
 -   Un administrador no puede suspender a otro administrador.
 -   Un administrador no puede suspender a un Super Administrador.
 -   Cada suspensión genera una advertencia.
--   Al alcanzar cinco advertencias la cuenta del autor queda suspendida.
+-   Al alcanzar cinco advertencias la cuenta del autor queda suspendida al igual que sus publicaciones.
 -   Solo se envía un correo por operación.
 
 ## Arquitectura
@@ -51,6 +51,7 @@ jobService.suspendJob()
         ├── jobRepo.suspend()
         ├── warningRepo.create()
         ├── warningRepo.count()
+        ├── jobRepo.suspendAllByAuthorId() (si corresponde)
         ├── userRepo.suspend() (si corresponde)
         └── mailService
 ```

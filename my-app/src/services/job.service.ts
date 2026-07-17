@@ -79,7 +79,9 @@ export const jobService = {
         const warningCount = await warningRepo.count(author.id)
         
         
-        if (warningCount >= 5) {
+        if (warningCount === 5) {
+
+            await jobRepo.suspendAllByAuthorId(author.id)
             await userRepo.suspend(author.id)
 
             mailService.sendAccountSuspendedEmail(author.email)
