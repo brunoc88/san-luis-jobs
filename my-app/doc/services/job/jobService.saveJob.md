@@ -20,8 +20,9 @@ Guarda una publicación en la lista de favoritos del usuario autenticado.
 2.  Obtiene y valida que la publicación exista, se encuentre activa y no
     esté suspendida mediante `requireActiveJobById`.
 3.  Verifica que el usuario no sea el autor de la publicación.
-4.  Construye el DTO `SaveJobDto`.
-5.  Delega la persistencia al repositorio `jobRepo.saveJob`.
+4.  Verifica que la publicacion este finalizada.
+5.  Construye el DTO `SaveJobDto`.
+6.  Delega la persistencia al repositorio `jobRepo.saveJob`.
 
 ## Reglas de negocio
 

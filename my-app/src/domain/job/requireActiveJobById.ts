@@ -11,6 +11,7 @@ export const requireActiveJobById = async (id: number) => {
     return {
         id: job.id,
         autorId: job.userId,
-        title: job.title
+        title: job.title,
+        state: job.state
     }
 }

@@ -35,6 +35,7 @@ export const requireActiveJobById = async (id: number) => {
         id: job.id,
         autorId: job.userId
         title: job.title
+        state: job.state
     }
 }
 ```
@@ -45,7 +46,7 @@ export const requireActiveJobById = async (id: number) => {
 2.  Verificar que exista.
 3.  Verificar que no haya sido eliminado (`isActive = false`).
 4.  Verificar que no esté suspendido (`isSuspended = true`).
-5.  Devolver únicamente `id`, `autorId` y `title`.
+5.  Devolver únicamente `id`, `autorId`, `title` y `state`.
 
 ## Responsabilidades
 

@@ -21,5 +21,17 @@ export const jobRepo = {
         }
     }),
 
-    saveJob: async (data:SaveJobData) => await prisma.savedJob.create({data})
+    saveJob: async (data:SaveJobData) => await prisma.savedJob.create({data}),
+
+    getSavedJob : async (userId:number, jobId:number) => await prisma.savedJob.findFirst({where:{userId, jobId}}),
+
+    removeSavedJob: async (userId: number, jobId: number) =>
+    await prisma.savedJob.delete({
+        where: {
+            userId_jobId: {
+                userId,
+                jobId
+            }
+        }
+    })
 }

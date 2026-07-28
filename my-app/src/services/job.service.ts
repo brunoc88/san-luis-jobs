@@ -2,12 +2,13 @@ import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
 import { requireAdmin } from "@/domain/auth/requireAdmin"
 import { requireActiveJobById } from "@/domain/job/requireActiveJobById"
 import { requireActiveLocationById } from "@/domain/location/requireActiveLocationById"
-import { ForbiddenError } from "@/lib/errors/appError"
+import { ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { jobRepo } from "@/repositories/job.repository"
 import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
 import { CreateJobDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
+import { JobState } from "@prisma/client"
 
 export const jobService = {
     create: async (userId: number, data: CreateJobDto): Promise<number> => {
@@ -46,15 +47,15 @@ export const jobService = {
 
         requireAdmin(user.role)
 
-        
+
         if (user.id === job.autorId) {
             throw new ForbiddenError()
         }
 
-        
+
         const author = await requireActiveUserById(job.autorId)
 
-        
+
         const sameRole = user.role === author.role
         const adminSuspendingSuperAdmin =
             user.role === "admin" &&
@@ -63,10 +64,10 @@ export const jobService = {
         if (sameRole) throw new ForbiddenError()
         if (adminSuspendingSuperAdmin) throw new ForbiddenError()
 
-        
+
         await jobRepo.suspend(jobId)
 
-       
+
         const warningToCreate = {
             userId: author.id,
             reason: data.reason,
@@ -75,10 +76,10 @@ export const jobService = {
 
         await warningRepo.create(warningToCreate)
 
-        
+
         const warningCount = await warningRepo.count(author.id)
-        
-        
+
+
         if (warningCount === 5) {
 
             await jobRepo.suspendAllByAuthorId(author.id)
@@ -90,18 +91,35 @@ export const jobService = {
         }
     },
 
-    saveJob: async (userId:number, jobId:number) : Promise<void> => {
+    saveJob: async (userId: number, jobId: number): Promise<void> => {
         const user = await requireActiveUserById(userId)
         const job = await requireActiveJobById(jobId)
 
-        if(user.id === job.autorId) throw new ForbiddenError()
-        
-        const data : SaveJobDto = {
-            userId:user.id,
-            jobId:job.id
+        if (user.id === job.autorId) throw new ForbiddenError()
+        if (job.state === JobState.completed) throw new ForbiddenError("No es posible guardar una publicación finalizada.")
+
+        const data: SaveJobDto = {
+            userId: user.id,
+            jobId: job.id
         }
 
         await jobRepo.saveJob(data)
-        return 
+        return
+    },
+
+    unsaveJob: async (
+        userId: number,
+        jobId: number
+    ): Promise<void> => {
+
+        await requireActiveUserById(userId)
+
+        const savedJob = await jobRepo.getSavedJob(userId, jobId)
+
+        if (!savedJob) {
+            throw new NotFoundError()
+        }
+
+        await jobRepo.removeSavedJob(userId, jobId)
     }
 }

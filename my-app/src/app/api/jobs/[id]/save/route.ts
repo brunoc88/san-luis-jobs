@@ -8,13 +8,27 @@ export const POST = async ({ params }: { params: Promise<{ id: string }> }) => {
     try {
         const userId = await requireSession()
 
-        let {id} = await params
+        let { id } = await params
         let jobId = parseId(id)
 
         await jobService.saveJob(userId, jobId)
 
-        return NextResponse.json({ok:true},{status:201})
+        return NextResponse.json({ ok: true }, { status: 201 })
 
+    } catch (error) {
+        return errorHandler(error)
+    }
+}
+
+export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) => {
+    try {
+        const userId = await requireSession()
+
+        let { id } = await params
+        let jobId = parseId(id)
+
+        await jobService.unsaveJob(userId, jobId)
+        return NextResponse.json({ ok: true }, { status: 200 })
     } catch (error) {
         return errorHandler(error)
     }

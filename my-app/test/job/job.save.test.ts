@@ -70,6 +70,18 @@ describe('POST /api/jobs/:id/save', () => {
         expect(res.status).toBe(201)
         expect(body.ok).toBe(true)
     })
+
+    it('guardar job en estado finalizado', async () => {
+        mockAuthenticatedSession(1)
+
+        const job = await prisma.job.update({data:{state:"completed"},where:{id:jobs[0].id}})
+
+        const res = await POST({ params: { id: String(job.id) } })
+        const body = await res.json()
+
+        expect(res.status).toBe(403)
+        expect(body.error).toBe("No es posible guardar una publicación finalizada.")
+    })
 })
 afterEach(() => {
     vi.clearAllMocks()
