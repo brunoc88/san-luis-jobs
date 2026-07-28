@@ -9,11 +9,8 @@ Objetivos
             - FIGMA
             - ENDPOINT/SERVICE/REPO
         - REPORTAR
-            - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - GUARDAR <-- AHORA
-            - ENDPOINT/SERVICE/REPO
-            - HACER PARA ELIMINAR DE FAVORITOS TAMBIEN
+        
 
 
        
