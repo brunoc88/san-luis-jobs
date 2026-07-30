@@ -17,8 +17,8 @@ Su objetivo es extraer la información enviada mediante `FormData`, transformarl
    - Descripción
 3. Cada valor es convertido a `string`.
 4. Si algún campo no existe en el formulario, se asigna una cadena vacía como valor por defecto.
-5. Se obtiene el campo `file` de manera independiente.
-6. Se verifica que el archivo recibido sea una instancia válida de `File`.
+5. Se obtiene el campo `file` y `cvFile` de manera independiente.
+6. Se verifica que los archvos recibidos sean una instancia válida de `File`.
 7. Si la validación del archivo falla, se asigna `null`.
 8. Los datos son validados mediante `userRegisterSchema`.
 9. Si la validación falla:
@@ -28,7 +28,7 @@ Su objetivo es extraer la información enviada mediante `FormData`, transformarl
 10. Si la validación es exitosa:
     - Se devuelve `ok: true`.
     - Se incluyen los datos ya validados y tipados por Zod.
-    - Se adjunta el archivo procesado para su uso posterior.
+    - Se adjunta los archivos procesados para su uso posterior.
 
 ## Validación de datos
 
@@ -72,7 +72,8 @@ Esto permite desacoplar la validación de datos textuales de la gestión de arch
 {
   ok: true,
   data: validatedData,
-  file
+  file,
+  cvFile
 }
 ```
 

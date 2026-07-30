@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs"
 
 beforeEach(async () => {
   process.env.DEFAULT_USER_IMAGE_URL = "https://res.cloudinary.com/fake/default.png"
+   await prisma.job.deleteMany()
   await prisma.user.deleteMany()
 })
 
@@ -21,13 +22,13 @@ const makeRequest = (formData: FormData) => {
 //  Mockear Cloudinary
 vi.mock("@/lib/cloudinary", () => {
   return {
-    uploadImage: vi.fn(async (file: File, folder: string) => {
+    uploadFile: vi.fn(async (file: File, folder: string) => {
       return {
         url: "https://res.cloudinary.com/fake/image.png",
         publicId: "users/fake-id"
       }
     }),
-    deleteImage: vi.fn(async (publicId: string) => {
+    deleteFile: vi.fn(async (publicId: string) => {
       return
     })
   }
@@ -40,9 +41,9 @@ vi.mock("@/lib/cloudinary", () => {
 // Caso contrario comentar para no recibirlo
 
 vi.mock('@/services/mail.service', () => ({
-    mailService: {
-        sendEmailVerification: vi.fn()
-    }
+  mailService: {
+    sendEmailVerification: vi.fn()
+  }
 }))
 
 describe('POST /api/user', () => {
@@ -153,7 +154,7 @@ describe('POST /api/user', () => {
       const buffer = fs.readFileSync(filePath)
       const file = new File([buffer], "default.png", { type: "image/png" })
       formData.append("file", file)
-      
+
       const res = await POST(makeRequest(formData))
       const body = await res.json()
 
@@ -163,16 +164,18 @@ describe('POST /api/user', () => {
       expect(body).toHaveProperty('ok')
     })
 
-    it('crear cuenta con duplicado de email', async () =>{
+    it('crear cuenta con duplicado de email', async () => {
       const hashedPassword = await bcrypt.hash('sekrets', 10)
-      await prisma.user.create({data:{
-        email: 'bruno3@gtest.com',
-        username: 'bruno3',
-        password:hashedPassword,
-        description:'sin description',
-        pic:'fake.png',
-        picPublicId:''
-      }})
+      await prisma.user.create({
+        data: {
+          email: 'bruno3@gtest.com',
+          username: 'bruno3',
+          password: hashedPassword,
+          description: 'sin description',
+          pic: 'fake.png',
+          picPublicId: ''
+        }
+      })
 
       const formData = new FormData()
 
@@ -184,13 +187,13 @@ describe('POST /api/user', () => {
 
       const res = await POST(makeRequest(formData))
       const body = await res.json()
-      
+
       expect(res.status).toBe(409)
       expect(body).toHaveProperty('error')
       expect(body.error).toBe('El campo email ya está en uso')
     })
 
-    it('crear cuenta + generar token', async () =>{
+    it('crear cuenta + generar token', async () => {
 
       const formData = new FormData()
 
@@ -201,20 +204,47 @@ describe('POST /api/user', () => {
       formData.append('description', '')
 
       const res = await POST(makeRequest(formData))
-      
+
       expect(res.status).toBe(201)
-     
+
     })
 
-  
-    
+    it.only('crear usuario con cv', async () => {
+      const formData = new FormData()
+
+      formData.append('email', 'bruno4@test.com')
+      formData.append('username', 'bruno4')
+      formData.append('password', 'sekretsx')
+      formData.append('password2', 'sekretsx')
+
+      const filePath = path.resolve(__dirname, "../fixtures/CV_Ejemplo_Fake.pdf")
+      const buffer = fs.readFileSync(filePath)
+
+      const file = new File(
+        [buffer],
+        "CV_Ejemplo_Fake.pdf",
+        { type: "application/pdf" }
+      )
+
+      formData.append("cvFile", file)
+
+      const res = await POST(makeRequest(formData))
+
+      const user = await prisma.user.findFirst({where:{email:'bruno4@test.com'}})
+
+      expect(res.status).toBe(201)
+      expect(user).not.toBeNull()
+      expect(user).toHaveProperty('cv')
+      expect(user?.cv).not.toBeNull()
+    })
+
   })
 
 })
 
 
 afterEach(() => {
-    vi.clearAllMocks()
+  vi.clearAllMocks()
 })
 
 afterAll(async () => {

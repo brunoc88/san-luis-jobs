@@ -14,8 +14,8 @@ Endpoint encargado de registrar un nuevo usuario en el sistema. Su responsabilid
    - Se responde con código HTTP `400 Bad Request`.
 4. Si la validación es exitosa:
    - Se obtienen los datos ya tipados y validados.
-   - Se recupera el archivo asociado al formulario (`file`) sin validación adicional en esta etapa.
-5. Se invoca `userService.createAccount`, encargado de crear la cuenta del usuario utilizando los datos validados y el archivo recibido.
+   - Se recupera los archivos asociados al formulario (`file`) y (`cvFile`) sin validación adicional en esta etapa.
+5. Se invoca `userService.createAccount`, encargado de crear la cuenta del usuario utilizando los datos validados y los archivos recibidos.
 6. Una vez creada la cuenta, se ejecuta `mailService.sendEmailVerification` para enviar el correo de verificación junto con el token de activación.
 7. Si todo el proceso finaliza correctamente, se responde con HTTP `201 Created`.
 

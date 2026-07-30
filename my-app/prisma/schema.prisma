@@ -23,13 +23,14 @@ model User {
   picPublicId String?
   isActive    Boolean    @default(false)
   visibility  Boolean    @default(true)
-
+  cv          String?
+  cvPublicId  String?       
   role         UserRole   @default(common)
+  
   verificationToken EmailVerificationToken?
+  
   jobs         Job[]
-
   warnings    Warning[]
-
   savedJobs   SavedJob[]
 }
 
@@ -52,7 +53,7 @@ model Location {
 enum JobState {
   active
   paused
-  completed
+  finished
 }
 
 enum JobModality {

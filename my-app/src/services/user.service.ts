@@ -1,13 +1,13 @@
 import { RegisterUserInput, CreateUserData } from "@/types/user/user.register.type"
 import bcrypt from "bcryptjs"
-import { uploadImage, deleteImage } from "@/lib/cloudinary"
+import { uploadFile, deleteFile } from "@/lib/cloudinary"
 import { userRepo } from "@/repositories/user.repository"
 import crypto from 'crypto'
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
 import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
 
 export const userService = {
-    createAccount: async (data: RegisterUserInput, imageFile: File | null): Promise<{ email: string, token: string }> => {
+    createAccount: async (data: RegisterUserInput, imageFile: File | null, cvFile: File | null): Promise<{ email: string, token: string }> => {
         let { email, username, password, description } = data
 
         let hashedPassword = await bcrypt.hash(password, 10)
@@ -15,21 +15,32 @@ export const userService = {
         let imageUrl = process.env.DEFAULT_USER_IMAGE_URL!
         let imagePublicId: string | null = null
 
+        let cvUrl: string | null = null
+        let cvPublicId: string | null = null
 
         try {
 
             if (imageFile) {
-                const uploadResult = await uploadImage(imageFile, "users")
+                const uploadResult = await uploadFile(imageFile, "users")
                 imageUrl = uploadResult.url
                 imagePublicId = uploadResult.publicId
             }
+
+            if (cvFile) {
+                const uploadResult = await uploadFile(cvFile, "users-cv")
+                cvUrl = uploadResult.url
+                cvPublicId = uploadResult.publicId
+            }
+
             const user: CreateUserData = {
                 email,
                 username,
                 password: hashedPassword,
                 description: description ? description : 'sin descripcion',
                 pic: imageUrl,
-                picPublicId: imagePublicId
+                picPublicId: imagePublicId,
+                cv: cvUrl,
+                cvPublicId
             }
 
             const createdUser = await userRepo.create(user)
@@ -41,7 +52,7 @@ export const userService = {
                 .update(token)
                 .digest("hex")
 
-            
+
 
             const expiresAt = new Date(
                 Date.now() + 24 * 60 * 60 * 1000
@@ -58,7 +69,10 @@ export const userService = {
         } catch (error) {
             // rollback si falla DB
             if (imagePublicId) {
-                await deleteImage(imagePublicId)
+                await deleteFile(imagePublicId)
+            }
+            if (cvPublicId) {
+                await deleteFile(cvPublicId)
             }
             throw error
         }

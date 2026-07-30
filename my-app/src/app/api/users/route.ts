@@ -12,7 +12,7 @@ export const POST = async (req: Request) => {
 
         if (!validation.ok) return NextResponse.json({ error: validation.error }, { status: validation.status })
 
-        const user = await userService.createAccount(validation.data, validation.file)
+        const user = await userService.createAccount(validation.data, validation.file, validation.cvFile)
 
         await mailService.sendEmailVerification(user.email, user.token)
         

@@ -1,7 +1,7 @@
 import { ValidationResult } from "@/types/user/user.validateRequest.type"
 import userRegisterSchema from "./schemas/user/user.registerSchema"
 
-const validateUserRequest = (formData: FormData) : ValidationResult => {
+const validateUserRequest = (formData: FormData): ValidationResult => {
 
     const data = {
         email: formData.get('email')?.toString() || "",
@@ -11,10 +11,16 @@ const validateUserRequest = (formData: FormData) : ValidationResult => {
         description: formData.get('description')?.toString() || ""
     }
     const rawFile = formData.get('file')
+    const rawCvFile = formData.get('cvFile')
 
     const file =
         rawFile instanceof File
             ? rawFile
+            : null
+
+    const cvFile =
+        rawCvFile instanceof File
+            ? rawCvFile
             : null
 
     const parsed = userRegisterSchema.safeParse(data)
@@ -30,7 +36,8 @@ const validateUserRequest = (formData: FormData) : ValidationResult => {
     return {
         ok: true,
         data: parsed.data,
-        file
+        file,
+        cvFile
     }
 
 }

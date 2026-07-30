@@ -10,6 +10,7 @@ type ValidationSuccess = {
     ok: true
     data: RegisterUserInput
     file: File | null
+    cvFile: File | null
 }
 
 export type ValidationResult = ValidationError | ValidationSuccess

@@ -47,6 +47,8 @@ con los tipos de datos esperados.
 type CreateUserData = RegisterUserInput & {
     pic: string,
     picPublicId: string | null
+    cv: string | null
+    cvPublicId: string | null
 }
 ```
 
@@ -54,7 +56,7 @@ type CreateUserData = RegisterUserInput & {
 
 Este tipo representa la estructura completa requerida para crear un usuario dentro del repositorio de persistencia.
 
-Extiende `RegisterUserInput` agregando la información relacionada con la imagen de perfil.
+Extiende `RegisterUserInput` agregando la información relacionada con la imagen de perfil y cv.
 
 ### Propiedades adicionales
 
@@ -79,6 +81,23 @@ Este valor es utilizado para operaciones posteriores como:
 
 Puede ser `null` cuando el usuario utiliza la imagen predeterminada.
 
+#### cv
+
+Contiene la URL definitiva del cv asociada al usuario.
+Puede ser Null si el usuario no subio cv
+
+#### cvPublicId
+
+Contiene el identificador público del recurso almacenado.
+
+Este valor es utilizado para operaciones posteriores como:
+
+- Actualización de cv.
+- Eliminación de cv.
+- Rollback ante errores.
+
+Puede ser `null` si el usuario no cargo cv.
+
 ## Relación entre ambos tipos
 
 El flujo de transformación es el siguiente:
@@ -90,7 +109,7 @@ RegisterUserInput
 createAccount()
         │
         ▼
-Se agregan datos de imagen
+Se agregan datos de imagen y cv
         │
         ▼
 CreateUserData

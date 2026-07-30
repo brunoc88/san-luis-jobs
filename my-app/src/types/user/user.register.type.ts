@@ -7,6 +7,8 @@ export type RegisterUserInput = {
 
 export type CreateUserData =  RegisterUserInput & {
     pic: string,
-    picPublicId: string | null
+    picPublicId: string | null,
+    cv: string | null,
+    cvPublicId: string | null
 }
 

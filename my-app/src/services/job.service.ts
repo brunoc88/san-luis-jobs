@@ -96,7 +96,7 @@ export const jobService = {
         const job = await requireActiveJobById(jobId)
 
         if (user.id === job.autorId) throw new ForbiddenError()
-        if (job.state === JobState.completed) throw new ForbiddenError("No es posible guardar una publicación finalizada.")
+        if (job.state === JobState.finished) throw new ForbiddenError("No es posible guardar una publicación finalizada.")
 
         const data: SaveJobDto = {
             userId: user.id,
@@ -121,5 +121,14 @@ export const jobService = {
         }
 
         await jobRepo.removeSavedJob(userId, jobId)
+    },
+
+    changeJobStatus: async (userId:number, jobId:number, data:{state:string}) => {
+        const user = await requireActiveUserById(userId)
+        const job = await requireActiveJobById(jobId)
+
+        if(user.id !== job.autorId) throw new ForbiddenError()
+
+        // EN PAUSA POR CHEQUEO DE LIMITE DE POSTULANTES
     }
 }

@@ -4,7 +4,9 @@ PENDIENTE:
     - SOLICITAR CREDENCIALES DE GOOGLE PARA OAUTH
 JOBS/ APPLICATION 
     
-        
+- validar tipo y tamaño de archivos subidos
+- restringir formatos de avatar y CV
+- manejar reemplazo/eliminación de archivos antiguos   
 
     ADERIR:
         - UN USUARIO NO PUEDE POSTULARSE MAS DE UNA VEZ PARA UN PUESTO

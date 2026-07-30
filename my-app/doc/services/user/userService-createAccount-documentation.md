@@ -8,6 +8,7 @@ Además de persistir la información del usuario, esta función se encarga de:
 
 - Hashear la contraseña.
 - Gestionar la imagen de perfil.
+- Gestionar el archico con el cv.
 - Crear el registro del usuario.
 - Generar el token de verificación de cuenta.
 - Almacenar el token de forma segura.
@@ -15,12 +16,12 @@ Además de persistir la información del usuario, esta función se encarga de:
 
 ## Flujo de ejecución
 
-1. Se reciben los datos validados del usuario y un archivo de imagen opcional.
+1. Se reciben los datos validados del usuario, un archivo de imagen y cv ambos opcionales.
 2. La contraseña es hasheada utilizando `bcrypt` antes de ser almacenada.
 3. Se inicializan los valores de imagen por defecto definidos por la aplicación.
-4. Si el usuario proporciona una imagen:
-   - Se carga al servicio de almacenamiento mediante `uploadImage`.
-   - Se obtiene la URL pública de la imagen.
+4. Si el usuario proporciona una imagen y/o cv:
+   - Se carga al servicio de almacenamiento mediante `uploadFile`.
+   - Se obtiene la URL pública del archivo.
    - Se obtiene el identificador público necesario para futuras operaciones.
 5. Se construye el objeto `CreateUserData` con la información definitiva del usuario.
 6. Se crea el usuario mediante `userRepo.create`.
@@ -58,6 +59,19 @@ Si el usuario proporciona una imagen:
 - La imagen es subida al proveedor de almacenamiento configurado.
 - Se almacena la URL pública.
 - Se almacena el identificador público para futuras operaciones de actualización o eliminación.
+
+## Gestión de cv
+
+### Sin cv
+
+- Si el usuario no proporciona un archivo para el cv se guardara como `null`.
+
+### Con cv
+
+- El cv es subida al proveedor de almacenamiento configurado.
+- Se almacena la URL pública.
+- Se almacena el identificador público para futuras operaciones de actualización o eliminación.
+
 
 ## Generación del token de verificación
 
@@ -113,4 +127,4 @@ Si ocurre un error después de haber subido una imagen pero antes de completar c
 
 ## Responsabilidad
 
-Esta función concentra la lógica de negocio necesaria para registrar una nueva cuenta de usuario y preparar el proceso de verificación de correo electrónico, garantizando consistencia entre la base de datos, el almacenamiento de imágenes y el sistema de tokens.
+Esta función concentra la lógica de negocio necesaria para registrar una nueva cuenta de usuario y preparar el proceso de verificación de correo electrónico, garantizando consistencia entre la base de datos, el almacenamiento de imágenes, cv y el sistema de tokens.

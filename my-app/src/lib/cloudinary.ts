@@ -11,7 +11,7 @@ export type UploadResult = {
   publicId: string
 }
 
-export async function uploadImage(
+export async function uploadFile(
   file: File,
   folder: string
 ): Promise<UploadResult> {
@@ -36,6 +36,6 @@ export async function uploadImage(
   })
 }
 
-export async function deleteImage(publicId: string): Promise<void> {
+export async function deleteFile(publicId: string): Promise<void> {
   await cloudinary.uploader.destroy(publicId)
 }

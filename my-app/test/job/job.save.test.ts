@@ -74,7 +74,7 @@ describe('POST /api/jobs/:id/save', () => {
     it('guardar job en estado finalizado', async () => {
         mockAuthenticatedSession(1)
 
-        const job = await prisma.job.update({data:{state:"completed"},where:{id:jobs[0].id}})
+        const job = await prisma.job.update({data:{state:"finished"},where:{id:jobs[0].id}})
 
         const res = await POST({ params: { id: String(job.id) } })
         const body = await res.json()

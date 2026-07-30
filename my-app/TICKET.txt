@@ -1,10 +1,17 @@
 Objetivos
 
 - AHORA:
+    - JOB/UNSAVE:
+        - FALTA DOCUMENTAR UNSAVE JOB (ENDPOINT/REPO)
+    - APPLICATION:
+        - MODELO
+        - ENDPOINT/SERVICE/REPO PARA POSTULARSE
+        - TEST
+        - DOCUMENTAR
     - JOB: 
-        - JOB:
-        - ESTADO
-            - ENDPOINT/SERVICE/REPO
+        - JOB/ID/STATE: <-- PAUSADO(FALTA EL MODELO DE APPLICATION)
+            - ESTADO
+                - ENDPOINT/SERVICE/REPO
         - EDITAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
@@ -13,17 +20,11 @@ Objetivos
         
 
 
-       
-
-- PROXIMAMENTE:
-    - APPLICATION:
-        - model (configurar para que un usuario solo se puede aplicar una vez a un empleo)
-
-
 DOCUMENTAR:
     - nextauth
     - credentials-authorize
     - next-auth.d.ts
+    - clodinary(uploadFile)
 
 
 

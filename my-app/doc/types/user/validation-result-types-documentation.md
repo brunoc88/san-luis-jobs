@@ -68,6 +68,7 @@ type ValidationSuccess = {
     ok: true
     data: RegisterUserInput
     file: File | null
+    cvFile: File | null
 }
 ```
 
@@ -99,13 +100,13 @@ RegisterUserInput
 
 lo que garantiza que únicamente información válida llegue a la capa de servicios.
 
-#### file
+#### file y cvFile
 
-Contiene el archivo procesado por la función de validación.
+Contiene los archivos procesados por la función de validación.
 
 Puede contener:
 
-- Una instancia válida de `File`.
+- Dos instancias válidas de `File`.
 - `null` cuando no existe archivo asociado.
 
 ## Narrowing mediante discriminación
@@ -125,6 +126,7 @@ if (!validation.ok) {
 // ValidationSuccess
 validation.data
 validation.file
+validation.cvFile
 ```
 
 Este patrón mejora la seguridad de tipos y elimina la necesidad de realizar comprobaciones adicionales.

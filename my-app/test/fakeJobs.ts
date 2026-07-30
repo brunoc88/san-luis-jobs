@@ -12,6 +12,7 @@ export const loadJobs = async () => {
     users = await getUsers()
     locations = await getLocations()
 
+    
     await prisma.job.createMany({
         data: [
             {
@@ -67,7 +68,7 @@ export const loadJobs = async () => {
                 description: 'Diseño de interfaces modernas orientadas a mejorar la experiencia del usuario.',
                 salary: 1700000,
                 applicationLimit: 15,
-                state: 'completed',
+                state: 'finished',
                 modality: 'hybrid',
                 schedule: 'partTime',
                 locationId: locations[0].id,

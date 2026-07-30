@@ -27,7 +27,7 @@ Guarda una publicación en la lista de favoritos del usuario autenticado.
 ## Reglas de negocio
 
 -   Solo los usuarios activos pueden guardar publicaciones.
--   Solo pueden guardarse publicaciones activas y no suspendidas.
+-   Solo pueden guardarse publicaciones activas, no suspendidas y que su estado no sea pausada o finalizada.
 -   Un usuario no puede guardar una publicación de su autoría.
 -   Una publicación solo puede guardarse una vez por usuario. Esta
     restricción es garantizada por la clave compuesta (`@@id` o
