@@ -2,13 +2,14 @@ import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
 import { requireAdmin } from "@/domain/auth/requireAdmin"
 import { requireActiveJobById } from "@/domain/job/requireActiveJobById"
 import { requireActiveLocationById } from "@/domain/location/requireActiveLocationById"
-import { ForbiddenError, NotFoundError } from "@/lib/errors/appError"
+import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { jobRepo } from "@/repositories/job.repository"
 import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
 import { CreateJobDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
 import { JobState } from "@prisma/client"
+import { applicationRepo } from "@/repositories/application.repository"
 
 export const jobService = {
     create: async (userId: number, data: CreateJobDto): Promise<number> => {
@@ -95,7 +96,7 @@ export const jobService = {
         const user = await requireActiveUserById(userId)
         const job = await requireActiveJobById(jobId)
 
-        if (user.id === job.autorId) throw new ForbiddenError()
+        if (user.id === job.autorId) throw new ForbiddenError("No puedes guardar tu misma publicacion")
         if (job.state === JobState.finished) throw new ForbiddenError("No es posible guardar una publicación finalizada.")
 
         const data: SaveJobDto = {
@@ -123,12 +124,60 @@ export const jobService = {
         await jobRepo.removeSavedJob(userId, jobId)
     },
 
-    changeJobStatus: async (userId:number, jobId:number, data:{state:string}) => {
+    applyJob: async (userId: number, jobId: number) => {
         const user = await requireActiveUserById(userId)
         const job = await requireActiveJobById(jobId)
 
-        if(user.id !== job.autorId) throw new ForbiddenError()
+        if (job.state !== JobState.active) {
+            throw new ForbiddenError("No es posible postularte en estos momentos.")
+        }
+
+        if (user.id === job.autorId) {
+            throw new ForbiddenError("No puedes postularte a tu misma publicación")
+        }
+
+        const userData = await userRepo.findById(user.id)
+
+        if (!userData?.cv) {
+            throw new BadRequestError("Necesita cargar su cv")
+        }
+
+        const alreadyApplied = await applicationRepo.findByUserAndJob(
+            user.id,
+            job.id
+        )
+
+        if (alreadyApplied) {
+            throw new ConflictError("Ya estás postulado a esta publicación")
+        }
+
+        const thisJob = await jobRepo.findJobById(job.id)
+
+        if (thisJob?.applicationLimit) {
+            const count = await applicationRepo.count(job.id)
+
+            if (count >= thisJob.applicationLimit) {
+                throw new BadRequestError("Límite de postulaciones alcanzado")
+            }
+
+            await applicationRepo.create(job.id, user.id)
+
+            if (count + 1 === thisJob.applicationLimit) {
+                await jobRepo.finishJob(job.id)
+            }
+
+            return
+        }
+
+        await applicationRepo.create(job.id, user.id)
+    },
+    /*
+    changeJobStatus: async (userId: number, jobId: number, data: { state: string }) => {
+        const user = await requireActiveUserById(userId)
+        const job = await requireActiveJobById(jobId)
+
+        if (user.id !== job.autorId) throw new ForbiddenError()
 
         // EN PAUSA POR CHEQUEO DE LIMITE DE POSTULANTES
-    }
+    }*/
 }

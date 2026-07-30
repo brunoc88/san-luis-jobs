@@ -33,5 +33,10 @@ export const jobRepo = {
                 jobId
             }
         }
-    })
+    }),
+
+    findJobById: async (id:number) : Promise<Job | null> => await prisma.job.findUnique({where:{id}}),
+
+    finishJob: async (id:number) => await prisma.job.update({data:{state:'finished'},where:{id}}),
+
 }

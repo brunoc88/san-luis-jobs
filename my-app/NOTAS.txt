@@ -9,7 +9,6 @@ JOBS/ APPLICATION
 - manejar reemplazo/eliminación de archivos antiguos   
 
     ADERIR:
-        - UN USUARIO NO PUEDE POSTULARSE MAS DE UNA VEZ PARA UN PUESTO
         - INDICARLE QUE ESTA POSTULADO COMO EN EL UX DE JOBS/:ID
 
     MAS TARDE:

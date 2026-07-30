@@ -4,8 +4,6 @@ Objetivos
     - JOB/UNSAVE:
         - FALTA DOCUMENTAR UNSAVE JOB (ENDPOINT/REPO)
     - APPLICATION:
-        - MODELO
-        - ENDPOINT/SERVICE/REPO PARA POSTULARSE
         - TEST
         - DOCUMENTAR
     - JOB: 

@@ -30,3 +30,8 @@ export class ForbiddenError extends AppError {
   }
 }
 
+export class ConflictError extends AppError{
+    constructor(message = 'Error de duplicado'){
+        super(message, 409)
+    }
+}
