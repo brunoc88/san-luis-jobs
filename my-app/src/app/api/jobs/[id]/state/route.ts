@@ -16,7 +16,7 @@ export const PATCH = async (req: Request,{ params }: { params: Promise<{ id: str
         const validate = await validateRequest(req, ChangesJobSchema)
         if(!validate.ok) return NextResponse.json({error: validate.error}, {status:400})
 
-        await jobService.changeJobStatus(userId, jobId, validate?.data)
+        await jobService.changeJobStatus(userId, jobId, validate?.data?.state)
 
         return NextResponse.json({ok:true},{status:200})
     } catch (error) {

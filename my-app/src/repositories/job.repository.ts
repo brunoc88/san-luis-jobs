@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { CreateJobData, SaveJobData } from "@/types/job/job.type"
-import { Job } from "@prisma/client"
+import { Job, JobState } from "@prisma/client"
 
 export const jobRepo = {
     create: async (data: CreateJobData): Promise<Job> => {
@@ -35,8 +35,10 @@ export const jobRepo = {
         }
     }),
 
-    findJobById: async (id:number) : Promise<Job | null> => await prisma.job.findUnique({where:{id}}),
+    findJobById: async (id:number) : Promise<Job | null> => await prisma.job.findUnique({where:{id, isActive:true}}),
 
     finishJob: async (id:number) => await prisma.job.update({data:{state:'finished'},where:{id}}),
+
+    changeJobStatus: async (state:JobState, jobId:number) => await prisma.job.update({data:{state},where:{id:jobId}})
 
 }

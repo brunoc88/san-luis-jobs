@@ -3,6 +3,6 @@ import {JobState} from "@prisma/client"
 
 export const ChangesJobSchema = z.object({
     state: z.nativeEnum(JobState, {
-    error: "Modalidad inválida."
+    error: "Estado inválido."
   })
 })

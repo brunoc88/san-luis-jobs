@@ -124,7 +124,7 @@ export const jobService = {
         await jobRepo.removeSavedJob(userId, jobId)
     },
 
-    applyJob: async (userId: number, jobId: number) => {
+    applyJob: async (userId: number, jobId: number): Promise<void> => {
         const user = await requireActiveUserById(userId)
         const job = await requireActiveJobById(jobId)
 
@@ -153,12 +153,10 @@ export const jobService = {
 
         const thisJob = await jobRepo.findJobById(job.id)
 
+        let author = await userRepo.findById(job.autorId)
+
         if (thisJob?.applicationLimit) {
             const count = await applicationRepo.count(job.id)
-
-            if (count >= thisJob.applicationLimit) {
-                throw new BadRequestError("Límite de postulaciones alcanzado")
-            }
 
             await applicationRepo.create(job.id, user.id)
 
@@ -166,18 +164,44 @@ export const jobService = {
                 await jobRepo.finishJob(job.id)
             }
 
+
+            mailService.sendApplicationEmail(author?.email, userData.email, job.title, userData.cv)
+
             return
         }
 
         await applicationRepo.create(job.id, user.id)
+
+        mailService.sendApplicationEmail(author?.email, userData.email, job.title, userData.cv)
+        return
     },
-    /*
-    changeJobStatus: async (userId: number, jobId: number, data: { state: string }) => {
+
+    changeJobStatus: async (
+        userId: number,
+        jobId: number,
+        state: JobState
+    ): Promise<void> => {
         const user = await requireActiveUserById(userId)
         const job = await requireActiveJobById(jobId)
 
-        if (user.id !== job.autorId) throw new ForbiddenError()
+        if (user.id !== job.autorId) {
+            throw new ForbiddenError()
+        }
 
-        // EN PAUSA POR CHEQUEO DE LIMITE DE POSTULANTES
-    }*/
+        if (job.state === JobState.finished) {
+            const jobData = await jobRepo.findJobById(job.id)
+
+            if (jobData?.applicationLimit) {
+                const count = await applicationRepo.count(job.id)
+
+                if (count >= jobData.applicationLimit) {
+                    throw new BadRequestError(
+                        "No es posible cambiar el estado porque la publicación ya alcanzó el límite de postulaciones. Aumentá el límite antes de reactivarla."
+                    )
+                }
+            }
+        }
+
+        await jobRepo.changeJobStatus(state, job.id)
+    }
 }

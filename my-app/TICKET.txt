@@ -2,18 +2,16 @@ Objetivos
 
 - AHORA:
     - JOB/UNSAVE:
-        - FALTA DOCUMENTAR UNSAVE JOB (ENDPOINT/REPO)
-    - APPLICATION:
-        - TEST
-        - DOCUMENTAR
-    - JOB: 
-        - JOB/ID/STATE: <-- PAUSADO(FALTA EL MODELO DE APPLICATION)
-            - ESTADO
-                - ENDPOINT/SERVICE/REPO
+        - FALTA DOCUMENTAR 
+            - UNSAVE JOB (ENDPOINT/REPO)
+            - MAILSERVICE ENVIO DE SOLICITUD
+    - JOB:
         - EDITAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - REPORTAR
+        - REPORTAR <-- AHORA
+            - ENDPOINT/SERVICE/REPO
+        - INFO(JOBS/:ID)
             - ENDPOINT/SERVICE/REPO
         
 

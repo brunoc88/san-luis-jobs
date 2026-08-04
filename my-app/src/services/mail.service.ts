@@ -102,4 +102,32 @@ export const mailService = {
         })
     },
 
+    sendApplicationEmail: (
+        authorEmail: string,
+        applicantEmail: string,
+        jobTitle: string,
+        cvUrl: string
+    ) => {
+        return transporter.sendMail({
+            from: '"San Luis Jobs" <no-reply@app.com>',
+            to: authorEmail,
+            subject: "Nueva postulación recibida",
+            html: `
+            <p>Hola,</p>
+
+            <p>Has recibido una nueva postulación para tu publicación:</p>
+
+            <p><strong>${jobTitle}</strong></p>
+
+            <p><strong>Email del postulante:</strong> ${applicantEmail}</p>
+
+            <p>Puedes descargar su CV desde el siguiente enlace:</p>
+
+            <p><a href="${cvUrl}">Descargar CV</a></p>
+
+            <p>Saludos,<br>Equipo de San Luis Jobs.</p>
+        `
+        })
+    },
+
 }
