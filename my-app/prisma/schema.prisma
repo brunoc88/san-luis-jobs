@@ -25,15 +25,17 @@ model User {
   visibility  Boolean    @default(true)
   cv          String?
   cvPublicId  String?       
-  role         UserRole   @default(common)
+  role        UserRole   @default(common)
   
   verificationToken EmailVerificationToken?
   
-  jobs         Job[]
+  jobs        Job[]
   warnings    Warning[]
   savedJobs   SavedJob[]
 
   applications Application[]
+
+  complaints  Complaint[]
 }
 
 model EmailVerificationToken {
@@ -92,7 +94,9 @@ model Job {
 
   savedBy          SavedJob[] 
 
-  applications     Application[]           
+  applications     Application[]   
+
+  complaints       Complaint[]        
 }
 
 model Warning {
@@ -128,4 +132,32 @@ model Application {
   createdAt DateTime @default(now())
 
   @@id([userId, jobId])
+}
+
+enum ComplaintReason {
+  FALSE_INFORMATION
+  SUSPECTED_SCAM
+  INCORRECT_INFORMATION
+  INAPPROPRIATE_CONTENT
+  DUPLICATE_OR_SPAM
+  IMPERSONATION
+  OTHER
+}
+
+model Complaint {
+  id          Int @id @default(autoincrement())
+
+  userId      Int
+  jobId       Int
+
+  reason      ComplaintReason
+  explanation String?
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  job  Job  @relation(fields: [jobId], references: [id])
+
+  @@unique([userId, jobId])
 }

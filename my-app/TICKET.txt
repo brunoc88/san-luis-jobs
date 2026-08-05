@@ -1,17 +1,13 @@
 Objetivos
 
-- AHORA:
-    - JOB/UNSAVE:
-        - FALTA DOCUMENTAR 
-            - UNSAVE JOB (ENDPOINT/REPO)
-            - MAILSERVICE ENVIO DE SOLICITUD
+- PENDIENTE:
     - JOB:
         - EDITAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - REPORTAR <-- AHORA
+        - INFO(JOBS/:ID) <-- AHORA
             - ENDPOINT/SERVICE/REPO
-        - INFO(JOBS/:ID)
+        - INDEX
             - ENDPOINT/SERVICE/REPO
         
 

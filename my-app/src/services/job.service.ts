@@ -8,8 +8,9 @@ import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
 import { CreateJobDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
-import { JobState } from "@prisma/client"
+import { ComplaintReason, JobState } from "@prisma/client"
 import { applicationRepo } from "@/repositories/application.repository"
+import { complaintRepo } from "@/repositories/complaint.repository"
 
 export const jobService = {
     create: async (userId: number, data: CreateJobDto): Promise<number> => {
@@ -203,5 +204,37 @@ export const jobService = {
         }
 
         await jobRepo.changeJobStatus(state, job.id)
+    },
+
+    reportJob: async (
+        userId: number,
+        jobId: number,
+        data: {
+            reason: ComplaintReason
+            explanation: string | null
+        }
+    ): Promise<void> => {
+        const user = await requireActiveUserById(userId)
+        const job = await requireActiveJobById(jobId)
+
+        if (user.id === job.autorId) {
+            throw new ForbiddenError("No puedes denunciar tu propia publicación.")
+        }
+
+        const complaintAlreadyExists = await complaintRepo.findByUserAndJob(userId, jobId)
+
+        if (complaintAlreadyExists) {
+            throw new ConflictError("Ya has denunciado esta publicación.")
+        }
+
+        const complaint = {
+            userId,
+            jobId,
+            reason: data.reason,
+            explanation: data.explanation
+        }
+
+        await complaintRepo.create(complaint)
+        return
     }
 }
