@@ -5,8 +5,6 @@ Objetivos
         - EDITAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - INFO(JOBS/:ID) <-- AHORA
-            - ENDPOINT/SERVICE/REPO
         - INDEX
             - ENDPOINT/SERVICE/REPO
         

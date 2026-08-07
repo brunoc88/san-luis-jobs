@@ -39,6 +39,23 @@ export const jobRepo = {
 
     finishJob: async (id:number) => await prisma.job.update({data:{state:'finished'},where:{id}}),
 
-    changeJobStatus: async (state:JobState, jobId:number) => await prisma.job.update({data:{state},where:{id:jobId}})
+    changeJobStatus: async (state:JobState, jobId:number) => await prisma.job.update({data:{state},where:{id:jobId}}),
+
+    findJobDetailsById: async (id:number) =>{
+        return await prisma.job.findUnique({where:{id,isActive:true, isSuspended:false},
+        include:{
+            user:{
+                select:{
+                    username:true,
+                    pic:true
+                }
+            },
+            location:{
+                select:{
+                    name:true
+                }
+            }
+        }})
+    }
 
 }

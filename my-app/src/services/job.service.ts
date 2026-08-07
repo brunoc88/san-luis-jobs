@@ -6,7 +6,7 @@ import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from "@
 import { jobRepo } from "@/repositories/job.repository"
 import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
-import { CreateJobDto, SaveJobDto } from "@/types/job/job.type"
+import { CreateJobDto, JobDetailsDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
 import { ComplaintReason, JobState } from "@prisma/client"
 import { applicationRepo } from "@/repositories/application.repository"
@@ -236,5 +236,53 @@ export const jobService = {
 
         await complaintRepo.create(complaint)
         return
+    },
+
+    getJobDetailsById: async (jobId: number, userId?: number | null) => {
+        const job = await requireActiveJobById(jobId)
+        const jobData = await jobRepo.findJobDetailsById(job.id)
+
+        if (!jobData) {
+            throw new NotFoundError()
+        }
+
+        const jobDetails: JobDetailsDto = {
+            id: jobData.id,
+            author: {
+                username: jobData.user.username,
+                pic: jobData.user.pic
+            },
+            title: jobData.title,
+            state: jobData.state,
+            date: jobData.createdAt,
+            location: {
+                name: jobData.location.name
+            },
+            schedule: jobData.schedule,
+            modality: jobData.modality,
+            salary: jobData.salary,
+            description: jobData.description
+        }
+
+
+
+        if (userId) {
+            const user = await requireActiveUserById(userId)
+            const alreadyApplied = await applicationRepo.findByUserAndJob(user.id, job.id)
+
+            if (alreadyApplied) {
+                jobDetails.alreadyApplied = true }
+            else{
+                jobDetails.alreadyApplied = false
+            } 
+            if (jobData?.applicationLimit) {
+                let numberOfApplicants = await applicationRepo.count(job.id)
+                jobDetails.numberOfApplicants = numberOfApplicants
+            }
+        }
+
+
+        return jobDetails
+
     }
 }
