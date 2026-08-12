@@ -5,8 +5,16 @@ Objetivos
         - EDITAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - INDEX
+        - INDEX <-- AHORA
             - ENDPOINT/SERVICE/REPO
+
+GET /api/jobs
+│
+├── modality
+├── sort
+│
+└── combinaciones
+
         
 
 

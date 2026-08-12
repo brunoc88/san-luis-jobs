@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { CreateJobData, SaveJobData } from "@/types/job/job.type"
-import { Job, JobState } from "@prisma/client"
+import { Job, JobState, Prisma } from "@prisma/client"
 
 export const jobRepo = {
     create: async (data: CreateJobData): Promise<Job> => {
@@ -21,41 +21,68 @@ export const jobRepo = {
         }
     }),
 
-    saveJob: async (data:SaveJobData) => await prisma.savedJob.create({data}),
+    saveJob: async (data: SaveJobData) => await prisma.savedJob.create({ data }),
 
-    getSavedJob : async (userId:number, jobId:number) => await prisma.savedJob.findFirst({where:{userId, jobId}}),
+    getSavedJob: async (userId: number, jobId: number) => await prisma.savedJob.findFirst({ where: { userId, jobId } }),
 
     removeSavedJob: async (userId: number, jobId: number) =>
-    await prisma.savedJob.delete({
-        where: {
-            userId_jobId: {
-                userId,
-                jobId
-            }
-        }
-    }),
-
-    findJobById: async (id:number) : Promise<Job | null> => await prisma.job.findUnique({where:{id, isActive:true}}),
-
-    finishJob: async (id:number) => await prisma.job.update({data:{state:'finished'},where:{id}}),
-
-    changeJobStatus: async (state:JobState, jobId:number) => await prisma.job.update({data:{state},where:{id:jobId}}),
-
-    findJobDetailsById: async (id:number) =>{
-        return await prisma.job.findUnique({where:{id,isActive:true, isSuspended:false},
-        include:{
-            user:{
-                select:{
-                    username:true,
-                    pic:true
-                }
-            },
-            location:{
-                select:{
-                    name:true
+        await prisma.savedJob.delete({
+            where: {
+                userId_jobId: {
+                    userId,
+                    jobId
                 }
             }
-        }})
+        }),
+
+    findJobById: async (id: number): Promise<Job | null> => await prisma.job.findUnique({ where: { id, isActive: true } }),
+
+    finishJob: async (id: number) => await prisma.job.update({ data: { state: 'finished' }, where: { id } }),
+
+    changeJobStatus: async (state: JobState, jobId: number) => await prisma.job.update({ data: { state }, where: { id: jobId } }),
+
+    findJobDetailsById: async (id: number) => {
+        return await prisma.job.findUnique({
+            where: { id, isActive: true, isSuspended: false },
+            include: {
+                user: {
+                    select: {
+                        username: true,
+                        pic: true
+                    }
+                },
+                location: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        })
+    },
+
+    findAllActiveJobs: async (
+        where: Prisma.JobWhereInput,
+        skip: number,
+        take: number
+    ) => {
+
+        return await prisma.job.findMany({
+            where,
+            skip,
+            take,
+            include: {
+                user: {
+                    select: {
+                        username: true
+                    }
+                },
+                location: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        })
     }
 
 }

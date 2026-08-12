@@ -8,9 +8,10 @@ import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
 import { CreateJobDto, JobDetailsDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
-import { ComplaintReason, JobState } from "@prisma/client"
+import { ComplaintReason, JobState, Prisma } from "@prisma/client"
 import { applicationRepo } from "@/repositories/application.repository"
 import { complaintRepo } from "@/repositories/complaint.repository"
+import { JobQueryDto } from "@/lib/schemas/job/job.query.schema"
 
 export const jobService = {
     create: async (userId: number, data: CreateJobDto): Promise<number> => {
@@ -271,10 +272,11 @@ export const jobService = {
             const alreadyApplied = await applicationRepo.findByUserAndJob(user.id, job.id)
 
             if (alreadyApplied) {
-                jobDetails.alreadyApplied = true }
-            else{
+                jobDetails.alreadyApplied = true
+            }
+            else {
                 jobDetails.alreadyApplied = false
-            } 
+            }
             if (jobData?.applicationLimit) {
                 let numberOfApplicants = await applicationRepo.count(job.id)
                 jobDetails.numberOfApplicants = numberOfApplicants
@@ -284,5 +286,45 @@ export const jobService = {
 
         return jobDetails
 
+    },
+
+    getJobs: async (filter: JobQueryDto) => {
+
+        const skip = (filter.page - 1) * filter.limit
+
+        const where: Prisma.JobWhereInput = {
+            isActive: true,
+            isSuspended: false,
+            state: JobState.active
+        }
+
+        if (filter.search) {
+            where.title = {
+                contains: filter.search,
+                mode: "insensitive"
+            }
+        }
+
+        if (filter.locationId) {
+            where.locationId = filter.locationId
+        }
+
+        if(filter.schedule){
+            where.schedule = filter.schedule
+        }
+
+        if(filter.modality) {
+            where.modality = filter.modality
+        }
+
+        if(filter.sort) {
+            where.sort = filter.sort
+        }
+
+        return await jobRepo.findAllActiveJobs(
+            where,
+            skip,
+            filter.limit
+        )
     }
 }

@@ -11,7 +11,7 @@
     "test:e": "dotenv -e .env.test -- vitest test/mail/mail.service.test.ts",
     "test:a": "dotenv -e .env.test -- vitest test/auth/reset.password.pt2.test.ts",
     "test:l": "dotenv -e .env.test -- vitest test/location/location.create.test.ts",
-    "test:j": "dotenv -e .env.test -- vitest test/job/job.info.test.ts",
+    "test:j": "dotenv -e .env.test -- vitest test/job/job.index.test.ts",
     "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
     "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
     "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"

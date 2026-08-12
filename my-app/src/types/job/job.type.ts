@@ -8,13 +8,13 @@ export type CreateJobDto = {
     title: string,
     description: string,
     salary: number | null,
-    applicationLimit:number| null,
+    applicationLimit: number | null,
     modality: JobModality,
     schedule: JobSchedule
     locationId: number
 }
 
-export type CreateJobData = CreateJobDto & {userId:number}
+export type CreateJobData = CreateJobDto & { userId: number }
 
 export type SaveJobDto = {
     userId: number,
@@ -45,3 +45,6 @@ export type JobDetailsDto = BaseJobDto & {
     alreadyApplied?: boolean
     numberOfApplicants?: number
 }
+
+
+
