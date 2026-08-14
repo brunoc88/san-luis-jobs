@@ -42,17 +42,19 @@ const mockAuthenticatedSession = (i: number) => {
 }
 
 describe('GET /api/jobs/:id', () => {
-    describe('tipo de informacion', () =>{
+    describe('tipo de informacion', () => {
         it('sin session', async () => {
             const res = await GET({ params: { id: jobs[0].id } })
             const body = await res.json()
-            
+
             expect(res.status).toBe(200)
             expect(body).toHaveProperty('ok')
             expect(body).toHaveProperty('job')
             expect(body.ok).toBe(true)
             expect(body.job).not.toHaveProperty('alreadyApplied')
             expect(body.job).not.toHaveProperty('numberOfApplicants')
+            expect(body.job).not.toHaveProperty('userId')
+            expect(body.job).not.toHaveProperty('locationId')
         })
 
         it('con session', async () => {
@@ -67,6 +69,8 @@ describe('GET /api/jobs/:id', () => {
             expect(body.ok).toBe(true)
             expect(body.job).toHaveProperty('alreadyApplied')
             expect(body.job).toHaveProperty('numberOfApplicants')
+            expect(body.job).not.toHaveProperty('userId')
+            expect(body.job).not.toHaveProperty('locationId')
             expect(body.job.alreadyApplied).toBe(false)
             expect(body.job.numberOfApplicants).not.toBeNull()
         })
@@ -74,13 +78,13 @@ describe('GET /api/jobs/:id', () => {
         it('con session & postulado', async () => {
             mockAuthenticatedSession(1)
 
-            await prisma.user.update({data:{cv:'fakeCv.pdf'}, where:{id:users[1].id}})
+            await prisma.user.update({ data: { cv: 'fakeCv.pdf' }, where: { id: users[1].id } })
 
-            await POST({params: { id: jobs[0].id }})
+            await POST({ params: { id: jobs[0].id } })
 
             const res = await GET({ params: { id: jobs[0].id } })
             const body = await res.json()
-            
+
             expect(res.status).toBe(200)
             expect(body).toHaveProperty('ok')
             expect(body).toHaveProperty('job')

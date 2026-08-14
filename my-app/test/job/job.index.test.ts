@@ -9,6 +9,7 @@ let jobs: any = []
 let locations: any = []
 
 beforeEach(async () => {
+    await prisma.application.deleteMany()
     await prisma.job.deleteMany()
     await prisma.location.deleteMany()
     await prisma.user.deleteMany()
@@ -155,6 +156,17 @@ describe('GET /api/jobs', () => {
 
         })
 
+        it('/jobs?search=backend&locationId=2&schedule=fullTime&sort=recent&page=1&limit=5', async () => {
+            const res = await GET(new NextRequest(
+                `http://localhost/api/jobs?search=backend&locationId=${locations[1].id}&schedule=fullTime&sort=recent&page=1&limit=5`
+            ))
+            const body = await res.json()
+            
+            expect(res.status).toBe(200)
+            expect(body).toHaveProperty('jobs')
+            expect(body.jobs).not.toBeNull()
+        })
+
     })
 
     describe('validaciones zod', () => {
@@ -261,12 +273,46 @@ describe('GET /api/jobs', () => {
             )
             const res = await GET(request)
             const body = await res.json()
-            console.log('error', body)
 
             expect(res.status).toBe(400)
             expect(body).toHaveProperty('error')
             expect(body.error).toHaveProperty('modality')
             expect(body.error.modality).toContain('Modalidad inválida.')
+        })
+    })
+
+    describe('por orden(sort)', () => {
+        it('/jobs?sort=alphabetical', async () => {
+            const res = await GET(new NextRequest(
+                'http://localhost/api/jobs?sort=alphabetical'
+            ))
+            const body = await res.json()
+
+            expect(res.status).toBe(200)
+            expect(body).toHaveProperty('jobs')
+            expect(body.jobs).not.toBeNull()
+        })
+
+        it('/jobs?sort=recent', async () => {
+            const res = await GET(new NextRequest(
+                'http://localhost/api/jobs?sort=recent'
+            ))
+            const body = await res.json()
+
+            expect(res.status).toBe(200)
+            expect(body).toHaveProperty('jobs')
+            expect(body.jobs).not.toBeNull()
+        })
+
+        it('/jobs?sort=popular', async () => {
+            const res = await GET(new NextRequest(
+                'http://localhost/api/jobs?sort=popular'
+            ))
+            const body = await res.json()
+
+            expect(res.status).toBe(200)
+            expect(body).toHaveProperty('jobs')
+            expect(body.jobs).not.toBeNull()
         })
     })
 })

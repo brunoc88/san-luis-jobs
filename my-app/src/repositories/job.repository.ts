@@ -63,22 +63,38 @@ export const jobRepo = {
     findAllActiveJobs: async (
         where: Prisma.JobWhereInput,
         skip: number,
-        take: number
+        take: number,
+        orderBy: Prisma.JobOrderByWithRelationInput
     ) => {
 
         return await prisma.job.findMany({
             where,
             skip,
             take,
-            include: {
+            orderBy,
+
+            select: {
+                id: true,
+                title: true,
+                createdAt: true,
+                modality: true,
+                schedule: true,
+
                 user: {
                     select: {
                         username: true
                     }
                 },
+
                 location: {
                     select: {
                         name: true
+                    }
+                },
+
+                _count: {
+                    select: {
+                        applications: true
                     }
                 }
             }

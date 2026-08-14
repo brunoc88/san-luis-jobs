@@ -289,7 +289,6 @@ export const jobService = {
     },
 
     getJobs: async (filter: JobQueryDto) => {
-
         const skip = (filter.page - 1) * filter.limit
 
         const where: Prisma.JobWhereInput = {
@@ -309,22 +308,68 @@ export const jobService = {
             where.locationId = filter.locationId
         }
 
-        if(filter.schedule){
+        if (filter.schedule) {
             where.schedule = filter.schedule
         }
 
-        if(filter.modality) {
+        if (filter.modality) {
             where.modality = filter.modality
         }
 
-        if(filter.sort) {
-            where.sort = filter.sort
+        let orderBy: Prisma.JobOrderByWithRelationInput
+
+        switch (filter.sort) {
+            case "alphabetical":
+                orderBy = {
+                    title: "asc"
+                }
+                break
+
+            case "popular":
+                orderBy = {
+                    applications: {
+                        _count: "desc"
+                    }
+                }
+                break
+
+            case "recent":
+            default:
+                orderBy = {
+                    createdAt: "desc"
+                }
+                break
         }
 
-        return await jobRepo.findAllActiveJobs(
+        const jobs = await jobRepo.findAllActiveJobs(
             where,
             skip,
-            filter.limit
+            filter.limit + 1,
+            orderBy
         )
+
+        const hasNextPage = jobs.length > filter.limit
+
+        const jobsToReturn = hasNextPage
+            ? jobs.slice(0, filter.limit)
+            : jobs
+
+        return {
+            jobs: jobsToReturn.map(job => ({
+                id: job.id,
+                title: job.title,
+                createdAt: job.createdAt,
+                modality: job.modality,
+                schedule: job.schedule,
+                username: job.user.username,
+                locationName: job.location.name,
+                applicants: job._count.applications
+            })),
+            pagination: {
+                page: filter.page,
+                limit: filter.limit,
+                hasNextPage
+            }
+        }
     }
 }

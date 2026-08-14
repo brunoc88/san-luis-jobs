@@ -5,15 +5,8 @@ Objetivos
         - EDITAR
             - FIGMA
             - ENDPOINT/SERVICE/REPO
-        - INDEX <-- AHORA
-            - ENDPOINT/SERVICE/REPO
+    
 
-GET /api/jobs
-│
-├── modality
-├── sort
-│
-└── combinaciones
 
         
 
@@ -23,6 +16,7 @@ DOCUMENTAR:
     - credentials-authorize
     - next-auth.d.ts
     - clodinary(uploadFile)
+    - todos los repositorios
 
 
 

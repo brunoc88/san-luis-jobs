@@ -28,9 +28,9 @@ export const GET = async (req: NextRequest) => {
         if(!validate.ok) {
             return NextResponse.json({error:validate.error}, {status:validate.status})
         }
-        const jobs = await jobService.getJobs(validate?.data)
+        const res = await jobService.getJobs(validate?.data)
 
-        return NextResponse.json({ ok: true, jobs }, { status: 200 })
+        return NextResponse.json({ ok: true, jobs: res.jobs, pagination: res.pagination }, { status: 200 })
     } catch (error) {
         return errorHandler(error)
     }
