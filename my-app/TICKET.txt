@@ -1,6 +1,58 @@
 Objetivos
 
 - PENDIENTE:
+    - FEEDBACK:        
+        ADMIN PAGES
+        /ID
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        /GET(LIST)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+
+    - COMPLAINT
+        ADMIN PAGES
+         /ID
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        /GET(LIST)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+    
+    - ADMINPANEL
+        /GET(LIST ACCOUNT)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+
+        /ID/TOGGLE/STATE(ACTIVATE O DESACTIVATE ACCOUNT)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+
+        /ID/TOGGLE/ROLE(GIVE OR LOOSE ADMIN ROLE)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        
+    - USER
+        /PROFILE:
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        /USERNAME:
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        /CONFIG:
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        
     - JOB:
         - EDITAR
             - FIGMA

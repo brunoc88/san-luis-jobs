@@ -36,6 +36,8 @@ model User {
   applications Application[]
 
   complaints  Complaint[]
+
+  feedback    Feedback[]
 }
 
 model EmailVerificationToken {
@@ -160,4 +162,14 @@ model Complaint {
   job  Job  @relation(fields: [jobId], references: [id])
 
   @@unique([userId, jobId])
+}
+
+model Feedback {
+  id          Int @id @default(autoincrement())
+  
+  opinion     String 
+  userId      Int 
+  createdAt   DateTime @default(now())
+
+  user User   @relation(fields:[userId], references:[id])
 }
