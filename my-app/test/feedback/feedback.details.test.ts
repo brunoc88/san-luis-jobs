@@ -43,7 +43,7 @@ describe('GET /api/feedback/:id', () => {
         expect(res.status).toBe(404)
     })
 
-    it('feedback no encontrado', async () => {
+    it('feedback detallado', async () => {
         mockAuthenticatedSession(0)
 
         const feeback = await prisma.feedback.create({

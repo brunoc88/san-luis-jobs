@@ -14,5 +14,9 @@ export const feedbackRepo = {
                 }
             }
         }})
+    },
+
+    deleteById: async (id: number) : Promise<void> => {
+        await prisma.feedback.delete({where:{id}})
     }
 }

@@ -17,3 +17,17 @@ export const GET = async ({ params }: { params: Promise<{ id: string }> }) => {
         return errorHandler(error)
     }
 }
+
+export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) => {
+    try {
+        const userId = await requireSession()
+
+        const { id } = await params
+        const feedbackId = parseId(id)
+
+        await feedbackService.deleteById(feedbackId, userId)
+        return NextResponse.json({ ok: true }, { status: 200 })
+    } catch (error) {
+        return errorHandler(error)
+    }
+}

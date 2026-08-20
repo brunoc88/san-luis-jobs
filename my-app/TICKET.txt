@@ -3,10 +3,6 @@ Objetivos
 - PENDIENTE:
     - FEEDBACK:        
         ADMIN PAGES
-        /ID/DELETE
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
         /GET(LIST)
         - ENDPOINT/SERVICE/REPO
         - TEST
