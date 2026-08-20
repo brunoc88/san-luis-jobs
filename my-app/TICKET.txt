@@ -10,11 +10,11 @@ Objetivos
 
     - COMPLAINT
         ADMIN PAGES
-        /ID
+        /ID (GET)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
-        /ID/DELETE
+        /ID (DELETE)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
@@ -29,12 +29,12 @@ Objetivos
         - TEST
         - DOCUMENTAR
 
-        /ID/TOGGLE/STATE(ACTIVATE O DESACTIVATE ACCOUNT)
+        /ID(ACTIVATE O DESACTIVATE ACCOUNT)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
 
-        /ID/TOGGLE/ROLE(GIVE OR LOOSE ADMIN ROLE)
+        /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR

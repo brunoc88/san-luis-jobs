@@ -55,12 +55,12 @@ describe('GET /api/feedback/:id', () => {
 
         const res = await GET({ params: { id: feeback.id } })
         const body = await res.json()
-
+        
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('feedback')
         expect(body.feedback).toHaveProperty('opinion')
-        expect(body.feedback).toHaveProperty('user')
-        expect(body.feedback.user).toHaveProperty('username')
+        expect(body.feedback).toHaveProperty('from')
+
     })
 
 })

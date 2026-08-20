@@ -18,7 +18,12 @@ export const feedbackService = {
         const feedbackData = await feedbackRepo.findById(feedbackId)
         if(!feedbackData) throw new NotFoundError()
         
-        return feedbackData
+        return {
+            id: feedbackData.id,
+            createdAt: feedbackData.createdAt,
+            from: feedbackData?.user.username,
+            opinion: feedbackData.opinion
+        }
     },
 
     deleteById: async (id:number, userId:number) => {

@@ -117,7 +117,12 @@ De esta forma, el repository solamente informa que el recurso no existe, mientra
 Si el feedback existe y el usuario está autorizado:
 
 ```ts
-return feedbackData
+return {
+            id: feedbackData.id,
+            createdAt: feedbackData.createdAt,
+            from: feedbackData?.user.username,
+            opinion: feedbackData.opinion
+        }
 ```
 
 El controller recibe estos datos y construye la respuesta HTTP `200`.
