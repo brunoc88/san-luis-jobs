@@ -3,7 +3,7 @@ Objetivos
 - PENDIENTE:
     - FEEDBACK:        
         ADMIN PAGES
-        /ID
+        /ID/DELETE
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
@@ -14,7 +14,11 @@ Objetivos
 
     - COMPLAINT
         ADMIN PAGES
-         /ID
+        /ID
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        /ID/DELETE
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
