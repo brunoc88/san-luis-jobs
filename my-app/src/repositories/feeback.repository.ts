@@ -6,7 +6,7 @@ export const feedbackRepo = {
         await prisma.feedback.create({data})
     },
 
-    findById: async (id: number ) : Promise<Feedback | null > => {
+    findById: async (id: number ) => {
         return await prisma.feedback.findUnique({where:{id}, include:{
             user:{
                 select:{
