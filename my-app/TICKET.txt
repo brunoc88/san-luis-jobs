@@ -31,9 +31,10 @@ Objetivos
         - TEST
         - DOCUMENTAR
         
-        SUPERADMIN
+        
         /GET(LIST ACCOUNT ACTIVE )
-        - LISTADO DE CUENTAS ACTIVAS (UX FIGMA)
+        - LISTADO DE CUENTAS ACTIVAS y NO ACTIVAS 
+        SUPERADMIN
         /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
         - ENDPOINT/SERVICE/REPO
         - TEST
