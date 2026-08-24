@@ -13,6 +13,7 @@
     "test:l": "dotenv -e .env.test -- vitest test/location/location.create.test.ts",
     "test:j": "dotenv -e .env.test -- vitest test/job/job.index.test.ts",
     "test:f": "dotenv -e .env.test -- vitest test/feedback/feedback.details.test.ts",
+    "test:c": "dotenv -e .env.test -- vitest test/complaint/complaint.details.test.ts",
     "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
     "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
     "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"

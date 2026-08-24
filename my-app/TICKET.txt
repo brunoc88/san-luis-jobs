@@ -10,10 +10,7 @@ Objetivos
 
     - COMPLAINT
         ADMIN PAGES
-        /ID (GET)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
+        
         /ID (DELETE)
         - ENDPOINT/SERVICE/REPO
         - TEST
@@ -24,7 +21,7 @@ Objetivos
         - DOCUMENTAR
     
     - ADMINPANEL
-        /GET(LIST ACCOUNT)
+        /GET(LIST ACCOUNT SUSPENDED)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
@@ -33,7 +30,10 @@ Objetivos
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
-
+        
+        SUPERADMIN
+        /GET(LIST ACCOUNT ACTIVE )
+        - LISTADO DE CUENTAS ACTIVAS (UX FIGMA)
         /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
         - ENDPOINT/SERVICE/REPO
         - TEST
@@ -55,11 +55,10 @@ Objetivos
         
     - JOB:
         - EDITAR
+            - UX(FIGMA)
             - FIGMA
             - ENDPOINT/SERVICE/REPO
     
-
-
         
 
 
