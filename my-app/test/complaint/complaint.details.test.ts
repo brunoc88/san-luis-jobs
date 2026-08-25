@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { describe, it, beforeEach, afterEach, afterAll, vi, expect } from "vitest"
 import clearTestDb from "../clearTestDb"
-import { getUsers, loadUsers } from "../fake.user"
+import { getUsers } from "../fake.user"
 import { getServerSession } from "next-auth"
 import { getJobs, loadJobs } from "../fakeJobs"
-import { POST } from "@/app/api/jobs/[id]/complaint/route"
 import { GET } from "@/app/api/complaints/[id]/route"
 
 let users: any[]

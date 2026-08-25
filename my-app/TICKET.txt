@@ -11,10 +11,6 @@ Objetivos
     - COMPLAINT
         ADMIN PAGES
         
-        /ID (DELETE)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
         /GET(LIST)
         - ENDPOINT/SERVICE/REPO
         - TEST
@@ -36,6 +32,7 @@ Objetivos
         - LISTADO DE CUENTAS ACTIVAS y NO ACTIVAS 
         SUPERADMIN
         /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
+        (notificar con email que recibio rol de admin)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR

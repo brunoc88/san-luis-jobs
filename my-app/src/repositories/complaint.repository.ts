@@ -36,5 +36,9 @@ export const complaintRepo = {
                 }
             }
         })
+    },
+
+    deleteById: async (id:number) => {
+        await prisma.complaint.updateMany({data:{isActive:false}, where:{id}})
     }
 }
