@@ -22,3 +22,15 @@ export const POST = async (req: Request) => {
         return errorHandler(error)
     }
 }
+
+export const GET = async () => {
+    try {
+        const userId = await requireSession()
+
+        const feedbacks = await feedbackService.getAllFeedbacks(userId)
+        return NextResponse.json({ok:true, feedbacks},{status:200})
+
+    } catch (error) {
+        return errorHandler(error)
+    }
+}

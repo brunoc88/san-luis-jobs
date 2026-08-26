@@ -42,5 +42,12 @@ export const feedbackService = {
         }
 
         await feedbackRepo.deleteById(feedbackData.id)
+    },
+
+    getAllFeedbacks: async (id:number) => {
+        const user = await requireActiveUserById(id)
+        requireAdmin(user.role)
+
+        return await feedbackRepo.findAllFeedbacks()
     }
 }
