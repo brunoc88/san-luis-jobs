@@ -38,7 +38,31 @@ export const complaintRepo = {
         })
     },
 
-    deleteById: async (id:number) => {
-        await prisma.complaint.updateMany({data:{isActive:false}, where:{id}})
+    deleteById: async (id: number) => {
+        await prisma.complaint.updateMany({ data: { isActive: false }, where: { id } })
+    },
+
+    findAllActiveComplaints: async (skip: number, take: number) => {
+        return await prisma.complaint.findMany({
+            skip,
+            take,
+            orderBy: [
+                {
+                    createdAt: "desc"
+                },
+                {
+                    id: "desc"
+                }
+            ],
+            include: {
+                user: {
+                    select: {
+                        username: true
+                    }
+                }
+            },
+            where:{isActive:true}
+        }
+        )
     }
 }

@@ -2,12 +2,6 @@ Objetivos
 
 - PENDIENTE:
     - COMPLAINT
-        ADMIN PAGES
-        
-        /GET(LIST)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
     
     - ADMINPANEL
         /GET(LIST ACCOUNT SUSPENDED)
