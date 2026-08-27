@@ -1,13 +1,6 @@
 Objetivos
 
 - PENDIENTE:
-    - FEEDBACK:        
-        ADMIN PAGES
-        /GET(LIST)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
-
     - COMPLAINT
         ADMIN PAGES
         

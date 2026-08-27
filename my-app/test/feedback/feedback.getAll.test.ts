@@ -4,6 +4,7 @@ import { describe, it, beforeEach, afterEach, afterAll, vi, expect } from "vites
 import { getUsers, loadUsers } from "../fake.user"
 import { GET } from "@/app/api/feedback/route"
 import clearTestDb from "../clearTestDb"
+import { NextRequest } from "next/server"
 
 let users: any[]
 
@@ -67,12 +68,62 @@ describe('GET /api/feedback', () => {
             ]
         })
 
-        const res = await GET()
+        const res = await GET(new NextRequest(
+            `http://localhost/api/feedback`
+        ))
         const body = await res.json()
-        console.log('feedback:', body.feedbacks)
+        
         expect(res.status).toBe(200)
         expect(body.ok).toBe(true)
         expect(body.feedbacks).not.toBeNull()
+        expect(body).toHaveProperty('hasNextPage')
+        expect(body.hasNextPage).toBe(true)
+        expect(body.feedbacks.length).toBe(5)
+    })
+    it('paginacion', async () => {
+        mockAuthenticatedSession(0)
+        // cargo algunos
+        const opinion = 'muy buen sitio web'
+
+        await prisma.feedback.createMany({
+            data: [{
+                userId: users[0].id,
+                opinion
+            },
+            {
+                userId: users[1].id,
+                opinion
+            },
+            {
+                userId: users[2].id,
+                opinion
+            },
+            {
+                userId: users[3].id,
+                opinion
+            },
+            {
+                userId: users[4].id,
+                opinion
+            },
+            {
+                userId: users[5].id,
+                opinion
+            },
+            ]
+        })
+
+        const res = await GET(new NextRequest(
+            `http://localhost/api/feedback?page=${2}`
+        ))
+        const body = await res.json()
+        
+        expect(res.status).toBe(200)
+        expect(body.ok).toBe(true)
+        expect(body.feedbacks).not.toBeNull()
+        expect(body).toHaveProperty('hasNextPage')
+        expect(body.hasNextPage).toBe(false)
+        expect(body.feedbacks.length).toBe(1)
     })
 })
 
