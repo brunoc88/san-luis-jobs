@@ -22,6 +22,7 @@ model User {
   pic         String
   picPublicId String?
   isActive    Boolean    @default(false)
+  isSuspended Boolean    @default(false)
   visibility  Boolean    @default(true)
   cv          String?
   cvPublicId  String?       
