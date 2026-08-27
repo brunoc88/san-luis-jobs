@@ -1,19 +1,34 @@
 Objetivos
 
+- URGENTE: 
+    - JOB:
+        SUSPENDED:
+            MODIFICAR 
+            -TABLA WARNIG(INCLUIR isActive(boolean(true)), adminId)
+            - SERVICE/REPO
+            - TEST
+            
+    NECESARIO PARA AUDITORIA:
+        - CORROBAR SI LA SUSPENSION ES VALIDA
+        - VER SI NO HAY ABUSO DE PODER
+
 - PENDIENTE:
     - ADMINPANEL
         
-        
-        /GET(LIST)
-        - LISTADO DE CUENTAS ACTIVAS y NO ACTIVAS 
+        USER:
+        GET /(LIST)
+        - LISTADO DE CUENTAS ACTIVAS y NO ACTIVAS(INCATIVAS SOLO PARA TODOS, INCLUIR LAS ACTIVAS PARA 
+        EL SUPERADMIN PUEDA ADEMAS DE ACTIVARLAS COMO LO PUEDE HACER UN ADMIN AQUI EL SUPERADMIN PODRA
+        DARLE O QUITARLE AL USUARIO EL ROL DE ADMIN) 
 
-        /ID(ACTIVATE AN INACTIVE AND NOT SUSPENDED ACCOUNT)
+        PATCH /ID(ACTIVATE AN INACTIVE AND NOT SUSPENDED ACCOUNT)
+        (notificar con email que se activo su cuenta)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
         
         SUPERADMIN
-        /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
+        PATCH /ID/GIVEROLE(GIVE OR LOOSE ADMIN ROLE)
         (notificar con email que recibio rol de admin)
         - ENDPOINT/SERVICE/REPO
         - TEST
@@ -25,7 +40,13 @@ Objetivos
         - TEST
         - DOCUMENTAR
 
-        /ID(ACTIVATE SUSPENDED ACCOUNT)
+        PATCH /ID(ACTIVATE SUSPENDED ACCOUNT)
+        (notificar con email que se activo su cuenta)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+
+        GET /ID/SUSPENSION-AUDIT(VER PUBLICACIONES SUSPENDIAS DE USUARIO SUSPENDIDO)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
@@ -43,12 +64,22 @@ Objetivos
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
-        
+
+    - USER:
+        /ID/SUSPENSION-AUDIT
+        (SE VAN A MOSTRAR TODOS LOS JOBS SUSPENDIDO)
+        (NO VA A SER UNA LISTA, ASI A LO CRUDO)
+            - UX(FIGMA)
+            - FIGMA   
     - JOB:
         - EDITAR
             - UX(FIGMA)
             - FIGMA
             - ENDPOINT/SERVICE/REPO
+            
+    - LOCATION 
+            /PANEL:
+            - UX(FIGMA)
     
         
 
