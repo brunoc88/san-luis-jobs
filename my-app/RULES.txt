@@ -1,0 +1,31 @@
+Panel de cuentas
+🟢 Cuentas activas / desactivadas voluntariamente
+Admin + SuperAdmin: pueden consultar el listado.
+Mostrar:
+ID
+Email
+Username
+Estado
+Rol
+Acciones
+Incluye:
+cuentas activas
+cuentas desactivadas voluntariamente
+No incluye cuentas suspendidas.
+Ningún administrador puede desactivar una cuenta desde el panel.
+Admin y SuperAdmin pueden reactivar una cuenta que el propio usuario haya desactivado.
+No necesitamos token por email para esta reactivación inicialmente.
+Listado paginado de 5 en 5.
+Búsqueda por username realizada en backend.
+Búsqueda + paginación funcionan conjuntamente.
+Cuando cambia la búsqueda, se vuelve a page = 1.
+La búsqueda se puede hacer mientras el usuario escribe, utilizando debounce.
+Solo SuperAdmin puede otorgar o quitar el rol de Admin.
+
+🔴 Cuentas suspendidas
+Acceso exclusivo para SuperAdmin.
+Listado paginado de 5 en 5.
+Permite revisar las cuentas suspendidas.
+SuperAdmin puede decidir quitar la suspensión/reactivar la cuenta.
+Un Admin común no puede quitar una suspensión.
+También puede contar con búsqueda por username en backend.

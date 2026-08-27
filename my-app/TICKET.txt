@@ -1,25 +1,31 @@
 Objetivos
 
 - PENDIENTE:
-    - COMPLAINT
-    
     - ADMINPANEL
+        
+        
+        /GET(LIST)
+        - LISTADO DE CUENTAS ACTIVAS y NO ACTIVAS 
+
+        /ID(ACTIVATE AN INACTIVE AND NOT SUSPENDED ACCOUNT)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        
+        SUPERADMIN
+        /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
+        (notificar con email que recibio rol de admin)
+        - ENDPOINT/SERVICE/REPO
+        - TEST
+        - DOCUMENTAR
+        
+
         /GET(LIST ACCOUNT SUSPENDED)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
 
-        /ID(ACTIVATE O DESACTIVATE ACCOUNT)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
-        
-        
-        /GET(LIST ACCOUNT ACTIVE )
-        - LISTADO DE CUENTAS ACTIVAS y NO ACTIVAS 
-        SUPERADMIN
-        /ID/TOGGLEROLE(GIVE OR LOOSE ADMIN ROLE)
-        (notificar con email que recibio rol de admin)
+        /ID(ACTIVATE SUSPENDED ACCOUNT)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
