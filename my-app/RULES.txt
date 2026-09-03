@@ -21,7 +21,8 @@ Búsqueda + paginación funcionan conjuntamente.
 Cuando cambia la búsqueda, se vuelve a page = 1.
 La búsqueda se puede hacer mientras el usuario escribe, utilizando debounce.
 Solo SuperAdmin puede otorgar o quitar el rol de Admin.
-
+(consultar: devolver solo cuentas comunes para admin,
+un admin no deberia poder activar cuenta de otro admin)
 🔴 Cuentas suspendidas
 Acceso exclusivo para SuperAdmin.
 Listado paginado de 5 en 5.

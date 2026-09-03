@@ -74,7 +74,8 @@ export const jobService = {
         const warningToCreate = {
             userId: author.id,
             reason: data.reason,
-            jobId
+            jobId,
+            adminId: user.id
         }
 
         await warningRepo.create(warningToCreate)

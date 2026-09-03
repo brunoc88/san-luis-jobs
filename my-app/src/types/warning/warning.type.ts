@@ -1,5 +1,6 @@
 export type WarningCreate = {
     reason: string
     userId: number
-    jobId: number
+    jobId: number,
+    adminId: number
 }

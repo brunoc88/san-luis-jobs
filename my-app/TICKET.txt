@@ -1,17 +1,5 @@
 Objetivos
 
-- URGENTE: 
-    - JOB:
-        SUSPENDED:
-            MODIFICAR 
-            -TABLA WARNIG(INCLUIR isActive(boolean(true)), adminId)
-            - SERVICE/REPO
-            - TEST
-            
-    NECESARIO PARA AUDITORIA:
-        - CORROBAR SI LA SUSPENSION ES VALIDA
-        - VER SI NO HAY ABUSO DE PODER
-
 - PENDIENTE:
     - ADMINPANEL
         

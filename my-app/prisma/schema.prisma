@@ -31,7 +31,8 @@ model User {
   verificationToken EmailVerificationToken?
   
   jobs        Job[]
-  warnings    Warning[]
+  warnings       Warning[] @relation("UserWarnings")
+  warningsGiven  Warning[] @relation("AdminWarnings")
   savedJobs   SavedJob[]
 
   applications Application[]
@@ -106,12 +107,16 @@ model Warning {
   id        Int      @id @default(autoincrement())
   reason    String
   createdAt DateTime @default(now())
+  isActive  Boolean  @default(true)
 
-  jobId      Int     @unique
-  job        Job     @relation(fields: [jobId], references: [id])
+  jobId     Int      @unique
+  job       Job      @relation(fields: [jobId], references: [id])
 
-  userId     Int
-  user       User    @relation(fields: [userId], references: [id])
+  userId    Int
+  user      User     @relation("UserWarnings", fields: [userId], references: [id])
+
+  adminId   Int
+  admin     User     @relation("AdminWarnings", fields: [adminId], references: [id])
 }
 
 model SavedJob {

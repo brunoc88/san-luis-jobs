@@ -10,6 +10,7 @@ let users: any[]
 let jobs: any[]
 
 beforeEach(async () => {
+    await prisma.feedback.deleteMany()
     await prisma.warning.deleteMany()
     await prisma.job.deleteMany()
     await prisma.user.deleteMany()
@@ -138,36 +139,93 @@ describe('POST /api/job/:id/suspend', () => {
             let data = {
                 reason: 'Inflige las normas'
             }
+            const warningBefore = await prisma.warning.findFirst()
+            expect(warningBefore).toBeNull()
 
             const res = await POST(makeRequest(data, String(jobs[2].id)), { params: { id: jobs[2].id } })
-            const job = await prisma.job.findUnique({where:{id:jobs[2].id}})
+            const job = await prisma.job.findUnique({ where: { id: jobs[2].id } })
+            const warningAfter = await prisma.warning.findFirst({
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                            isActive:true
+                        }
+                    },
+                    admin: {
+                        select: {
+                            username: true
+                        }
+                    },
+                    job: {
+                        select: {
+                            title: true
+                        }
+                    }
+
+                }
+            })
 
             expect(res.status).toBe(201)
             expect(mailService.sendJobSuspendedEmail).toHaveBeenCalled()
             expect(mailService.sendAccountSuspendedEmail).not.toHaveBeenCalled()
             expect(job?.isActive).toBe(false)
             expect(job?.isSuspended).toBe(true)
+            expect(warningAfter).not.toBeNull()
+            expect(warningAfter?.user.isActive).toBe(true)
+
         })
 
-        it('usuario suspendido/inactivo', async () => {
+        it.only('usuario suspendido/inactivo', async () => {
             mockAuthenticatedSession(0)
 
             // para este test se modifico el limite de suspenciones a 2
-            
-            const jobsByUserId = await prisma.job.findMany({where:{userId:users[3].id}})
-            
-            await prisma.warning.createMany({data:{
-                jobId:jobsByUserId[0].id,
-                userId:users[3].id,
-                reason:'inflige las normas'
-            }})
-           
 
-            const res = await POST(makeRequest({reason:'inflige las normas'}, String(jobsByUserId[1].id)), { params: { id: jobsByUserId[1].id } })
+            const jobsByUserId = await prisma.job.findMany({ where: { userId: users[3].id } })
 
-            const allJobsByAuthor = await prisma.job.findMany({where:{userId:users[3].id}})
-            const user = await prisma.user.findUnique({where:{id:users[3].id}})
-            
+            const warningBefore = await prisma.warning.findFirst()
+            expect(warningBefore).toBeNull()
+
+            await prisma.warning.createMany({
+                data: {
+                    jobId: jobsByUserId[0].id,
+                    userId: users[3].id,
+                    reason: 'inflige las normas',
+                    adminId: users[0].id
+                }
+            })
+
+
+            const res = await POST(makeRequest({ reason: 'inflige las normas' }, String(jobsByUserId[1].id)), { params: { id: jobsByUserId[1].id } })
+
+            const allJobsByAuthor = await prisma.job.findMany({ where: { userId: users[3].id } })
+            const user = await prisma.user.findUnique({ where: { id: users[3].id } })
+
+            const warningAfter = await prisma.warning.findMany({
+                where:{
+                    userId:users[3].id
+                },
+                include: {
+                    user: {
+                        select: {
+                            username: true,
+                            isActive:true
+                        }
+                    },
+                    admin: {
+                        select: {
+                            username: true
+                        }
+                    },
+                    job: {
+                        select: {
+                            title: true
+                        }
+                    }
+
+                }
+            })
+
             expect(res.status).toBe(201)
             expect(mailService.sendAccountSuspendedEmail).toHaveBeenCalled()
             expect(user?.isActive).toBe(false)
@@ -175,6 +233,8 @@ describe('POST /api/job/:id/suspend', () => {
             expect(allJobsByAuthor[0].isActive).toBe(false)
             expect(allJobsByAuthor[0].isSuspended).toBe(true)
             expect(allJobsByAuthor[1].isSuspended).toBe(true)
+            expect(warningAfter).not.toBeNull()
+            console.log('warnings:', warningAfter)
         })
     })
 })
