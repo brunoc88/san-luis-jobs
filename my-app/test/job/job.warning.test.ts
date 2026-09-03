@@ -176,7 +176,7 @@ describe('POST /api/job/:id/suspend', () => {
 
         })
 
-        it.only('usuario suspendido/inactivo', async () => {
+        it('usuario suspendido/inactivo', async () => {
             mockAuthenticatedSession(0)
 
             // para este test se modifico el limite de suspenciones a 2
@@ -234,7 +234,7 @@ describe('POST /api/job/:id/suspend', () => {
             expect(allJobsByAuthor[0].isSuspended).toBe(true)
             expect(allJobsByAuthor[1].isSuspended).toBe(true)
             expect(warningAfter).not.toBeNull()
-            console.log('warnings:', warningAfter)
+            
         })
     })
 })

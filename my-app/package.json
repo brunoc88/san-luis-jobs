@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "dotenv -e .env.test",
-    "test:u": "dotenv -e .env.test -- vitest test/user/user.create.test.ts",
+    "test:u": "dotenv -e .env.test -- vitest test/user/user.activate.suspended.account.test.ts",
     "test:e": "dotenv -e .env.test -- vitest test/mail/mail.service.test.ts",
     "test:a": "dotenv -e .env.test -- vitest test/auth/reset.password.pt2.test.ts",
     "test:l": "dotenv -e .env.test -- vitest test/location/location.create.test.ts",

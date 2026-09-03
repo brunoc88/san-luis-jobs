@@ -130,4 +130,33 @@ export const mailService = {
         })
     },
 
+    sendSuspendedAccountActivatedEmail: (email: string) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'Cuenta reactivada',
+            html: `
+            <h2>Tu cuenta ha sido reactivada</h2>
+
+            <p>
+                Te informamos que tu cuenta ha sido reactivada correctamente.
+            </p>
+
+            <p>
+                Las suspensiones asociadas a tu cuenta han sido levantadas
+                y ya podés volver a utilizar la plataforma con normalidad.
+            </p>
+
+            <p>
+                Recordá respetar las normas de la plataforma para evitar
+                nuevas sanciones.
+            </p>
+
+            <p>
+                Saludos,<br>
+                Equipo de Soporte
+            </p>
+        `
+        })
+    }
 }
