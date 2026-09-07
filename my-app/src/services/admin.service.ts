@@ -26,5 +26,39 @@ export const adminService = {
         return {
             email: suspendedUserData.email
         }
+    },
+
+    toggleRole: async (userId: number, selectedUserId: number) => {
+        const user = await requireActiveUserById(userId)
+        if (user.role !== 'superAdmin') throw new ForbiddenError()
+
+        const selectedUserData = await userRepo.findById(selectedUserId)
+        if (!selectedUserData) throw new NotFoundError()
+
+
+        if (user.id === selectedUserData.id) throw new ForbiddenError('No puedes cambiar tu propio rol')
+
+        type action = 'granted' | 'revoked'
+
+
+        if (user.role === selectedUserData.role) throw new ForbiddenError('Accion invalida')
+
+        let result: action
+
+        if (selectedUserData.role === 'admin') {
+            await adminRepo.revokeAdminRoleById(selectedUserData.id)
+            result = 'revoked'
+        }
+        else {
+            if (!selectedUserData.isActive || selectedUserData.isSuspended) throw new ForbiddenError('El usuario no cumple las condiciones')
+            await adminRepo.assignAdminRoleById(selectedUserData.id)
+            result = 'granted'
+        }
+
+        return {
+            email: selectedUserData.email,
+            result
+        }
+
     }
 }

@@ -158,5 +158,81 @@ export const mailService = {
             </p>
         `
         })
+    },
+
+    sendAdminRoleGrantedEmail: (email: string) => {
+
+        return transporter.sendMail({
+
+            from: '"Soporte" <no-reply@app.com>',
+
+            to: email,
+
+            subject: 'Rol de administrador otorgado',
+
+            html: `
+            <h2>Has recibido el rol de administrador</h2>
+
+            <p>
+                Te informamos que tu cuenta ha recibido correctamente
+                el rol de administrador.
+            </p>
+
+            <p>
+                A partir de este momento contarás con los permisos
+                correspondientes a dicho rol dentro de la plataforma.
+            </p>
+
+            <p>
+                Recordá utilizar estos permisos de manera responsable
+                y respetar las normas de la plataforma.
+            </p>
+
+            <p>
+                Saludos,<br>
+                Equipo de Soporte
+            </p>
+        `
+
+        })
+
+    },
+
+    sendAdminRoleRevokedEmail: (email: string) => {
+
+        return transporter.sendMail({
+
+            from: '"Soporte" <no-reply@app.com>',
+
+            to: email,
+
+            subject: 'Rol de administrador revocado',
+
+            html: `
+            <h2>Tu rol de administrador ha sido revocado</h2>
+
+            <p>
+                Te informamos que el rol de administrador de tu cuenta
+                ha sido revocado correctamente.
+            </p>
+
+            <p>
+                A partir de este momento tu cuenta volverá a contar
+                con los permisos correspondientes a un usuario común.
+            </p>
+
+            <p>
+                Si considerás que esta modificación se realizó por error,
+                podés comunicarte con el equipo de soporte.
+            </p>
+
+            <p>
+                Saludos,<br>
+                Equipo de Soporte
+            </p>
+        `
+
+        })
+
     }
 }
