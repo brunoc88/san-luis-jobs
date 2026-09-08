@@ -15,21 +15,8 @@ Objetivos
         - TEST
         - DOCUMENTAR
         
-        SUPERADMIN
-        PATCH /ID/GIVEROLE(GIVE OR LOOSE ADMIN ROLE)
-        (notificar con email que recibio o perdido rol de admin)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
-        
 
         /GET(LIST ACCOUNT SUSPENDED)
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
-
-
-        GET /ID/SUSPENSION-AUDIT(VER PUBLICACIONES SUSPENDIAS DE USUARIO SUSPENDIDO)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR

@@ -60,5 +60,48 @@ export const adminService = {
             result
         }
 
+    },
+
+    getUserAuditById: async (userId: number, suspendedUserId: number) => {
+
+        const user = await requireActiveUserById(userId)
+
+        if (user.role !== 'superAdmin') {
+            throw new ForbiddenError()
+        }
+
+        const suspendedUserData = await userRepo.findById(suspendedUserId)
+
+        if (!suspendedUserData) {
+            throw new NotFoundError()
+        }
+
+        if (user.id === suspendedUserData.id) {
+            throw new ForbiddenError()
+        }
+
+        if (user.role === suspendedUserData.role) {
+            throw new ForbiddenError('No puedes ver esta auditoría')
+        }
+
+        if (!suspendedUserData.isSuspended) {
+            throw new ForbiddenError('El usuario no cuenta con suspension')
+        }
+
+        const audit = await adminRepo.findUserAuditById(suspendedUserData.id) 
+
+        return audit.map(a => ({
+            jobInfo:{
+                title: a.job.title,
+                description: a.job.description,
+                createdAt: a.job.createdAt,
+                author:a.user.username
+            },
+            suspensionInfo:{
+                reason: a.reason,
+                date: a.createdAt,
+                by: a.admin.username
+            }
+        }))
     }
 }
