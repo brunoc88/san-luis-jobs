@@ -4,6 +4,7 @@ import { loadUsers, getUsers } from "../fake.user"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 import { PATCH } from "@/app/api/users/[id]/give-role/route"
+import { mailService } from "@/services/mail.service"
 
 
 let users: any[]
@@ -21,6 +22,13 @@ vi.mock('next-auth', async () => {
         getServerSession: vi.fn(),
     }
 })
+
+vi.mock('@/services/mail.service', () => ({
+  mailService: {
+    sendAdminRoleGrantedEmail: vi.fn(),
+    sendAdminRoleRevokedEmail: vi.fn()
+  }
+}))
 
 
 const mockAuthenticatedSession = (i: number) => {
@@ -100,6 +108,7 @@ describe('PATCH /api/users/:id/give-role', () => {
         expect(body.ok).toBe(true)
         expect(userBefore.role).toBe('common')
         expect(userAfter?.role).toBe('admin')
+        expect(mailService.sendAdminRoleGrantedEmail).toHaveBeenCalled()
 
     })
 
@@ -115,6 +124,7 @@ describe('PATCH /api/users/:id/give-role', () => {
         expect(res.status).toBe(200)
         expect(body.ok).toBe(true)
         expect(user?.role).toBe('common')
+        expect(mailService.sendAdminRoleRevokedEmail).toHaveBeenCalled()
 
     })
 })

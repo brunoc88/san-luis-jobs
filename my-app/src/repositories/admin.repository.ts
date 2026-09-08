@@ -45,5 +45,9 @@ export const adminRepo = {
                 }
             }
         })
+    },
+
+    activateUserAccountById: async (id: number) => {
+        await prisma.user.update({data:{isActive:true},where:{id}})
     }
 }

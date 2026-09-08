@@ -234,5 +234,34 @@ export const mailService = {
 
         })
 
+    },
+
+    sendAccountActivatedEmail: (email: string) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'Cuenta activada',
+            html: `
+            <h2>Tu cuenta ha sido reactivada</h2>
+
+            <p>
+                Te informamos que tu cuenta ha sido activada correctamente.
+            </p>
+
+            <p>
+                Ya podés volver a utilizar la plataforma con normalidad.
+            </p>
+
+            <p>
+                Si no solicitaste esta reactivación o considerás que se realizó
+                por error, podés comunicarte con el equipo de soporte.
+            </p>
+
+            <p>
+                Saludos,<br>
+                Equipo de Soporte
+            </p>
+        `
+        })
     }
 }

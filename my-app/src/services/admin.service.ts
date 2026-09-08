@@ -1,4 +1,5 @@
 import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
+import { requireAdmin } from "@/domain/auth/requireAdmin"
 import { ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { adminRepo } from "@/repositories/admin.repository"
 import { userRepo } from "@/repositories/user.repository"
@@ -88,20 +89,54 @@ export const adminService = {
             throw new ForbiddenError('El usuario no cuenta con suspension')
         }
 
-        const audit = await adminRepo.findUserAuditById(suspendedUserData.id) 
+        const audit = await adminRepo.findUserAuditById(suspendedUserData.id)
 
         return audit.map(a => ({
-            jobInfo:{
+            jobInfo: {
                 title: a.job.title,
                 description: a.job.description,
                 createdAt: a.job.createdAt,
-                author:a.user.username
+                author: a.user.username
             },
-            suspensionInfo:{
+            suspensionInfo: {
                 reason: a.reason,
                 date: a.createdAt,
                 by: a.admin.username
             }
         }))
+    },
+
+    activateUserAccount: async (userId: number, inactiveUserId: number) => {
+
+        const user = await requireActiveUserById(userId)
+
+        requireAdmin(user.role)
+
+        const inactiveUserData = await userRepo.findById(inactiveUserId)
+
+        if (!inactiveUserData) {
+            throw new NotFoundError()
+        }
+
+        if (inactiveUserData.isSuspended) {
+            throw new ForbiddenError('Accion invalida: Cuenta suspendida')
+        }
+
+        if (inactiveUserData.isActive) {
+            throw new ForbiddenError('La cuenta ya esta activa!')
+        }
+
+        if (user.role === 'admin' && inactiveUserData.role === 'superAdmin') {
+            throw new ForbiddenError()
+        }
+
+        if (user.role === 'superAdmin' && inactiveUserData.role === 'superAdmin') {
+            throw new ForbiddenError()
+        }
+
+        await adminRepo.activateUserAccountById(inactiveUserData.id)
+        return {
+            email:inactiveUserData.email
+        }
     }
 }
