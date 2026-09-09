@@ -54,7 +54,7 @@ describe('GET /api/users/suspended', () => {
         await updateAccountsStatus()
         const res = await GET(new NextRequest(`http://localhost/api/users/suspended`))
         const body = await res.json()
-
+        
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('accounts')
         expect(body.account).not.toBeNull()

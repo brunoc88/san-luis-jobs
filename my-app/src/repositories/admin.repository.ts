@@ -58,5 +58,13 @@ export const adminRepo = {
             skip,
             take
         })
+    },
+
+    findAllAccounts: async (where:Prisma.UserWhereInput, skip:number, take:number) => {
+        return await prisma.user.findMany({
+            where,
+            skip,
+            take
+        })
     }
 }

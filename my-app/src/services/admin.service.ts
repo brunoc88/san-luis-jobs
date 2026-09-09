@@ -192,5 +192,63 @@ export const adminService = {
             })),
             hasNextPage
         }
+    },
+
+    getAllAccounts: async (userId:number, page: number, search?: string) => {
+        const user = await requireActiveUserById(userId)
+        requireAdmin(user.role)
+
+        const limit = 5
+        const skip = (page - 1) * limit
+        const take = limit + 1
+
+        const where: Prisma.UserWhereInput = {
+            isSuspended:false,
+            role: {
+                not: UserRole.superAdmin
+            }
+        }
+        
+        if(user.role === 'admin') {
+            where.isActive = false
+        }
+
+         if (search) {
+            where.OR = [
+                {
+                    username: {
+                        startsWith: search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    email: {
+                        startsWith: search,
+                        mode: 'insensitive'
+                    }
+                }
+            ]
+        }
+
+        const allAccounts = await adminRepo.findAllAccounts(where, skip, take)
+
+        const hasNextPage = allAccounts.length > limit
+
+        const accountsToReturn = hasNextPage
+            ? allAccounts.slice(0, limit)
+            : allAccounts
+
+        return {
+            accounts: accountsToReturn.map(a => ({
+                id: a.id,
+                username: a.username,
+                email: a.email,
+                isActive: a.isActive,
+                role: a.role
+            })),
+            hasNextPage
+        }
+
+
     }
 }
