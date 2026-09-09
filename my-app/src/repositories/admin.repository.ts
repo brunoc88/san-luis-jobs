@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 
 export const adminRepo = {
     activateSuspendedAccountById: async (id: number) => {
@@ -48,6 +49,14 @@ export const adminRepo = {
     },
 
     activateUserAccountById: async (id: number) => {
-        await prisma.user.update({data:{isActive:true},where:{id}})
+        await prisma.user.update({ data: { isActive: true }, where: { id } })
+    },
+
+    findAllSuspendedAccounts: async (where:Prisma.UserWhereInput, skip:number, take:number) => {
+        return await prisma.user.findMany({
+            where,
+            skip,
+            take
+        })
     }
 }

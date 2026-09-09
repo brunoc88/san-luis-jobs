@@ -3,6 +3,7 @@ import { requireAdmin } from "@/domain/auth/requireAdmin"
 import { ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { adminRepo } from "@/repositories/admin.repository"
 import { userRepo } from "@/repositories/user.repository"
+import { Prisma, UserRole } from "@prisma/client"
 
 export const adminService = {
     activateSuspendedAccount: async (userId: number, suspendedUserId: number) => {
@@ -136,7 +137,60 @@ export const adminService = {
 
         await adminRepo.activateUserAccountById(inactiveUserData.id)
         return {
-            email:inactiveUserData.email
+            email: inactiveUserData.email
+        }
+    },
+
+    getAllSuspendedAccounts: async (userId: number, page: number, search?: string) => {
+        const user = await requireActiveUserById(userId)
+        if (user.role !== 'superAdmin') throw new ForbiddenError()
+
+        const limit = 5
+        const skip = (page - 1) * limit
+        const take = limit + 1
+
+        const where: Prisma.UserWhereInput = {
+            isActive: false,
+            isSuspended: true,
+            role: {
+                not: UserRole.superAdmin
+            }
+        }
+
+        if (search) {
+            where.OR = [
+                {
+                    username: {
+                        startsWith: search,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    email: {
+                        startsWith: search,
+                        mode: 'insensitive'
+                    }
+                }
+            ]
+        }
+
+        const suspendedAccounts = await adminRepo.findAllSuspendedAccounts(where, skip, take)
+
+        const hasNextPage = suspendedAccounts.length > limit
+
+        const accountsToReturn = hasNextPage
+            ? suspendedAccounts.slice(0, limit)
+            : suspendedAccounts
+
+
+        return {
+            accounts: accountsToReturn.map(a => ({
+                id: a.id,
+                username: a.username,
+                email: a.email,
+                pic: a.pic
+            })),
+            hasNextPage
         }
     }
 }
