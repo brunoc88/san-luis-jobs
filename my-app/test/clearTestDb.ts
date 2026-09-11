@@ -4,6 +4,7 @@ const clearTestDb = async () => {
     await prisma.warning.deleteMany()
     await prisma.complaint.deleteMany()
     await prisma.feedback.deleteMany()
+    await prisma.savedJob.deleteMany()
     await prisma.job.deleteMany()
     await prisma.location.deleteMany()
     await prisma.user.deleteMany()

@@ -5,6 +5,9 @@ import { userRepo } from "@/repositories/user.repository"
 import crypto from 'crypto'
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
 import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
+import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
+import { UserInfoDto } from "@/types/user/user.info.type"
+import { jobRepo } from "@/repositories/job.repository"
 
 export const userService = {
     createAccount: async (data: RegisterUserInput, imageFile: File | null, cvFile: File | null): Promise<{ email: string, token: string }> => {
@@ -87,5 +90,47 @@ export const userService = {
 
         await verificationTokenRepo.delete(token)
         return
+    },
+
+    getUserInfo: async (id: number, username: string) => {
+        const user = await requireActiveUserById(id)
+        const userData = await userRepo.findByUsername(username)
+        if (!userData) throw new NotFoundError()
+
+        const jobs = await jobRepo.findAllActiveJobsByUserId(userData.id)
+        const savedJobs = await jobRepo.findSavedJobsByUserId(userData.id)
+        
+        let userInfo: UserInfoDto = {
+            username: userData.username,
+            pic: userData.pic,
+            isPublic: userData.visibility
+        }
+
+        if (user.id !== userData.id) {
+            if (!userData.visibility) {
+                return userInfo
+            }
+        }
+
+        userInfo.email = userData.email
+        userInfo.description = userData.description
+        if (jobs) {
+            userInfo.jobs = jobs.map(j => ({
+                id: j.id,
+                title: j.title,
+                ...(user.id === userData.id && { state: j.state }),
+                date: j.createdAt
+            }))
+        }
+
+        if (savedJobs && userData.id === user.id) {
+             userInfo.savedJobs = savedJobs.map(s => ({
+                id: s.job.id,
+                title: s.job.title,
+                state: s.job.state,
+                date: s.job.createdAt
+            }))
+        }
+        return userInfo
     }
 }

@@ -18,4 +18,7 @@ export const userRepo = {
 
     suspend: async (id:number) => await prisma.user.update({data:{isActive:false, isSuspended:true},where:{id}}),
   
+    findByUsername: async (username:string) => {
+        return await prisma.user.findUnique({where:{username, isActive:true, isSuspended:false}})
+    }
 }

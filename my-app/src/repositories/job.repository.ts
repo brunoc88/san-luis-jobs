@@ -99,6 +99,32 @@ export const jobRepo = {
                 }
             }
         })
+    },
+
+    findAllActiveJobsByUserId: async (userId: number) => {
+        return await prisma.job.findMany({ where: { userId, isActive: true, isSuspended: false } })
+    },
+
+    findSavedJobsByUserId: async (userId: number) => {
+        return await prisma.savedJob.findMany({
+            where: {
+                userId,
+                job: {
+                    isActive: true,
+                    isSuspended: false
+                }
+            },
+            select: {
+                job: {
+                    select: {
+                        id: true,
+                        title: true,
+                        state: true,
+                        createdAt: true
+                    }
+                }
+            }
+        })
     }
 
 }
