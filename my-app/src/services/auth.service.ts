@@ -1,4 +1,4 @@
-import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
+import { BadRequestError, ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { generateToken } from "@/domain/auth/generateToken"
 import { requireToken } from "@/domain/auth/requireToken"
 import { userRepo } from "@/repositories/user.repository"
@@ -29,7 +29,7 @@ export const authService = {
         }
 
         const existingToken = await verificationTokenRepo.findTokenByUserId(user.id)
-        
+
         if (existingToken) {
             await verificationTokenRepo.delete(existingToken.token)
         }
@@ -58,7 +58,13 @@ export const authService = {
 
         let user = await userRepo.findById(token.userId)
         if (!user) throw new NotFoundError()
-        if (!user.isActive) throw new BadRequestError('cuenta inactiva')
+        if (user.isSuspended) {
+            throw new ForbiddenError('Cuenta suspendida')
+        }
+
+        if (!user.isActive) {
+            throw new BadRequestError('cuenta inactiva')
+        }
 
 
         let hashedPassword = await bcrypt.hash(data.password, 10)

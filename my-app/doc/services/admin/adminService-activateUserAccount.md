@@ -64,7 +64,7 @@ Por lo tanto, las combinaciones permitidas son:
 
 ### 7. Verificar existencia de Token
 
-Si existe un token vinculado al usuario se procedera a eliminarlo
+Si existe un token vinculado al usuario se procedera a eliminarlo.
 
 ### 8. Activar la cuenta
 
