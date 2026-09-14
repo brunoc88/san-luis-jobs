@@ -2,7 +2,7 @@
 
 ## Descripción
 
-`activateUserAccount` permite a un usuario con permisos administrativos reactivar una cuenta que se encuentra desactivada voluntariamente.
+`activateUserAccount` permite a un usuario con permisos administrativos reactivar una cuenta que se encuentra desactivada voluntariamente o que nunca fue activada al crearla.
 
 Este método no permite reactivar cuentas suspendidas. Las cuentas suspendidas deben utilizar el flujo específico de reactivación de suspensión.
 
@@ -62,7 +62,11 @@ Por lo tanto, las combinaciones permitidas son:
 | `superAdmin` | `admin` | Permitido |
 | `superAdmin` | `superAdmin` | Rechazado |
 
-### 7. Activar la cuenta
+### 7. Verificar existencia de Token
+
+Si existe un token vinculado al usuario se procedera a eliminarlo
+
+### 8. Activar la cuenta
 
 Una vez superadas todas las validaciones, se llama a:
 
@@ -86,6 +90,7 @@ El service es responsable de:
 - impedir la activación de cuentas suspendidas;
 - impedir la activación de cuentas que ya están activas;
 - aplicar las restricciones relacionadas con los roles;
+- verificar existencia de token;
 - solicitar al repository la activación de la cuenta.
 
 El repository es responsable de modificar la base de datos.

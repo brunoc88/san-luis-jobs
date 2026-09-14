@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Este controller se encarga de procesar la solicitud para **activar una cuenta de usuario previamente desactivada voluntariamente**.
+Este controller se encarga de procesar la solicitud para **activar una cuenta de usuario previamente desactivada voluntariamente como tambien de una cuenta creada pero que nunca fue activada**.
 
 El controller no contiene reglas de negocio. Su responsabilidad es:
 
@@ -128,6 +128,7 @@ El service se encarga de validar:
 - Que la cuenta no esté suspendida.
 - Que la cuenta realmente esté inactiva.
 - Que el rol del usuario objetivo sea compatible con el rol del administrador que realiza la acción.
+- Si existe token viculado a al usuario que se desea activar.
 
 Después de realizar la activación, el service devuelve el email del usuario afectado.
 

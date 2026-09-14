@@ -3,6 +3,7 @@ import { requireAdmin } from "@/domain/auth/requireAdmin"
 import { ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { adminRepo } from "@/repositories/admin.repository"
 import { userRepo } from "@/repositories/user.repository"
+import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
 import { Prisma, UserRole } from "@prisma/client"
 
 export const adminService = {
@@ -135,6 +136,11 @@ export const adminService = {
             throw new ForbiddenError()
         }
 
+        const existingToken = await verificationTokenRepo.findTokenByUserId(inactiveUserId)
+        if (existingToken) {
+            await verificationTokenRepo.delete(existingToken.token)
+        }
+
         await adminRepo.activateUserAccountById(inactiveUserData.id)
         return {
             email: inactiveUserData.email
@@ -194,7 +200,7 @@ export const adminService = {
         }
     },
 
-    getAllAccounts: async (userId:number, page: number, search?: string) => {
+    getAllAccounts: async (userId: number, page: number, search?: string) => {
         const user = await requireActiveUserById(userId)
         requireAdmin(user.role)
 
@@ -203,17 +209,17 @@ export const adminService = {
         const take = limit + 1
 
         const where: Prisma.UserWhereInput = {
-            isSuspended:false,
+            isSuspended: false,
             role: {
                 not: UserRole.superAdmin
             }
         }
-        
-        if(user.role === 'admin') {
+
+        if (user.role === 'admin') {
             where.isActive = false
         }
 
-         if (search) {
+        if (search) {
             where.OR = [
                 {
                     username: {

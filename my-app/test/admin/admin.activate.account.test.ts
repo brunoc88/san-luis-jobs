@@ -36,32 +36,32 @@ const mackeRequest = async (userId: number) => {
     return await PATCH({ params: { id: userId } })
 }
 
-describe('PATCH /api/users/:id/activate', ()=>{
-    describe('casos invalidos', () =>{
-        it('activar cuenta suspendida', async () =>{
+describe('PATCH /api/users/:id/activate', () => {
+    describe('casos invalidos', () => {
+        it('activar cuenta suspendida', async () => {
             mockAuthenticatedSession(0)
 
             //editamos una cuenta 
-            await prisma.user.update({data:{isActive:false, isSuspended:true},where:{id:users[3].id}})
+            await prisma.user.update({ data: { isActive: false, isSuspended: true }, where: { id: users[3].id } })
 
             const res = await mackeRequest(users[3].id)
             const body = await res.json()
-            
+
             expect(res.status).toBe(403)
             expect(body.error).toBe('Accion invalida: Cuenta suspendida')
         })
 
-        it('activar cuenta ya activa', async () =>{
+        it('activar cuenta ya activa', async () => {
             mockAuthenticatedSession(0)
 
             const res = await mackeRequest(users[3].id)
             const body = await res.json()
-            
+
             expect(res.status).toBe(403)
             expect(body.error).toBe('La cuenta ya esta activa!')
         })
 
-        it('activar cuenta superAdmin siendo admin', async () =>{
+        it('activar cuenta superAdmin siendo admin', async () => {
             mockAuthenticatedSession(0)
 
             const res = await mackeRequest(users[7].id)
@@ -69,17 +69,17 @@ describe('PATCH /api/users/:id/activate', ()=>{
             expect(res.status).toBe(403)
         })
 
-        it('activar cuenta superAdmin siendo superAdmin', async () =>{
+        it('activar cuenta superAdmin siendo superAdmin', async () => {
             mockAuthenticatedSession(6)
 
             const res = await mackeRequest(users[7].id)
-            
+
             expect(res.status).toBe(403)
         })
     })
 
     describe('casos validos', () => {
-        it('activar cuenta comun siendo admin', async () =>{
+        it('activar cuenta comun siendo admin', async () => {
             mockAuthenticatedSession(0)
 
             const userBefore = users[5]
@@ -87,7 +87,7 @@ describe('PATCH /api/users/:id/activate', ()=>{
             const res = await mackeRequest(users[5].id)
             const body = await res.json()
 
-            const userAfter = await prisma.user.findUnique({where:{id:users[5].id}})
+            const userAfter = await prisma.user.findUnique({ where: { id: users[5].id } })
 
             expect(res.status).toBe(200)
             expect(body).toHaveProperty('ok')
@@ -96,7 +96,7 @@ describe('PATCH /api/users/:id/activate', ()=>{
             expect(userAfter?.isActive).toBe(true)
         })
 
-        it('activar cuenta admin siendo admin', async () =>{
+        it('activar cuenta admin siendo admin', async () => {
             mockAuthenticatedSession(0)
 
             const userBefore = users[2]
@@ -104,13 +104,44 @@ describe('PATCH /api/users/:id/activate', ()=>{
             const res = await mackeRequest(users[2].id)
             const body = await res.json()
 
-            const userAfter = await prisma.user.findUnique({where:{id:users[2].id}})
+            const userAfter = await prisma.user.findUnique({ where: { id: users[2].id } })
 
             expect(res.status).toBe(200)
             expect(body).toHaveProperty('ok')
             expect(body.ok).toBe(true)
             expect(userBefore?.isActive).toBe(false)
             expect(userAfter?.isActive).toBe(true)
+        })
+
+        it('activar cuenta con token', async () => {
+            mockAuthenticatedSession(0)
+
+            const userBefore = users[5]
+            //creamos un token
+            await prisma.emailVerificationToken.create({
+                data: {
+                    token: '$#!@!2$',
+                    userId: users[5].id,
+                    expiresAt: new Date(
+                        Date.now() + 24 * 60 * 60 * 1000
+                    )
+                }
+            })
+
+            await prisma.emailVerificationToken.findUnique({where:{userId:users[5].id}})
+
+            const res = await mackeRequest(users[5].id)
+            const body = await res.json()
+
+            const userAfter = await prisma.user.findUnique({ where: { id: users[5].id } })
+            const verifyToken = await prisma.emailVerificationToken.findUnique({where:{userId:users[5].id}})
+
+            expect(res.status).toBe(200)
+            expect(body).toHaveProperty('ok')
+            expect(body.ok).toBe(true)
+            expect(userBefore?.isActive).toBe(false)
+            expect(userAfter?.isActive).toBe(true)
+            expect(verifyToken).toBeNull()
         })
     })
 })
