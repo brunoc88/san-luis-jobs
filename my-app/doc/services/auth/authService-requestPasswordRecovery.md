@@ -1,83 +1,119 @@
-# Documentación - `authService.requestPasswordRecovery()`
+# Documentación - `requestPasswordRecovery` Service
 
 ## Objetivo
 
-Iniciar el flujo de recuperación de contraseña de un usuario.
+Este service gestiona la solicitud de recuperación de contraseña según el estado de la cuenta.
 
-El servicio verifica que la solicitud sea válida, genera un token de
-recuperación y almacena únicamente su hash en la base de datos. El token
-original se devuelve al controller para que pueda enviarse por correo
-electrónico.
+Solamente las cuentas activas pueden iniciar el flujo de recuperación. Las cuentas inactivas y suspendidas reciben un resultado específico para que el controller envíe el email correspondiente.
 
-------------------------------------------------------------------------
+## Firma
 
-## Flujo de ejecución
+```ts
+requestPasswordRecovery: async (
+    email: string
+): Promise<
+    {
+        token?: string
+        email: string
+        result: "ok" | "inactive" | "suspended"
+    } | void
+>
+```
 
-1.  Buscar el usuario por su dirección de correo electrónico.
-2.  Si el usuario no existe, finalizar la ejecución sin devolver
-    errores.
-3.  Si la cuenta no está activa, finalizar la ejecución.
-4.  Verificar si el usuario ya posee un token de recuperación vigente.
-5.  Si existe un token, finalizar la ejecución.
-6.  Generar un nuevo token mediante `generateToken()`.
-7.  Almacenar únicamente el `tokenHash` junto con el `userId` y la fecha
-    de expiración.
-8.  Devolver el `token` original y el email del usuario.
+## Flujo
 
-------------------------------------------------------------------------
+1. Buscar el usuario mediante su email.
+2. Si el usuario no existe, devolver `void`.
+3. Si la cuenta está suspendida:
+   - devolver `result: "suspended"`;
+   - no generar ningún token.
+4. Si la cuenta está inactiva:
+   - devolver `result: "inactive"`;
+   - no generar ningún token.
+5. Si la cuenta está activa:
+   - buscar un token existente asociado al usuario;
+   - si existe, eliminarlo;
+   - generar un nuevo token mediante `generateToken()`;
+   - guardar únicamente el hash del token junto con su fecha de expiración;
+   - devolver el token original, el email y `result: "ok"`.
 
-## Responsabilidades
+## Estados
 
-### Búsqueda del usuario
+### Usuario inexistente
 
-Obtiene el usuario asociado al correo electrónico recibido.
+```ts
+return
+```
 
-### Validaciones de seguridad
+No se genera token ni se realiza ninguna operación sobre tokens existentes.
 
-Por motivos de seguridad el servicio no informa si:
+### Cuenta suspendida
 
--   El usuario no existe.
--   La cuenta está inactiva.
--   Ya existe una solicitud de recuperación pendiente.
-
-En cualquiera de estos casos simplemente finaliza la ejecución.
-
-### Generación del token
-
-La función `generateToken()` devuelve:
-
--   `token`: valor original que será enviado al usuario por email.
--   `tokenHash`: versión hasheada que será almacenada en la base de
-    datos.
--   `expiresAt`: fecha de expiración del token.
-
-### Persistencia
-
-Únicamente se almacena el `tokenHash`.
-
-El token original nunca se guarda en la base de datos.
-
-### Resultado
-
-Si la operación es exitosa devuelve:
-
-``` ts
+```ts
 {
-    token: string;
-    email: string;
+    email: user.email,
+    result: "suspended"
 }
 ```
 
-En caso contrario finaliza la ejecución sin devolver datos (`void`).
+No se genera un token de recuperación.
 
-------------------------------------------------------------------------
+La cuenta suspendida debe seguir el flujo correspondiente de suspensión y no puede solicitar recuperación de contraseña.
 
-## Consideraciones de seguridad
+### Cuenta inactiva
 
--   No se revela si el usuario existe.
--   No se revela si la cuenta está activa o inactiva.
--   No se generan múltiples tokens de recuperación para un mismo
-    usuario.
--   El token enviado por correo nunca se almacena en texto plano.
--   La validación posterior se realiza comparando el hash del token
-    recibido con el hash almacenado en la base de datos.
+```ts
+{
+    email: user.email,
+    result: "inactive"
+}
+```
+
+No se genera un token de recuperación.
+
+La cuenta debe ser activada mediante el flujo administrativo correspondiente antes de poder solicitar una recuperación de contraseña.
+
+### Cuenta activa
+
+Si existe un token anterior, se elimina independientemente de si está vencido o no.
+
+Luego se genera uno nuevo:
+
+```ts
+{
+    token,
+    email: user.email,
+    result: "ok"
+}
+```
+
+El token original se devuelve al controller para ser enviado por email. En la base de datos solamente se almacena `tokenHash`.
+
+## Responsabilidades
+
+### Service
+
+- Buscar el usuario por email.
+- Determinar el estado de la cuenta.
+- Impedir la recuperación para cuentas inactivas o suspendidas.
+- Reemplazar cualquier token de recuperación anterior para cuentas activas.
+- Generar el nuevo token.
+- Persistir únicamente el hash del token.
+- Devolver el resultado necesario para que el controller determine qué email enviar.
+
+### Controller
+
+El controller interpreta el campo `result`:
+
+- `ok` → `sendEmailPasswordRecovery()`.
+- `inactive` → `sendInactiveAccountEmail()`.
+- `suspended` → `sendSuspendedAccountEmail()`.
+
+## Seguridad
+
+- Si el usuario no existe, el service no devuelve información sobre la cuenta.
+- Las cuentas inactivas y suspendidas no reciben tokens de recuperación.
+- El token anterior de una cuenta activa se elimina antes de crear uno nuevo.
+- No importa si el token anterior estaba vencido: una nueva solicitud reemplaza el token existente.
+- Solamente el hash del token se almacena en la base de datos.
+- El token original solamente se devuelve para permitir su envío mediante el email de recuperación.

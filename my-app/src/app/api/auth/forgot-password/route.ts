@@ -5,16 +5,44 @@ import { authService } from "@/services/auth.service"
 import { mailService } from "@/services/mail.service"
 import { NextResponse } from "next/server"
 
-export const POST = async (req:Request) => {
+export const POST = async (req: Request) => {
     try {
         const validation = await validateRequest(req, passwordRecoverySchema)
-        if(!validation.ok) return NextResponse.json({error: validation.error},{status:validation.status})
-        
-        const res = await authService.requestPasswordRecovery(validation.data?.email)
 
-        if(res) await mailService.sendEmailPasswordRecovery(res.email, res.token)
+        if (!validation.ok) {
+            return NextResponse.json(
+                { error: validation.error },
+                { status: validation.status }
+            )
+        }
 
-        return NextResponse.json({ok:true},{status:200})
+        const res = await authService.requestPasswordRecovery(
+            validation.data?.email
+        )
+
+        if (!res) {
+            return NextResponse.json({ ok: true }, { status: 200 })
+        }
+
+        switch (res.result) {
+            case 'ok':
+                await mailService.sendEmailPasswordRecovery(
+                    res.email,
+                    res.token!
+                )
+                break
+
+            case 'inactive':
+                await mailService.sendInactiveAccountEmail(res.email)
+                break
+
+            case 'suspended':
+                await mailService.sendSuspendedAccountEmail(res.email)
+                break
+        }
+
+        return NextResponse.json({ ok: true }, { status: 200 })
+
     } catch (error) {
         return errorHandler(error)
     }

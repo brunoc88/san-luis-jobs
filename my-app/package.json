@@ -9,7 +9,7 @@
     "test": "dotenv -e .env.test",
     "test:u": "dotenv -e .env.test -- vitest test/user/user.info.test.ts",
     "test:e": "dotenv -e .env.test -- vitest test/mail/mail.service.test.ts",
-    "test:a": "dotenv -e .env.test -- vitest test/auth/reset.password.pt2.test.ts",
+    "test:a": "dotenv -e .env.test -- vitest test/auth/forgot.password.test.ts",
     "test:l": "dotenv -e .env.test -- vitest test/location/location.create.test.ts",
     "test:j": "dotenv -e .env.test -- vitest test/job/job.warning.test.ts",
     "test:f": "dotenv -e .env.test -- vitest test/feedback/feedback.getAll.test.ts",

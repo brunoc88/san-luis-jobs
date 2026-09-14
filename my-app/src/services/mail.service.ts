@@ -263,5 +263,35 @@ export const mailService = {
             </p>
         `
         })
-    }
+    },
+
+    sendInactiveAccountEmail: (email: string) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'No podés recuperar tu contraseña',
+            html: `
+            <h2>No podés solicitar la recuperación de contraseña</h2>
+            <p>Recibimos una solicitud para recuperar la contraseña de tu cuenta.</p>
+            <p>No podés solicitar la recuperación porque tu cuenta se encuentra inactiva.</p>
+            <p>Para volver a utilizar tu cuenta, comunicate con el equipo de soporte y solicitá su activación.</p>
+            <p>Saludos,<br>Equipo de Soporte</p>
+        `
+        })
+    },
+
+    sendSuspendedAccountEmail: (email: string) => {
+        return transporter.sendMail({
+            from: '"Soporte" <no-reply@app.com>',
+            to: email,
+            subject: 'No podés recuperar tu contraseña',
+            html: `
+            <h2>No podés solicitar la recuperación de contraseña</h2>
+            <p>Recibimos una solicitud para recuperar la contraseña de tu cuenta.</p>
+            <p>No podés solicitar la recuperación porque tu cuenta se encuentra suspendida.</p>
+            <p>Si considerás que la suspensión fue un error o necesitás realizar una consulta, comunicate con el equipo de soporte.</p>
+            <p>Saludos,<br>Equipo de Soporte</p>
+        `
+        })
+    },
 }
