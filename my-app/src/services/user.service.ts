@@ -4,10 +4,11 @@ import { uploadFile, deleteFile } from "@/lib/cloudinary"
 import { userRepo } from "@/repositories/user.repository"
 import crypto from 'crypto'
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
-import { BadRequestError, NotFoundError } from "@/lib/errors/appError"
+import { BadRequestError, ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
 import { UserInfoDto } from "@/types/user/user.info.type"
 import { jobRepo } from "@/repositories/job.repository"
+
 
 export const userService = {
     createAccount: async (data: RegisterUserInput, imageFile: File | null, cvFile: File | null): Promise<{ email: string, token: string }> => {
@@ -94,43 +95,116 @@ export const userService = {
 
     getUserInfo: async (id: number, username: string) => {
         const user = await requireActiveUserById(id)
-        const userData = await userRepo.findByUsername(username)
-        if (!userData) throw new NotFoundError()
 
-        const jobs = await jobRepo.findAllActiveJobsByUserId(userData.id)
-        const savedJobs = await jobRepo.findSavedJobsByUserId(userData.id)
-        
-        let userInfo: UserInfoDto = {
+        const userData = await userRepo.findByUsername(username)
+
+        if (!userData) {
+            throw new NotFoundError()
+        }
+
+        const userInfo: UserInfoDto = {
             username: userData.username,
             pic: userData.pic,
             isPublic: userData.visibility
         }
 
-        if (user.id !== userData.id) {
-            if (!userData.visibility) {
-                return userInfo
-            }
+        if (user.id !== userData.id && !userData.visibility) {
+            return userInfo
         }
 
         userInfo.email = userData.email
         userInfo.description = userData.description
-        if (jobs) {
-            userInfo.jobs = jobs.map(j => ({
-                id: j.id,
-                title: j.title,
-                ...(user.id === userData.id && { state: j.state }),
-                date: j.createdAt
-            }))
+
+        return userInfo
+    },
+
+    getUserJobs: async (
+        id: number,
+        username: string,
+        page: number,
+        search?: string,
+        sort: 'recent' | 'alphabetical' = 'recent'
+    ) => {
+
+        const user = await requireActiveUserById(id)
+
+        const userData = await userRepo.findByUsername(username)
+
+        if (!userData) throw new NotFoundError()
+
+        if (user.id !== userData.id && !userData.visibility) {
+            throw new ForbiddenError()
         }
 
-        if (savedJobs && userData.id === user.id) {
-             userInfo.savedJobs = savedJobs.map(s => ({
-                id: s.job.id,
-                title: s.job.title,
-                state: s.job.state,
-                date: s.job.createdAt
-            }))
+        const limit = 5
+        const skip = (page - 1) * limit
+        const take = limit + 1
+
+        const jobs = await jobRepo.findAllActiveJobsByUserId(
+            userData.id,
+            skip,
+            take,
+            search,
+            sort
+        )
+
+        const hasNextPage = jobs.length > limit
+
+        return {
+            jobs: jobs
+                .slice(0, limit)
+                .map(j => ({
+                    id: j.id,
+                    title: j.title,
+                    ...(user.id === userData.id && { state: j.state }),
+                    date: j.createdAt
+                })),
+            hasNextPage
         }
-        return userInfo
+    },
+
+    getUserSavedJobs: async (
+        id: number,
+        username: string,
+        page: number,
+        search?: string,
+        sort: 'recent' | 'alphabetical' = 'recent'
+    ) => {
+
+        const user = await requireActiveUserById(id)
+
+        const userData = await userRepo.findByUsername(username)
+
+        if (!userData) throw new NotFoundError()
+
+        if (user.id !== userData.id) {
+            throw new ForbiddenError()
+        }
+
+        const limit = 5
+        const skip = (page - 1) * limit
+        const take = limit + 1
+
+        const savedJobs = await jobRepo.findSavedJobsByUserId(
+            userData.id,
+            skip,
+            take,
+            search,
+            sort
+        )
+
+        const hasNextPage = savedJobs.length > limit
+
+        return {
+            savedJobs: savedJobs
+                .slice(0, limit)
+                .map(s => ({
+                    id: s.job.id,
+                    title: s.job.title,
+                    state: s.job.state,
+                    date: s.job.createdAt
+                })),
+            hasNextPage
+        }
     }
 }

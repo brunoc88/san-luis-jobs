@@ -101,19 +101,61 @@ export const jobRepo = {
         })
     },
 
-    findAllActiveJobsByUserId: async (userId: number) => {
-        return await prisma.job.findMany({ where: { userId, isActive: true, isSuspended: false } })
+    findAllActiveJobsByUserId: async (
+        userId: number,
+        skip: number,
+        take: number,
+        search?: string,
+        sort: 'recent' | 'alphabetical' = 'recent'
+    ) => {
+
+        return await prisma.job.findMany({
+            where: {
+                userId,
+                isActive: true,
+                isSuspended: false,
+                ...(search && {
+                    title: {
+                        startsWith: search,
+                        mode: 'insensitive'
+                    }
+                })
+            },
+            skip,
+            take,
+            orderBy: sort === 'alphabetical'
+                ? { title: 'asc' }
+                : { createdAt: 'desc' }
+        })
     },
 
-    findSavedJobsByUserId: async (userId: number) => {
+    findSavedJobsByUserId: async (
+        userId: number,
+        skip: number,
+        take: number,
+        search?: string,
+        sort: 'recent' | 'alphabetical' = 'recent'
+    ) => {
+
         return await prisma.savedJob.findMany({
             where: {
                 userId,
                 job: {
                     isActive: true,
-                    isSuspended: false
+                    isSuspended: false,
+                    ...(search && {
+                        title: {
+                            startsWith: search,
+                            mode: 'insensitive'
+                        }
+                    })
                 }
             },
+            skip,
+            take,
+            orderBy: sort === 'alphabetical'
+                ? { job: { title: 'asc' } }
+                : { job: { createdAt: 'desc' } },
             select: {
                 job: {
                     select: {
