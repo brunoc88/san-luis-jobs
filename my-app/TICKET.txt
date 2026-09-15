@@ -3,15 +3,6 @@ Objetivos
 - PENDIENTE:
         
     - USER
-        GET /USERNAME:
-        (EL USUARIO VE SU PROPIO PERFIL, CON SUS PUBLICACIONES
-        Y JOBS GUARDADOS)
-        (VER EL PERFIL DE UN USUARIO, CON SUS PUBLICACIONES
-        Y SI ES QUE EL PERFIL NO ES PRIVADO)
-        PAGINACION(RECIENTES, ALFABETICO, TITLE(STARTWITH))
-        - ENDPOINT/SERVICE/REPO
-        - TEST
-        - DOCUMENTAR
         /CONFIG:
         (ACCIONES DE LA CUENTA, CAMBIAR USERNAME, PASSWORD, FOTO,
         DESACTIVAR CUENTA, PORNERLA PRIVADA, ETC)
@@ -44,6 +35,7 @@ DOCUMENTAR:
     - next-auth.d.ts
     - clodinary(uploadFile)
     - todos los repositorios
+    - lo que falte
 
 
 

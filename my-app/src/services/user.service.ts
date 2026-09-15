@@ -196,7 +196,7 @@ export const userService = {
         const hasNextPage = savedJobs.length > limit
 
         return {
-            savedJobs: savedJobs
+            jobs: savedJobs
                 .slice(0, limit)
                 .map(s => ({
                     id: s.job.id,

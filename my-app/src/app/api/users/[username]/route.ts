@@ -3,9 +3,7 @@ import errorHandler from "@/lib/errors/errorHandler"
 import { userService } from "@/services/user.service"
 import { NextRequest, NextResponse } from "next/server"
 
-export const GET = async (
-    req: NextRequest,
-    { params }: { params: Promise<{ username: string }> }
+export const GET = async ({ params }: { params: Promise<{ username: string }> }
 ) => {
     try {
         const userId = await requireSession()

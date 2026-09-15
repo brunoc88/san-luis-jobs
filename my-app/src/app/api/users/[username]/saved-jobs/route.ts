@@ -30,7 +30,7 @@ export const GET = async (
 
         const { page, search, sort } = validate.data
 
-        const savedJobs = await userService.getUserSavedJobs(
+        const savedJobsInfo = await userService.getUserSavedJobs(
             userId,
             username,
             page,
@@ -39,7 +39,7 @@ export const GET = async (
         )
 
         return NextResponse.json(
-            { ok: true, ...savedJobs },
+            { ok: true, savedJobsInfo },
             { status: 200 }
         )
     } catch (error) {
