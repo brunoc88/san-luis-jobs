@@ -169,24 +169,10 @@ export const jobRepo = {
         })
     },
 
-    findAllMyActiveJobsById: async (id: number) => {
-        return await prisma.job.findMany({ where: { userId: id, isActive: true, isSuspended: false } })
-    },
-
-    desactivateAllMyJobsById: async (id: number) => {
+    deactivateAllMyJobsById: async (id: number) => {
         await prisma.job.updateMany({ data: { isActive: false }, where: { userId: id } })
     },
 
-    findAllMySavedJobsById: async (id: number) => {
-        return await prisma.savedJob.findMany({
-            where: {
-                userId: id, 
-                job: {
-                    isActive: true, isSuspended: false
-                }
-            }
-        })
-    },
 
     deleteAllMySavedJobsById: async (id:number) => {
         await prisma.savedJob.deleteMany({where:{userId:id}})

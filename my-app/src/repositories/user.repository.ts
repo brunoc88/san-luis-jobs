@@ -22,7 +22,7 @@ export const userRepo = {
         return await prisma.user.findUnique({where:{username, isActive:true, isSuspended:false}})
     },
 
-    desactivateMyAccount: async (id:number) => {
+    deactivateMyAccountById: async (id:number) => {
         await prisma.user.update({data:{isActive:false}, where:{id}})
     }
 }

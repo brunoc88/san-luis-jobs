@@ -16,7 +16,7 @@ export const PATCH = async (req:NextRequest) => {
         }
 
         const password = validate.data.password
-        await userService.deactivateMyAccountById(userId, password)
+        await userService.deactivateMyAccount(userId, password)
         return NextResponse.json({ok:true},{status:200})
 
     } catch (error) {
