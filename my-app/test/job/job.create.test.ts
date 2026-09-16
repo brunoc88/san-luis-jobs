@@ -9,6 +9,8 @@ let users: any[]
 let locations: any[]
 
 beforeEach(async () => {
+    await prisma.savedJob.deleteMany()
+    await prisma.feedback.deleteMany()
     await prisma.job.deleteMany()
     await prisma.user.deleteMany()
     await prisma.location.deleteMany()

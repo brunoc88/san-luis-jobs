@@ -2,6 +2,7 @@ import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
 import { JobRegisterSchema } from "@/lib/schemas/job/job.register.schema"
 import { validateQueryParams } from "@/lib/validateQueryParams"
+import { validateRequest } from "@/lib/validateRequest"
 import { jobService } from "@/services/job.service"
 import { NextRequest, NextResponse } from "next/server"
 

@@ -125,6 +125,49 @@ describe('GET /api/feedback', () => {
         expect(body.hasNextPage).toBe(false)
         expect(body.feedbacks.length).toBe(1)
     })
+
+    it('validacion zod', async () => {
+        mockAuthenticatedSession(0)
+        // cargo algunos
+        const opinion = 'muy buen sitio web'
+
+        await prisma.feedback.createMany({
+            data: [{
+                userId: users[0].id,
+                opinion
+            },
+            {
+                userId: users[1].id,
+                opinion
+            },
+            {
+                userId: users[2].id,
+                opinion
+            },
+            {
+                userId: users[3].id,
+                opinion
+            },
+            {
+                userId: users[4].id,
+                opinion
+            },
+            {
+                userId: users[5].id,
+                opinion
+            },
+            ]
+        })
+
+        const res = await GET(new NextRequest(
+            `http://localhost/api/feedback?page=abc`
+        ))
+        const body = await res.json()
+        
+        expect(res.status).toBe(400)
+        expect(body).toHaveProperty('error')
+        expect(body.error.page).toContain('Debe ingresar un numero')
+    })
 })
 
 afterEach(() => {

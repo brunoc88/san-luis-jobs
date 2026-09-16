@@ -206,5 +206,24 @@ export const userService = {
                 })),
             hasNextPage
         }
+    },
+
+    deactivateMyAccountById: async (id:number, password:string) => {
+        const user = await requireActiveUserById(id)
+
+        const userData = await userRepo.findById(user.id)
+        if(!userData) throw new NotFoundError()
+
+        const isValid = await bcrypt.compare(password, userData.password)
+        if(!isValid) throw new ForbiddenError('password incorrecto')
+        
+        // desactivar todas las publicaciones del usuario
+        const myJobsData = await jobRepo.findAllMyActiveJobsById(userData.id)
+        if(myJobsData) await jobRepo.desactivateAllMyJobsById(userData.id)
+        // eliminar todos los jobs guardados
+        const mySavedJobsData = await jobRepo.findAllMySavedJobsById(userData.id)
+        if(mySavedJobsData) await jobRepo.deleteAllMySavedJobsById(userData.id)
+        // desactivar cuenta
+        await userRepo.desactivateMyAccount(userData.id)
     }
 }

@@ -55,19 +55,20 @@ describe('GET /api/complaint/:id', () => {
 
         expect(complaint).not.toBeNull()
         expect(complaint).toHaveProperty('id')
-        
+
 
         const res = await GET({ params: { id: complaint.id } })
         const body = await res.json()
-        
+
         expect(body).not.toBeNull()
         expect(body).toHaveProperty('complaint')
         expect(body.complaint).toHaveProperty('jobAuthor')
         expect(body.complaint).toHaveProperty('reportedBy')
         expect(body.complaint.jobAuthor).toBe('admin1')
         expect(body.complaint.reportedBy).toBe('admin2')
-        
+
     })
+
 })
 
 

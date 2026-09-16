@@ -1,0 +1,9 @@
+schemas/
+└── user/
+    ├── register-user.schema.ts
+    ├── deactivate-account.schema.ts
+    ├── change-password.schema.ts
+    ├── change-username.schema.ts
+    ├── change-email.schema.ts
+    ├── change-privacy.schema.ts
+    └── change-profile-photo.schema.ts

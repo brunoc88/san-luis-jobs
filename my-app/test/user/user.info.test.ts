@@ -47,7 +47,7 @@ const mackeRequest = async (name: string) => {
     return await GET({ params: { username: name } })
 }
 
-const mackeRequest2 = async (name: string, sort?: string | null, search?: string | null, page?: number | null) => {
+const mackeRequest2 = async (name: string, sort?: string | null, search?: string | null, page?: number | null | any) => {
     if (sort) {
         return await GETJOBS(
             new NextRequest(`http://localhost/api/users/${name}/jobs?sort=${sort}`, {
@@ -89,7 +89,7 @@ const mackeRequest2 = async (name: string, sort?: string | null, search?: string
     )
 }
 
-const mackeRequest3 = async (name: string, sort?: string | null, search?: string | null, page?: number | null) => {
+const mackeRequest3 = async (name: string, sort?: string | null, search?: string | null, page?: number | null | any) => {
     if (sort) {
         return await GETSAVEDJOBS(
             new NextRequest(`http://localhost/api/users/${name}/saved-jobs?sort=${sort}`, {
@@ -271,6 +271,18 @@ describe('GET /api/users/:username/jobs', () => {
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('userJobsInfo')
         expect(body.userJobsInfo).toHaveProperty('jobs')
+    })
+
+    it('validacion zod page', async () => {
+        mockAuthenticatedSession(0)
+
+        const res = await mackeRequest2('admin2', null, null, 'avc')
+        const body = await res.json()
+
+        expect(res.status).toBe(400)
+        expect(body).toHaveProperty('error')
+        expect(body.error).toHaveProperty('page')
+        expect(body.error.page).toContain('Debe ingresar un numero')
     })
 })
 

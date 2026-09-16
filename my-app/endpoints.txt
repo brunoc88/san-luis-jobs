@@ -1,0 +1,22 @@
+/api/users
+│
+├── /me
+│   ├── GET
+│   │
+│   ├── /username
+│   │   └── PATCH
+│   │
+│   ├── /password
+│   │   └── PATCH
+│   │
+│   ├── /email
+│   │   └── PATCH
+│   │
+│   ├── /profile-photo
+│   │   └── PATCH
+│   │
+│   ├── /privacy
+│   │   └── PATCH
+│   │
+│   └── /deactivate
+│       └── PATCH

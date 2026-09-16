@@ -29,14 +29,14 @@ export const GET = async (req: NextRequest) => {
         const userId = await requireSession()
 
         const searchParams = req.nextUrl.searchParams
-
+        
         const validation = PageSchema.safeParse({
             page: searchParams.get("page") ?? undefined
         })
 
         if (!validation.success) {
             return NextResponse.json(
-                { error: validation.error },
+                { error: validation.error.flatten().fieldErrors, },
                 { status: 400 }
             )
         }

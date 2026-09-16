@@ -17,7 +17,7 @@ export const GET = async (req: NextRequest) => {
 
         if (!validation.success) {
             return NextResponse.json(
-                { error: validation.error },
+                { error: validation.error.flatten().fieldErrors },
                 { status: 400 }
             )
         }
