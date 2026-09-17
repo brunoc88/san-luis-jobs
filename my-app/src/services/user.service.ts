@@ -208,30 +208,36 @@ export const userService = {
         }
     },
 
-    deactivateMyAccount: async (id:number, password:string) => {
+    deactivateMyAccount: async (id: number, password: string) => {
         const user = await requireActiveUserById(id)
 
         const userData = await userRepo.findById(user.id)
-        if(!userData) throw new NotFoundError()
+        if (!userData) throw new NotFoundError()
 
         const isValid = await bcrypt.compare(password, userData.password)
-        if(!isValid) throw new ForbiddenError('password incorrecto')
-        
+        if (!isValid) throw new ForbiddenError('password incorrecto')
+
         await jobRepo.deactivateAllMyJobsById(userData.id)
-        
+
         await jobRepo.deleteAllMySavedJobsById(userData.id)
-        
+
         await userRepo.deactivateMyAccountById(userData.id)
     },
 
-    changePrivacy: async (id:number) =>{
+    changePrivacy: async (id: number) => {
         const user = await requireActiveUserById(id)
 
         const userData = await userRepo.findById(user.id)
-        if(!userData) throw new NotFoundError()
+        if (!userData) throw new NotFoundError()
 
-        if(userData.visibility)await userRepo.changePrivacyById(userData.id, false)
+        if (userData.visibility) await userRepo.changePrivacyById(userData.id, false)
         else await userRepo.changePrivacyById(userData.id, true)
 
+    },
+
+    changeUsername: async (id: number, username: string) => {
+        const user = await requireActiveUserById(id)
+
+        await userRepo.changeUsernameById(user.id, username)
     }
 }

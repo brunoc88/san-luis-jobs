@@ -30,4 +30,8 @@ export const userRepo = {
         await prisma.user.update({data:{visibility},where:{id}})
     },
 
+    changeUsernameById: async (id:number, username:string) => {
+        return await prisma.user.update({data:{username},where:{id}})
+    }
+
 }
