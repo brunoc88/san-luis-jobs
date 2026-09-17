@@ -5,7 +5,7 @@ Objetivos
     - USER
         /CONFIG:
         (ACCIONES DE LA CUENTA, CAMBIAR USERNAME, PASSWORD, FOTO,
-        DESACTIVAR CUENTA, PORNERLA PRIVADA, ETC)
+         ETC)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
@@ -36,7 +36,6 @@ DOCUMENTAR:
     - clodinary(uploadFile)
     - todos los repositorios
     - lo que falte
-
 
 
 

@@ -222,5 +222,16 @@ export const userService = {
         await jobRepo.deleteAllMySavedJobsById(userData.id)
         
         await userRepo.deactivateMyAccountById(userData.id)
+    },
+
+    changePrivacy: async (id:number) =>{
+        const user = await requireActiveUserById(id)
+
+        const userData = await userRepo.findById(user.id)
+        if(!userData) throw new NotFoundError()
+
+        if(userData.visibility)await userRepo.changePrivacyById(userData.id, false)
+        else await userRepo.changePrivacyById(userData.id, true)
+
     }
 }

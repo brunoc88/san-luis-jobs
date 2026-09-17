@@ -24,5 +24,10 @@ export const userRepo = {
 
     deactivateMyAccountById: async (id:number) => {
         await prisma.user.update({data:{isActive:false}, where:{id}})
-    }
+    },
+
+    changePrivacyById: async (id:number, visibility:boolean) => {
+        await prisma.user.update({data:{visibility},where:{id}})
+    },
+
 }
