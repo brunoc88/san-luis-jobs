@@ -239,5 +239,21 @@ export const userService = {
         const user = await requireActiveUserById(id)
 
         await userRepo.changeUsernameById(user.id, username)
+    },
+
+    changePassword: async (id: number, currentPassword: string, newPassword: string) => {
+        const user = await requireActiveUserById(id)
+
+        const userData = await userRepo.findById(user.id)
+
+        if (!userData) throw new NotFoundError()
+
+        const isValid = await bcrypt.compare(currentPassword, userData.password)
+
+        if (!isValid) throw new ForbiddenError('password invalido')
+
+        const newHashedPassword = await bcrypt.hash(newPassword, 10)
+
+        await userRepo.changePasswordById(user.id, newHashedPassword)
     }
 }

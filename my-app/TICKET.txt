@@ -4,7 +4,7 @@ Objetivos
         
     - USER
         /CONFIG:
-        (ACCIONES DE LA CUENTA, PASSWORD, FOTO,
+        (ACCIONES DE LA CUENTA, EMAIL, FOTO,
          ETC)
         - ENDPOINT/SERVICE/REPO
         - TEST

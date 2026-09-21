@@ -32,6 +32,10 @@ export const userRepo = {
 
     changeUsernameById: async (id:number, username:string) => {
         return await prisma.user.update({data:{username},where:{id}})
+    },
+
+    changePasswordById: async (id:number, password:string) =>{
+        await prisma.user.update({data:{password},where:{id}})
     }
 
 }
