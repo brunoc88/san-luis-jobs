@@ -36,6 +36,14 @@ export const userRepo = {
 
     changePasswordById: async (id:number, password:string) =>{
         await prisma.user.update({data:{password},where:{id}})
+    },
+
+    changeEmailById: async (id:number, email:string) => {
+        await prisma.user.update({data:{email, pendingEmail:null},where:{id}})
+    },
+
+    savePendingEmail: async (id:number, email:string) => {
+        await prisma.user.update({data:{pendingEmail:email}, where:{id}})
     }
 
 }

@@ -40,6 +40,8 @@ model User {
   complaints  Complaint[]
 
   feedback    Feedback[]
+
+  pendingEmail String?
 }
 
 model EmailVerificationToken {

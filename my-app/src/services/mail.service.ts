@@ -294,4 +294,39 @@ export const mailService = {
         `
         })
     },
+
+    sendChangeEmailVerification: async (email: string, token: string) => {
+
+        const verificationUrl =
+            `${process.env.NEXT_PUBLIC_APP_URL}/api/users/me/email/verify?token=${token}`
+
+        await transporter.sendMail({
+            from: 'Soporte <no-reply@app.com>',
+            to: email,
+            subject: 'Confirmación de cambio de email',
+            html: `
+            <h2>Confirmá tu nuevo email</h2>
+
+            <p>
+                Recibimos una solicitud para cambiar el email de tu cuenta.
+            </p>
+
+            <p>
+                Para confirmar el cambio, hacé click en el siguiente enlace:
+            </p>
+
+            <a href="${verificationUrl}">
+                Confirmar cambio de email
+            </a>
+
+            <p>
+                Este enlace tiene una validez de 24 horas.
+            </p>
+
+            <p>
+                Si no solicitaste este cambio, podés ignorar este correo.
+            </p>
+        `
+        })
+    },
 }

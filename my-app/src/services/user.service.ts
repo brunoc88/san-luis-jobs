@@ -4,7 +4,7 @@ import { uploadFile, deleteFile } from "@/lib/cloudinary"
 import { userRepo } from "@/repositories/user.repository"
 import crypto from 'crypto'
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
-import { BadRequestError, ForbiddenError, NotFoundError } from "@/lib/errors/appError"
+import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from "@/lib/errors/appError"
 import { requireActiveUserById } from "@/domain/auth/requireActiveUserById"
 import { UserInfoDto } from "@/types/user/user.info.type"
 import { jobRepo } from "@/repositories/job.repository"
@@ -255,5 +255,57 @@ export const userService = {
         const newHashedPassword = await bcrypt.hash(newPassword, 10)
 
         await userRepo.changePasswordById(user.id, newHashedPassword)
+    },
+
+    requestChangeEmail: async (id:number, email:string) => {
+        const user = await requireActiveUserById(id)
+        
+        const userData = await userRepo.findById(id)
+        if(!userData) throw new NotFoundError()
+
+        if(userData.email === email) throw new ForbiddenError('El email es el mismo')
+
+        const emailInUse = await userRepo.findByEmail(email)
+        if(emailInUse) throw new ConflictError('email no disponible')
+
+        const verificationToken = await verificationTokenRepo.findTokenByUserId(id)
+
+        if(verificationToken) await verificationTokenRepo.delete(verificationToken.token)
+
+        const token = crypto.randomBytes(32).toString("hex")
+
+            const tokenHash = crypto
+                .createHash("sha256")
+                .update(token)
+                .digest("hex")
+
+
+
+            const expiresAt = new Date(
+                Date.now() + 24 * 60 * 60 * 1000
+            )
+
+            await verificationTokenRepo.create({
+                token: tokenHash,
+                userId: user.id,
+                expiresAt
+            })
+
+            await userRepo.savePendingEmail(user.id, email)
+
+            return { token }
+    },
+
+    changeEmailConfirm: async (token:string) => {
+        const tokenData = await verificationTokenRepo.findByToken(token)
+        if(!tokenData) throw new NotFoundError()
+
+        const userData = await userRepo.findById(tokenData.userId)
+        if(!userData) throw new NotFoundError()
+
+        if(!userData.pendingEmail) throw new ForbiddenError('No existe mail sustito')
+        
+        await userRepo.changeEmailById(userData.id, userData.pendingEmail)
+        await verificationTokenRepo.delete(tokenData.token)
     }
 }
