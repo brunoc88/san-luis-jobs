@@ -2,6 +2,8 @@ import getOptionalSessionUser from "@/domain/auth/optionalSessionUser"
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
 import { parseId } from "@/lib/parseId"
+import { JobRegisterSchema } from "@/lib/schemas/job/job.register.schema"
+import { validateRequest } from "@/lib/validateRequest"
 import { jobService } from "@/services/job.service"
 import { NextResponse } from "next/server"
 
@@ -32,6 +34,25 @@ export const GET = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         return NextResponse.json({ok:true, job},{status:200})
 
+    } catch (error) {
+        return errorHandler(error)
+    }
+}
+
+export const PUT = async (req:Request, { params }: { params: Promise<{ id: string }> }) =>{
+    try {
+        const userId = await requireSession()
+        let {id} = await params
+        let jobId = parseId(id)
+
+        const validate = await validateRequest(req, JobRegisterSchema)
+        if(!validate.ok){
+            return NextResponse.json({error: validate.error},{status:validate.status})
+        }
+
+        await jobService.editJob(userId, jobId, validate?.data)
+
+        return NextResponse.json({ok:true},{status:200})
     } catch (error) {
         return errorHandler(error)
     }

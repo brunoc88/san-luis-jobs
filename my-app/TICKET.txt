@@ -4,27 +4,13 @@ Objetivos
         
     - USER
         /CONFIG:
-        (ACCIONES DE LA CUENTA: FOTO,
+        (ACCIONES DE LA CUENTA: FOTO, CARGAR O CAMBIAR CV
          ETC)
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
 
-    - USER:
-        /ID/SUSPENSION-AUDIT
-        (SE VAN A MOSTRAR TODOS LOS JOBS SUSPENDIDO)
-        (NO VA A SER UNA LISTA, ASI A LO CRUDO)
-            - UX(FIGMA)
-            - FIGMA   
-    - JOB:
-        - EDITAR
-            - UX(FIGMA)
-            - FIGMA
-            - ENDPOINT/SERVICE/REPO
             
-    - LOCATION 
-            /PANEL:
-            - UX(FIGMA)
     
         
 

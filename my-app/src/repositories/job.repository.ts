@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { CreateJobData, SaveJobData } from "@/types/job/job.type"
+import { CreateJobData, EditJobData, SaveJobData } from "@/types/job/job.type"
 import { Job, JobState, Prisma } from "@prisma/client"
 
 export const jobRepo = {
@@ -173,9 +173,12 @@ export const jobRepo = {
         await prisma.job.updateMany({ data: { isActive: false }, where: { userId: id } })
     },
 
-
     deleteAllMySavedJobsById: async (id:number) => {
         await prisma.savedJob.deleteMany({where:{userId:id}})
+    },
+
+    editJobById: async (id:number, data:EditJobData) => {
+        await prisma.job.update({data, where:{id}})
     }
 
 }

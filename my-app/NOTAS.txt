@@ -1,6 +1,5 @@
 PENDIENTE:
     - APLICAR RATE-LIMIT
-    - UX DE LOCATION
     - SOLICITAR CREDENCIALES DE GOOGLE PARA OAUTH
 
 
@@ -8,7 +7,7 @@ clodinary
 - validar tipo y tamaño de archivos subidos
 - restringir formatos de avatar y CV
 - manejar reemplazo/eliminación de archivos antiguos   
-
+- poner nuestra propia imagen de perfil default en clodinary
 
 JOBS/ APPLICATION 
     ADERIR:

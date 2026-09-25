@@ -6,7 +6,7 @@ import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from "@
 import { jobRepo } from "@/repositories/job.repository"
 import { userRepo } from "@/repositories/user.repository"
 import { warningRepo } from "@/repositories/warning.repository"
-import { CreateJobDto, JobDetailsDto, SaveJobDto } from "@/types/job/job.type"
+import { CreateJobDto, EditJobDto, JobDetailsDto, SaveJobDto } from "@/types/job/job.type"
 import { mailService } from "./mail.service"
 import { ComplaintReason, JobState, Prisma } from "@prisma/client"
 import { applicationRepo } from "@/repositories/application.repository"
@@ -372,5 +372,36 @@ export const jobService = {
                 hasNextPage
             }
         }
+    },
+
+    editJob: async (id: number, jobId: number, data: EditJobDto) => {
+
+        const user = await requireActiveUserById(id)
+
+        const job = await requireActiveJobById(jobId)
+
+        if (user.id !== job.autorId) {
+            throw new ForbiddenError()
+        }
+
+        const jobApplicants = await applicationRepo.count(job.id)
+
+        
+        if (
+            job.state === JobState.active &&
+            data.applicationLimit !== undefined &&
+            data?.applicationLimit <= jobApplicants
+        ) {
+            throw new BadRequestError(
+                "El límite de postulantes no puede ser menor o igual a la cantidad de postulantes actuales."
+            )
+        }
+
+
+        await jobRepo.editJobById(job.id, {
+            ...data,
+            applicationLimit: data.applicationLimit ?? null,
+            salary: data.salary ?? null
+        })
     }
 }
