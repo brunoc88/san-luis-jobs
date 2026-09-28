@@ -4,6 +4,11 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import { authorizeUser } from "@/app/api/auth/credentials-authorize"
 import { prisma } from "@/lib/prisma"
+import { getClientIp } from "@/lib/rate-limit/getClientIp"
+import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
+
+const LOGIN_RATE_LIMIT = 5
+const LOGIN_RATE_WINDOW = 60_000
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -14,13 +19,31 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" }
       },
 
-      async authorize(credentials) {
+      async authorize(credentials, req) {
+        const clientIp = getClientIp(req?.headers)
+
+        if (!clientIp) {
+          return null
+        }
+
+        const allowed = rateLimiter(
+          clientIp,
+          LOGIN_RATE_LIMIT,
+          LOGIN_RATE_WINDOW
+        )
+
+        if (!allowed) {
+          return null
+        }
+
         if (!credentials) return null
 
         const parsed = await LoginSchema.safeParseAsync(credentials)
+
         if (!parsed.success) return null
 
         const user = await authorizeUser(parsed.data)
+
         if (!user) return null
 
         return {
@@ -30,12 +53,12 @@ export const authOptions: AuthOptions = {
           role: user.role
         }
       }
-
     }),
+
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!
+    })
   ],
 
   callbacks: {
@@ -61,7 +84,7 @@ export const authOptions: AuthOptions = {
                 password: "",
                 role: "common",
                 isActive: true,
-                pic: user.image ?? "/default-avatar.png" //revisar
+                pic: user.image ?? "/default-avatar.png" // revisar
               }
             })
           }
@@ -83,10 +106,12 @@ export const authOptions: AuthOptions = {
         session.user.name = token.name as string
         session.user.role = token.role as string
       }
+
       return session
     }
   }
 }
 
 const handler = NextAuth(authOptions)
+
 export { handler as GET, handler as POST }

@@ -1,4 +1,4 @@
-# GET /api/users/:username
+# GET /api/users/username/:username
 
 ## Responsabilidad del controller
 

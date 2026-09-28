@@ -1,4 +1,4 @@
-# GET /api/users/:username/jobs
+# GET /api/users/username/:username/jobs
 
 ### Responsabilidad del controller
 

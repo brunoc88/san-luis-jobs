@@ -1,7 +1,8 @@
 Objetivos
 
 - PENDIENTE:
-        
+    
+    POSPUESTO POR CONFIGURACION DE clodinary 
     - USER
         /CONFIG:
         (ACCIONES DE LA CUENTA: FOTO, CARGAR O CAMBIAR CV
@@ -9,6 +10,28 @@ Objetivos
         - ENDPOINT/SERVICE/REPO
         - TEST
         - DOCUMENTAR
+
+        /CREATE:
+        (CREAR CUENTA DE USUARIO)
+        - SERVICE()
+        - TEST
+        - DOCUMENTAR
+
+    ACTUALMENTE:
+    - RATE LIMIT
+        -FORGOT-PASSWORD
+        -RESET-PASSWORD
+        -REGISTRO
+        -CONFIRMACION DE CUENTA
+        -CREAR JOB
+        -EDITAR JOB
+        -APLICAR JOB
+        -GUARDAR JOB
+        -DENUNCIAR JOB
+        -ACCIONES ADMINISTRATIVAS
+        -BUSQUEDAS
+        -PERFILES
+        -LISTADOS PUBLICOS
 
             
     
@@ -21,6 +44,9 @@ DOCUMENTAR:
     - next-auth.d.ts
     - clodinary(uploadFile)
     - todos los repositorios
+    - rateLimiter
+    - getClientIp
+    - re documentar los controllers
     - lo que falte
 
 

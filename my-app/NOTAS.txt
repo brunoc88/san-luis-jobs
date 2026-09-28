@@ -10,8 +10,6 @@ clodinary
 - poner nuestra propia imagen de perfil default en clodinary
 
 JOBS/ APPLICATION 
-    ADERIR:
-        - INDICARLE QUE ESTA POSTULADO COMO EN EL UX DE JOBS/:ID
 
     MAS TARDE:
         - RECORDAR QUE EL ADMIN DEBE PONER RAZON DE SUSPENSION EN EL UX

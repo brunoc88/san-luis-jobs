@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "test": "dotenv -e .env.test",
-    "test:u": "dotenv -e .env.test -- vitest test/user/user.change.email.test.ts",
+    "test:u": "dotenv -e .env.test -- vitest test/user/user.info.test.ts",
     "test:e": "dotenv -e .env.test -- vitest test/mail/mail.service.test.ts",
     "test:a": "dotenv -e .env.test -- vitest test/auth/forgot.password.test.ts",
     "test:l": "dotenv -e .env.test -- vitest test/location/location.create.test.ts",
@@ -15,6 +15,7 @@
     "test:f": "dotenv -e .env.test -- vitest test/feedback/feedback.getAll.test.ts",
     "test:c": "dotenv -e .env.test -- vitest test/complaint/complaint.details.test.ts",
     "test:ad": "dotenv -e .env.test -- vitest test/admin/admin.activate.account.test.ts",
+    "test:r": "dotenv -e .env.test -- vitest test/rate-limit/forgot-password.test.ts",
     "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
     "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
     "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"
