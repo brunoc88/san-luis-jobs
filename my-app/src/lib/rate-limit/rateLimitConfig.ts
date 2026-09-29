@@ -17,5 +17,19 @@ export const rateLimitConfig = {
     }
   },
 
-  // otros endpoints...
+  resetPassword: {
+    ipGET: {
+      limit: 10,
+      windowMs: 60_000
+    },
+    ipPOST: {
+      limit: 5,
+      windowMs: 60_000
+    },
+    token: {
+      limit: 3,
+      windowMs: 15 * 60_000
+    }
+  },
+
 }

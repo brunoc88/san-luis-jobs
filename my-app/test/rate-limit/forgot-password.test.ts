@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest"
 import { POST } from "@/app/api/auth/forgot-password/route"
-import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
+
 
 
 const makeRequest = (
