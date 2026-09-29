@@ -17,21 +17,30 @@ Objetivos
         - TEST
         - DOCUMENTAR
 
-    ACTUALMENTE:
-    - RATE LIMIT
-        -FORGOT-PASSWORD
-        -RESET-PASSWORD
-        -REGISTRO
-        -CONFIRMACION DE CUENTA
-        -CREAR JOB
-        -EDITAR JOB
-        -APLICAR JOB
-        -GUARDAR JOB
-        -DENUNCIAR JOB
-        -ACCIONES ADMINISTRATIVAS
-        -BUSQUEDAS
-        -PERFILES
-        -LISTADOS PUBLICOS
+RATE LIMIT
+├── Auth
+│   ├── Forgot password / listo!
+│   ├── Reset password / en proceso
+│   ├── Registro
+│   └── Confirmación de cuenta
+│
+├── Jobs
+│   ├── Crear
+│   ├── Editar
+│   ├── Aplicar
+│   ├── Guardar
+│   └── Denunciar
+│
+├── Administración
+│   └── Acciones administrativas
+│
+├── Lectura
+│   ├── Búsquedas
+│   ├── Perfiles
+│   └── Listados públicos
+│
+└── Feedback
+    └── Crear feedback
 
             
     

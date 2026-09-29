@@ -6,9 +6,9 @@ import { authorizeUser } from "@/app/api/auth/credentials-authorize"
 import { prisma } from "@/lib/prisma"
 import { getClientIp } from "@/lib/rate-limit/getClientIp"
 import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
+import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
 
-const LOGIN_RATE_LIMIT = 5
-const LOGIN_RATE_WINDOW = 60_000
+
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -28,8 +28,8 @@ export const authOptions: AuthOptions = {
 
         const allowed = rateLimiter(
           clientIp,
-          LOGIN_RATE_LIMIT,
-          LOGIN_RATE_WINDOW
+          rateLimitConfig.login.ip.limit,
+          rateLimitConfig.login.ip.windowMs
         )
 
         if (!allowed) {
