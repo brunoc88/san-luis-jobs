@@ -20,13 +20,13 @@ Objetivos
 RATE LIMIT
 ├── Auth
 │   ├── Forgot password / listo!
-│   ├── Reset password / en proceso
-│   ├── Registro
-│   └── Confirmación de cuenta
+│   ├── Reset password / listo!
+│   ├── Registro / pausado(modificacion adapter/front)
+│   └── Confirmación de cuenta / pausado(modificacion adapter/front)
 │
 ├── Jobs
-│   ├── Crear
-│   ├── Editar
+│   ├── Crear / listo!
+│   ├── Editar / listo!
 │   ├── Aplicar
 │   ├── Guardar
 │   └── Denunciar

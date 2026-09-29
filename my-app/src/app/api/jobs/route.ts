@@ -1,5 +1,7 @@
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
+import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
+import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { JobRegisterSchema } from "@/lib/schemas/job/job.register.schema"
 import { validateQueryParams } from "@/lib/validateQueryParams"
 import { validateRequest } from "@/lib/validateRequest"
@@ -12,6 +14,19 @@ export const POST = async (req: Request) => {
 
         const validate = await validateRequest(req, JobRegisterSchema)
         if (!validate.ok) return NextResponse.json({ error: validate.error }, { status: 400 })
+
+        const allowedByUserId = rateLimiter(
+            `create-job:user:${userId}`,
+            rateLimitConfig.createJob.user.limit,
+            rateLimitConfig.createJob.user.windowMs
+        )
+
+        if (!allowedByUserId) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
 
         const jobId = await jobService.create(userId, validate.data)
 
@@ -26,8 +41,8 @@ export const GET = async (req: NextRequest) => {
         const searchParams = req.nextUrl.searchParams
 
         const validate = validateQueryParams(searchParams)
-        if(!validate.ok) {
-            return NextResponse.json({error:validate.error}, {status:validate.status})
+        if (!validate.ok) {
+            return NextResponse.json({ error: validate.error }, { status: validate.status })
         }
         const res = await jobService.getJobs(validate?.data)
 
