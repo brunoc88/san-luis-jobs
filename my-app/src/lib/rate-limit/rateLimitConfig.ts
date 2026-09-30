@@ -41,9 +41,30 @@ export const rateLimitConfig = {
 
   editJob: {
     user: {
-        limit: 20,
-        windowMs: 60 * 60 * 1000
+      limit: 20,
+      windowMs: 60 * 60 * 1000
     }
-}
+  },
+
+  applyJob: {
+    user: {
+      limit: 20,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  saveJob: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  unsaveJob: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 60 * 1000
+    }
+  }
 
 }

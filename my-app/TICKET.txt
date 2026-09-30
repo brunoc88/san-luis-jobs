@@ -27,9 +27,14 @@ RATE LIMIT
 ├── Jobs
 │   ├── Crear / listo!
 │   ├── Editar / listo!
-│   ├── Aplicar
-│   ├── Guardar
-│   └── Denunciar
+│   ├── Aplicar / listo!
+│   ├── Guardar / listo!
+|   ├── Quitar guardado
+|   ├── Denunciar
+|   ├── Eliminar
+|   ├── Cambiar estado
+|   ├── Listar
+|   └── Información
 │
 ├── Administración
 │   └── Acciones administrativas
