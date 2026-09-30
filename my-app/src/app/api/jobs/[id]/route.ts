@@ -2,6 +2,7 @@ import getOptionalSessionUser from "@/domain/auth/optionalSessionUser"
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
 import { parseId } from "@/lib/parseId"
+import { getClientIp } from "@/lib/rate-limit/getClientIp"
 import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
 import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { JobRegisterSchema } from "@/lib/schemas/job/job.register.schema"
@@ -38,12 +39,35 @@ export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) =>
     }
 }
 
-export const GET = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const GET = async (req:Request, { params }: { params: Promise<{ id: string }> }) => {
     try {
+
+        const clientIp = getClientIp(req.headers)
+
+        if (!clientIp) {
+            return NextResponse.json(
+                { error: "Unable to identify client" },
+                { status: 400 }
+            )
+        }
+
         const user = await getOptionalSessionUser()
 
         let { id } = await params
         let jobId = parseId(id)
+
+        const allowedByIp = rateLimiter(
+            `job-details:ip:${clientIp}`,
+            rateLimitConfig.getJobDetails.ip.limit,
+            rateLimitConfig.getJobDetails.ip.windowMs
+        )
+
+        if (!allowedByIp) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
 
         const job = await jobService.getJobDetailsById(jobId, user?.id,)
 

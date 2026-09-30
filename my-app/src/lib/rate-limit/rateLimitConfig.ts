@@ -93,6 +93,20 @@ export const rateLimitConfig = {
       limit: 10,
       windowMs: 60 * 60 * 1000
     }
+  },
+
+  listJobs: {
+    ip: {
+      limit: 60,
+      windowMs: 60 * 1000
+    }
+  },
+
+  getJobDetails: {
+    ip: {
+      limit: 60,
+      windowMs: 60 * 1000
+    }
   }
 
 }

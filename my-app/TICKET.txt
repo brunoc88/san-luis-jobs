@@ -33,7 +33,7 @@ RATE LIMIT
 |   ├── Denunciar / listo!
 |   ├── Eliminar / listo!
 |   ├── Cambiar estado / listo!
-|   ├── Listar
+|   ├── Listar / listo!
 |   └── Información
 │
 ├── Administración
