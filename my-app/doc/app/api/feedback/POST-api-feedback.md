@@ -44,15 +44,73 @@ Actualmente se recomienda establecer:
 
 > El límite máximo evita que el endpoint sea utilizado para enviar contenido excesivamente grande y mantiene el feedback enfocado.
 
+## Rate Limit
+
+El endpoint utiliza un rate limit basado en el usuario autenticado.
+
+### Configuración
+
+- **Límite:** 5 solicitudes
+- **Ventana:** 1 hora
+- **Identificador:** `userId`
+- **Clave:** `create-feedback:user:${userId}`
+
+El límite permite que un usuario pueda registrar múltiples opiniones, pero evita la creación excesiva de registros en un período corto.
+
+El rate limit se aplica después de validar el body y antes de ejecutar el service.
+
 ## Flujo
 
 1. Se obtiene el usuario autenticado mediante `requireSession()`.
 2. Se valida el body mediante `validateRequest()`.
 3. Si la validación falla, se devuelve el error correspondiente.
-4. Se delega la creación del feedback a `feedbackService.create()`.
-5. El service verifica que el usuario exista y esté activo.
-6. El repository crea el registro asociado al `userId`.
-7. Si todo es correcto, se devuelve `201 Created`.
+4. Se aplica el rate limit por `userId`.
+5. Si se supera el límite, se devuelve HTTP `429`.
+6. Se delega la creación del feedback a `feedbackService.create()`.
+7. El service verifica que el usuario exista y esté activo.
+8. El repository crea el registro asociado al `userId`.
+9. Si todo es correcto, se devuelve `201 Created`.
+
+## Implementación
+
+```ts
+export const POST = async (req: Request) => {
+  try {
+    const userId = await requireSession()
+
+    const validate = await validateRequest(req, FeedBackRegisterSchema)
+
+    if (!validate.ok) {
+      return NextResponse.json(
+        { error: validate.error },
+        { status: validate.status }
+      )
+    }
+
+    const allowedByUserId = rateLimiter(
+      `create-feedback:user:${userId}`,
+      rateLimitConfig.createFeedback.user.limit,
+      rateLimitConfig.createFeedback.user.windowMs
+    )
+
+    if (!allowedByUserId) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        { status: 429 }
+      )
+    }
+
+    await feedbackService.create(validate.data, userId)
+
+    return NextResponse.json(
+      { ok: true },
+      { status: 201 }
+    )
+  } catch (error) {
+    return errorHandler(error)
+  }
+}
+```
 
 ## Respuestas
 
@@ -61,6 +119,16 @@ Actualmente se recomienda establecer:
 ```json
 {
   "ok": true
+}
+```
+
+### 429 — Rate limit excedido
+
+Si el usuario supera el límite establecido:
+
+```json
+{
+  "error": "Too many requests"
 }
 ```
 
@@ -88,21 +156,37 @@ El endpoint mantiene la separación de responsabilidades:
 
 ```text
 Route
+
   ↓
+
 requireSession()
+
   ↓
+
 validateRequest()
+
   ↓
+
+rateLimiter()
+
+  ↓
+
 feedbackService.create()
+
   ↓
+
 requireActiveUserById()
+
   ↓
+
 feedbackRepo.create()
+
   ↓
+
 Database
 ```
 
-La route se encarga principalmente de HTTP, autenticación inicial y validación.
+La route se encarga principalmente de HTTP, autenticación inicial, validación y rate limiting.
 
 La lógica de negocio queda en el service y el acceso a Prisma queda en el repository.
 
@@ -132,3 +216,9 @@ Esto evita que un usuario pueda intentar registrar una opinión utilizando el ID
 Aunque la sesión sea válida, el service debe verificar que el usuario siga activo mediante `requireActiveUserById()`.
 
 Esto mantiene consistente la regla utilizada en otras operaciones del backend.
+
+### Rate limiting
+
+El rate limit agrega una capa adicional de protección frente a la creación excesiva de feedback.
+
+No reemplaza la autenticación ni la validación de negocio.

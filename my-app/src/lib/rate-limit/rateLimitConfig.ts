@@ -128,6 +128,20 @@ export const rateLimitConfig = {
       limit: 10,
       windowMs: 60 * 60 * 1000
     }
+  },
+
+  createFeedback: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  getAllFeedbacks: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
   }
 
 }

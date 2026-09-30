@@ -1,5 +1,7 @@
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
+import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
+import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { FeedBackRegisterSchema } from "@/lib/schemas/feedback/feedback.register.schema"
 import { PageSchema } from "@/lib/schemas/page.Schema"
 import { validateRequest } from "@/lib/validateRequest"
@@ -13,6 +15,19 @@ export const POST = async (req: Request) => {
         const validate = await validateRequest(req, FeedBackRegisterSchema)
         if (!validate.ok) {
             return NextResponse.json({ error: validate.error }, { status: validate.status })
+        }
+
+        const allowedByUserId = rateLimiter(
+            `create-feedback:user:${userId}`,
+            rateLimitConfig.createFeedback.user.limit,
+            rateLimitConfig.createFeedback.user.windowMs
+        )
+
+        if (!allowedByUserId) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
         }
 
         await feedbackService.create(validate.data, userId)
@@ -29,7 +44,7 @@ export const GET = async (req: NextRequest) => {
         const userId = await requireSession()
 
         const searchParams = req.nextUrl.searchParams
-        
+
         const validation = PageSchema.safeParse({
             page: searchParams.get("page") ?? undefined
         })
@@ -42,6 +57,19 @@ export const GET = async (req: NextRequest) => {
         }
 
         const page = validation.data.page
+
+        const allowedByUserId = rateLimiter(
+            `list-feedback:user:${userId}`,
+            rateLimitConfig.getAllFeedbacks.user.limit,
+            rateLimitConfig.getAllFeedbacks.user.windowMs
+        )
+
+        if (!allowedByUserId) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
 
         const { feedbacks, hasNextPage } =
             await feedbackService.getAllFeedbacks(userId, page)
