@@ -1,31 +1,51 @@
 import requireSession from "@/domain/auth/requireSession";
 import errorHandler from "@/lib/errors/errorHandler";
+import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig";
+import { rateLimiter } from "@/lib/rate-limit/rateLimiter";
 import { PageSchema } from "@/lib/schemas/page.Schema";
 import { complaintService } from "@/services/complaint.service";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {
-    try {
-        const userId = await requireSession()
+  try {
+    const userId = await requireSession()
 
-        const searchParams = req.nextUrl.searchParams
+    const searchParams = req.nextUrl.searchParams
 
-        const validation = PageSchema.safeParse({
-            page: searchParams.get("page") ?? undefined
-        })
+    const validation = PageSchema.safeParse({
+      page: searchParams.get("page") ?? undefined
+    })
 
-        if (!validation.success) {
-            return NextResponse.json(
-                { error: validation.error.flatten().fieldErrors },
-                { status: 400 }
-            )
-        }
-
-        const page = validation.data.page
-
-        const { complaints, hasNextPage } = await complaintService.getAllActiveComplaints(userId, page)
-        return NextResponse.json({ ok: true, complaints, hasNextPage }, { status: 200 })
-    } catch (error) {
-        return errorHandler(error)
+    if (!validation.success) {
+      return NextResponse.json(
+        { error: validation.error.flatten().fieldErrors },
+        { status: 400 }
+      )
     }
+
+    const allowedByUserId = rateLimiter(
+      `list-complaints:user:${userId}`,
+      rateLimitConfig.listComplaints.user.limit,
+      rateLimitConfig.listComplaints.user.windowMs
+    )
+
+    if (!allowedByUserId) {
+      return NextResponse.json(
+        { error: "Too many requests" },
+        { status: 429 }
+      )
+    }
+
+    const page = validation.data.page
+
+    const { complaints, hasNextPage } =
+      await complaintService.getAllActiveComplaints(userId, page)
+
+    return NextResponse.json(
+      { ok: true, complaints, hasNextPage },
+      { status: 200 }
+    )
+  } catch (error) {
+    return errorHandler(error)
+  }
 }

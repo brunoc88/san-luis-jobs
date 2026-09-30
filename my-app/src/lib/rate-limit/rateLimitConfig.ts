@@ -107,6 +107,27 @@ export const rateLimitConfig = {
       limit: 60,
       windowMs: 60 * 1000
     }
+  },
+
+  listComplaints: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  getComplaint: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  deleteComplaint: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
   }
 
 }

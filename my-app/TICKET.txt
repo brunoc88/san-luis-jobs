@@ -34,7 +34,8 @@ RATE LIMIT
 |   ├── Eliminar / listo!
 |   ├── Cambiar estado / listo!
 |   ├── Listar / listo!
-|   └── Información
+|   └── Información / listo!
+|   └── suspend / listo!
 │
 ├── Administración
 │   └── Acciones administrativas

@@ -41,6 +41,10 @@ const mockAuthenticatedSession = (i: number) => {
     })
 }
 
+// IMPORTANTE!
+// AGREGARLE REQUEST!
+// PARA PODER OPTENER EL IP
+
 describe('GET /api/jobs/:id', () => {
     describe('tipo de informacion', () => {
         it('sin session', async () => {
