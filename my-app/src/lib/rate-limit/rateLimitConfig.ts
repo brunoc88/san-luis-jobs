@@ -65,6 +65,34 @@ export const rateLimitConfig = {
       limit: 30,
       windowMs: 60 * 60 * 1000
     }
+  },
+
+  reportJob: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  deleteJob: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  changeJobStatus: {
+    user: {
+      limit: 20,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  suspendJob: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
   }
 
 }

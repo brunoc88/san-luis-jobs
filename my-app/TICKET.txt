@@ -29,10 +29,10 @@ RATE LIMIT
 │   ├── Editar / listo!
 │   ├── Aplicar / listo!
 │   ├── Guardar / listo!
-|   ├── Quitar guardado
-|   ├── Denunciar
-|   ├── Eliminar
-|   ├── Cambiar estado
+|   ├── Quitar guardado / listo!
+|   ├── Denunciar / listo!
+|   ├── Eliminar / listo!
+|   ├── Cambiar estado / listo!
 |   ├── Listar
 |   └── Información
 │

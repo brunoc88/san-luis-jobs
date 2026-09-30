@@ -44,8 +44,8 @@ export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) =>
 
         const allowedByUserId = rateLimiter(
             `unsave-job:user:${userId}`,
-            rateLimitConfig.saveJob.user.limit,
-            rateLimitConfig.saveJob.user.windowMs
+            rateLimitConfig.unsaveJob.user.limit,
+            rateLimitConfig.unsaveJob.user.windowMs
         )
 
         if (!allowedByUserId) {

@@ -16,6 +16,19 @@ export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) =>
         let { id } = await params
         let jobId = parseId(id)
 
+        const allowedByUserId = rateLimiter(
+            `delete-job:user:${userId}`,
+            rateLimitConfig.deleteJob.user.limit,
+            rateLimitConfig.deleteJob.user.windowMs
+        )
+
+        if (!allowedByUserId) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
+
         await jobService.deleteJob(userId, jobId)
 
         return NextResponse.json({ ok: true }, { status: 200 })

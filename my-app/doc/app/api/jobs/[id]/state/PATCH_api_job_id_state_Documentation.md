@@ -32,14 +32,35 @@ Requiere una sesión válida mediante `requireSession()`.
 
 La validación del body se realiza con Zod (`ChangesJobSchema`), por lo que únicamente se aceptan los valores definidos en `JobState`.
 
+## Rate Limit
+
+El endpoint aplica un límite de solicitudes por usuario autenticado.
+
+- **Límite:** 20 solicitudes.
+- **Ventana:** 1 hora.
+- **Criterio:** `userId`.
+- **Clave:** `change-job-status:user:${userId}`.
+- Cuando el usuario supera el límite, el endpoint responde con `429 Too Many Requests`.
+
+El límite se aplica después de verificar la sesión, validar el ID de la publicación y validar el cuerpo de la petición, antes de ejecutar `jobService.changeJobStatus()`.
+
 ## Flujo del endpoint
 
 1. Verifica que el usuario tenga una sesión activa.
+
 2. Obtiene y valida el `id` de la publicación.
+
 3. Valida el cuerpo de la petición con `ChangesJobSchema`.
+
 4. Si la validación falla, responde **400 Bad Request**.
-5. Invoca `jobService.changeJobStatus(userId, jobId, state)`.
-6. Si la operación finaliza correctamente, responde **200 OK**.
+
+5. Aplica el rate limit correspondiente al usuario autenticado.
+
+6. Si el usuario supera el límite, responde **429 Too Many Requests**.
+
+7. Invoca `jobService.changeJobStatus(userId, jobId, state)`.
+
+8. Si la operación finaliza correctamente, responde **200 OK**.
 
 ## Respuesta exitosa
 
@@ -57,3 +78,4 @@ La validación del body se realiza con Zod (`ChangesJobSchema`), por lo que úni
 | 401 | El usuario no está autenticado. |
 | 403 | El usuario no es el autor de la publicación. |
 | 404 | La publicación no existe o está inactiva. |
+| 429 | El usuario ha superado el límite de solicitudes permitido. |
