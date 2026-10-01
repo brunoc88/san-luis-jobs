@@ -30,7 +30,22 @@ El parámetro recibido se convierte y valida mediante:
 
 El resultado se utiliza como `suspendedUserId`.
 
-### 4. Delegar al service
+### 4. Aplicar el rate limit
+
+Se aplica el rate limit utilizando el ID del usuario autenticado como identificador.
+
+- **Límite:** 30 solicitudes por minuto.
+- **Identificador:** `userId` del usuario autenticado.
+- **Key:** `get-user-audit:user:${userId}`
+- **Configuración:** `rateLimitConfig.getUserAudit.user`
+
+Si se supera el límite permitido, el controller responde con:
+
+`429 Too Many Requests`
+
+El rate limit se aplica después de validar el parámetro `id` y antes de ejecutar el service.
+
+### 5. Delegar al service
 
 Se llama a:
 
@@ -66,6 +81,7 @@ El controller es responsable de:
 - obtener la sesión;
 - obtener el parámetro `id`;
 - parsear y validar el ID recibido;
+- aplicar el rate limit;
 - llamar al service correspondiente;
 - construir la respuesta HTTP exitosa;
 - delegar el manejo de errores al `errorHandler`.

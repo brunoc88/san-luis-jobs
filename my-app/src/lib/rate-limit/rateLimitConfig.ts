@@ -191,6 +191,41 @@ export const rateLimitConfig = {
       limit: 10,
       windowMs: 60 * 60 * 1000
     }
-  }
+  },
+
+  listUsers: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  activateUser: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  toggleUserRole: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  activateSuspendedAccount: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  getUserAudit: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
 
 }

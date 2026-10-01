@@ -1,5 +1,7 @@
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
+import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
+import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { UserAccountSearchSchema } from "@/lib/schemas/admin/user.account.search.schema"
 import validateUserRequest from "@/lib/validateUserRequest"
 import { adminService } from "@/services/admin.service"
@@ -46,6 +48,19 @@ export const GET = async (req: NextRequest) => {
         const page = validation.data.page
         const search = validation.data.search
 
+         const allowedByUserId = rateLimiter(
+            `list-users:user:${userId}`,
+            rateLimitConfig.listUsers.user.limit,
+            rateLimitConfig.listUsers.user.windowMs
+        )
+
+        if (!allowedByUserId) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
+        
         const { accounts, hasNextPage } = await adminService.getAllAccounts(userId, page, search)
 
         return NextResponse.json({ ok: true, accounts, hasNextPage }, { status: 200 })
