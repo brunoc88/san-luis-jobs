@@ -18,35 +18,12 @@ Objetivos
         - DOCUMENTAR
 
 RATE LIMIT
-├── Auth
-│   ├── Forgot password / listo!
-│   ├── Reset password / listo!
-│   ├── Registro / pausado(modificacion adapter/front)
-│   └── Confirmación de cuenta / pausado(modificacion adapter/front)
-│
-├── Jobs
-│   ├── Crear / listo!
-│   ├── Editar / listo!
-│   ├── Aplicar / listo!
-│   ├── Guardar / listo!
-|   ├── Quitar guardado / listo!
-|   ├── Denunciar / listo!
-|   ├── Eliminar / listo!
-|   ├── Cambiar estado / listo!
-|   ├── Listar / listo!
-|   └── Información / listo!
-|   └── suspend / listo!
-│
-├── Administración
-│   └── Acciones administrativas
-│
-├── Lectura
-│   ├── Búsquedas
-│   ├── Perfiles
-│   └── Listados públicos
-│
-└── Feedback
-    └── Crear feedback
+
+V2:
+    - MOVER MAIL SERVICE A controllers
+        - ubicaciones:
+            - suspendJob
+            - applyJob
 
             
     

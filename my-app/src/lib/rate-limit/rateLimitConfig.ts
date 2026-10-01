@@ -142,6 +142,20 @@ export const rateLimitConfig = {
       limit: 30,
       windowMs: 60 * 1000
     }
+  },
+
+  getFeedback: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  deleteFeedback: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
   }
 
 }
