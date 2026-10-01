@@ -156,6 +156,41 @@ export const rateLimitConfig = {
       limit: 10,
       windowMs: 60 * 60 * 1000
     }
+  },
+
+  getAllLocations: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  getAllActiveLocations: {
+    user: {
+      limit: 60,
+      windowMs: 60 * 1000
+    }
+  },
+
+  createLocation: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  renameLocation: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  toggleLocationStatus: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
   }
 
 }
