@@ -228,4 +228,18 @@ export const rateLimitConfig = {
     }
   },
 
+  deactivateMyAccount: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  changePassword: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
 }

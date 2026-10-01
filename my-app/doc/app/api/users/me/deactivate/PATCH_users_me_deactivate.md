@@ -22,16 +22,36 @@ Requiere una sesión activa.
 
 El body se valida mediante `deactivateAccountSchema`.
 
+## Rate Limit
+
+- Límite: 5 solicitudes por hora.
+- Identificador: userId del usuario autenticado.
+- Key: deactivate-my-account:user:${userId}
+- Configuración: rateLimitConfig.deactivateMyAccount.user
+
+El rate limit se aplica después de validar el body y antes de ejecutar el service.
+
+Si se supera el límite, responde:
+
+`429 Too Many Requests`
+
+```js
+{
+  "error": "Too many requests"
+}
+```
+
 ## Flujo
 
 1. Obtiene el `userId` de la sesión.
 2. Valida el body mediante `deactivateAccountSchema`.
-3. Envía `userId` y `password` al service `deactivateMyAccount`.
-4. El service verifica que la cuenta esté activa.
-5. Verifica la contraseña mediante bcrypt.
-6. Desactiva los Jobs del usuario de forma lógica.
-7. Elimina físicamente los `SavedJob` del usuario.
-8. Desactiva la cuenta de forma lógica (`isActive = false`).
+3. Aplica el rate limit utilizando el userId autenticado.
+4. Envía `userId` y `password` al service `deactivateMyAccount`.
+5. El service verifica que la cuenta esté activa.
+6. Verifica la contraseña mediante bcrypt.
+7. Desactiva los Jobs del usuario de forma lógica.
+8. Elimina físicamente los `SavedJob` del usuario.
+9. Desactiva la cuenta de forma lógica (`isActive = false`).
 
 ## Response
 
@@ -49,6 +69,9 @@ El body se valida mediante `deactivateAccountSchema`.
 - `401` — No existe una sesión válida.
 - `403` — Contraseña incorrecta o cuenta no habilitada según las reglas del service.
 - `404` — Usuario no encontrado, si corresponde.
+- `429` — Se superó el límite de solicitudes permitido.
+- `500` — Error interno del servidor.
+
 
 ## Persistencia
 

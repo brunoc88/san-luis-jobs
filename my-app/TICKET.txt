@@ -13,7 +13,7 @@ Objetivos
 
         /CREATE:
         (CREAR CUENTA DE USUARIO)
-        - SERVICE()
+        - MODIFICAR SERVICE()
         - TEST
         - DOCUMENTAR
 
