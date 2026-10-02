@@ -3,8 +3,11 @@ Objetivos
 - PENDIENTE:
     
     POSPUESTO POR CONFIGURACION DE clodinary 
+    LA NUEVA VERSION DE CLOUDINARY YA ESTA DISPONIBLE EN lib/clodinary.v2.ts
+    
     - USER
         /CONFIG:
+        RATE LIMIT
         (ACCIONES DE LA CUENTA: FOTO, CARGAR O CAMBIAR CV
          ETC)
         - ENDPOINT/SERVICE/REPO
@@ -12,12 +15,13 @@ Objetivos
         - DOCUMENTAR
 
         /CREATE:
+        RATE LIMIT
         (CREAR CUENTA DE USUARIO)
         - MODIFICAR SERVICE()
         - TEST
         - DOCUMENTAR
 
-RATE LIMIT
+
 
 V2:
     - MOVER MAIL SERVICE A controllers

@@ -9,7 +9,9 @@ Su responsabilidad es coordinar la solicitud entre la sesión, el service de adm
 
 ## Rate Limit
 
-El endpoint aplica un límite por usuario autenticado.
+El endpoint aplica **dos límites independientes**.
+
+### Rate Limit por usuario autenticado
 
 - Límite: 5 solicitudes.
 - Ventana: 1 hora.
@@ -29,7 +31,29 @@ Si se supera el límite, responde con:
 
 El rate limit se aplica después de validar y convertir el id mediante parseId() y antes de ejecutar la lógica de negocio.
 
-El rate limit es una capa adicional de protección y no reemplaza la autenticación ni las validaciones de permisos realizadas por el service.
+### Rate Limit por email
+
+También se aplica un límite específico al email del usuario afectado.
+
+- Límite: 3 solicitudes.
+- Ventana: 15 minutos.
+- Identificador: email.
+- Key: toggle-user-role:email:${email}.
+- Configuración: rateLimitConfig.toggleUserRole.email.
+
+Si se supera el límite, responde con:
+
+429 Too Many Requests
+```js
+{
+  "error": "Too many requests"
+}
+```
+Este rate limit protege específicamente el envío de las notificaciones por email.
+
+El rate limit por email se aplica después de que adminService.toggleRole() finaliza correctamente y antes de enviar la notificación correspondiente.
+
+Los rate limits son una capa adicional de protección y no reemplazan la autenticación ni las validaciones de permisos realizadas por el service.
 
 ## Flujo
 
@@ -39,12 +63,14 @@ El rate limit es una capa adicional de protección y no reemplaza la autenticaci
 4. Aplica el rate limit al usuario autenticado
 5. Si se supera el límite, responde con 429 Too Many Requests.
 6. Envía ambos IDs a `adminService.toggleRole()`.
-5. Recibe del service el email del usuario afectado y el resultado de la operación.
-6. Según el resultado:
+7. Recibe del service el email del usuario afectado y el resultado de la operación.
+8. Aplica el rate limit por email.
+9. Si se supera el límite, responde con 429 Too Many Requests.
+10. Según el resultado:
    - `granted` → envía `sendAdminRoleGrantedEmail()`.
    - `revoked` → envía `sendAdminRoleRevokedEmail()`.
-7. Si todo finaliza correctamente, responde con `200 OK`.
-8. Cualquier error es enviado al `errorHandler()`.
+11. Si todo finaliza correctamente, responde con `200 OK`.
+12. Cualquier error es enviado al `errorHandler()`.
 
 ## Respuesta exitosa
 
@@ -79,6 +105,7 @@ Su función se limita a:
 - procesar el parámetro de ruta;
 - aplicar el rate limit;
 - delegar la operación al service;
+- aplicar el rate limit por email;
 - enviar la notificación correspondiente;
 - devolver la respuesta HTTP;
 - delegar los errores al `errorHandler`.

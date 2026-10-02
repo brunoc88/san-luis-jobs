@@ -204,6 +204,10 @@ export const rateLimitConfig = {
     user: {
       limit: 10,
       windowMs: 60 * 60 * 1000
+    },
+    email: {
+      limit: 3,
+      windowMs: 15 * 60 * 1000
     }
   },
 
@@ -211,6 +215,10 @@ export const rateLimitConfig = {
     user: {
       limit: 5,
       windowMs: 60 * 60 * 1000
+    },
+    email: {
+      limit: 3,
+      windowMs: 15 * 60 * 1000
     }
   },
 
@@ -218,6 +226,10 @@ export const rateLimitConfig = {
     user: {
       limit: 5,
       windowMs: 60 * 60 * 1000
+    },
+    email: {
+      limit: 3,
+      windowMs: 15 * 60 * 1000
     }
   },
 
@@ -241,5 +253,70 @@ export const rateLimitConfig = {
       windowMs: 60 * 60 * 1000
     }
   },
+
+  changePrivacy: {
+    user: {
+      limit: 20,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  changeUsername: {
+    user: {
+      limit: 10,
+      windowMs: 60 * 60 * 1000
+    }
+  },
+
+  changeEmail: {
+    user: {
+      limit: 5,
+      windowMs: 60 * 60 * 1000
+    },
+    email: {
+      limit: 3,
+      windowMs: 15 * 60 * 1000
+    }
+  },
+
+  changeEmailVerify: {
+    ip: {
+      limit: 10,
+      windowMs: 60 * 1000
+    },
+    token: {
+      limit: 3,
+      windowMs: 15 * 60 * 1000
+    }
+  },
+
+  listSuspendedUsers: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  getUserInfo: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  getUserJobs: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
+  getUserSavedJobs: {
+    user: {
+      limit: 30,
+      windowMs: 60 * 1000
+    }
+  },
+
 
 }

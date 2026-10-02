@@ -28,6 +28,20 @@ export const PATCH = async ({ params }: { params: Promise<{ id: string }> }) => 
         }
 
         const { email, result } = await adminService.toggleRole(userId, selectedUserId)
+
+        const allowedByEmail = rateLimiter(
+            `toggle-user-role:email:${email}`,
+            rateLimitConfig.toggleUserRole.email.limit,
+            rateLimitConfig.toggleUserRole.email.windowMs
+        )
+
+        if (!allowedByEmail) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
+
         if (result === 'granted') await mailService.sendAdminRoleGrantedEmail(email)
         else await mailService.sendAdminRoleRevokedEmail(email)
 

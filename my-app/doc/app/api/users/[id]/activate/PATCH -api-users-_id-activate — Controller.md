@@ -10,9 +10,10 @@ El controller no contiene reglas de negocio. Su responsabilidad es:
 2. Obtener y validar el `id` recibido como parámetro de ruta.
 3. Aplicar el rate limit al usuario autenticado
 4. Delegar la activación al `adminService`.
-5. Enviar un email de notificación al usuario cuya cuenta fue activada.
-6. Retornar una respuesta HTTP exitosa.
-7. Delegar el manejo de errores al `errorHandler`.
+5. Aplicar el rate limit específico para el email.
+6. Enviar un email de notificación al usuario cuya cuenta fue activada.
+7. Retornar una respuesta HTTP exitosa.
+8. Delegar el manejo de errores al `errorHandler`.
 
 ---
 
@@ -32,7 +33,9 @@ El parámetro recibido desde la URL es convertido a `number` mediante `parseId`.
 
 ## Rate Limit
 
-El endpoint aplica un límite por usuario autenticado.
+El endpoint aplica **dos límites independientes**.
+
+### Rate Limit por usuario autenticado
 
 - Límite: 10 solicitudes.
 - Ventana: 1 hora.
@@ -52,12 +55,37 @@ Si se supera el límite, responde con:
 
 El rate limit se aplica después de obtener y validar el id, y antes de ejecutar la lógica de negocio.
 
-El rate limit es una capa adicional de protección y no reemplaza la autenticación ni la autorización administrativa.
+Este rate limit controla la cantidad de solicitudes de activación que puede realizar el mismo usuario autenticado.
 
+### Rate Limit por email
+
+También se aplica un límite específico al email del usuario cuya cuenta fue activada.
+
+- Límite: 3 solicitudes.
+- Ventana: 15 minutos.
+- Identificador: email.
+-Key: activate-user:email:${email}.
+- Configuración: rateLimitConfig.activateUser.email.
+
+Si se supera el límite, responde con:
+
+429 Too Many Requests
+```js
+{
+  "error": "Too many requests"
+}
+```
+
+Este rate limit protege específicamente el envío de emails y evita que una misma dirección pueda recibir una cantidad excesiva de notificaciones dentro de la ventana establecida.
+
+El rate limit por usuario se aplica después de obtener y validar el id, y antes de ejecutar la lógica de negocio.
+
+El rate limit por email se aplica después de que el service completa correctamente la activación y antes de enviar el email.
+
+Los rate limits son una capa adicional de protección y no reemplazan la autenticación ni la autorización administrativa.
 ---
 
 ## Flujo
-
 ```text
 Request
    │
@@ -84,6 +112,11 @@ adminService.activateUserAccount()
 Obtiene email del usuario activado
    │
    ▼
+Rate Limit por email
+   │
+   ├── Límite excedido → HTTP 429
+   │
+   ▼
 mailService.sendAccountActivatedEmail()
    │
    ├── Error → errorHandler()
@@ -91,7 +124,6 @@ mailService.sendAccountActivatedEmail()
    ▼
 HTTP 200 { ok: true }
 ```
-
 ---
 
 ## Implementación
@@ -127,6 +159,19 @@ export const PATCH = async ({
                 inactiveUserId
             )
 
+        const allowedByEmail = rateLimiter(
+            `activate-user:email:${email}`,
+            rateLimitConfig.activateUser.email.limit,
+            rateLimitConfig.activateUser.email.windowMs
+        )
+
+        if (!allowedByEmail) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
+
         await mailService.sendAccountActivatedEmail(email)
 
         return NextResponse.json(
@@ -159,7 +204,7 @@ El resultado corresponde al usuario cuya cuenta se desea activar.
 
 ---
 
-### `Rate Limit`
+### `Rate Limit por usuario`
 
 Controla la cantidad de solicitudes de activación realizadas por el mismo usuario autenticado.
 
@@ -198,12 +243,26 @@ const { email } = await adminService.activateUserAccount(
 El controller utiliza ese email únicamente para realizar la notificación.
 
 ---
+### `Rate Limit por email`
 
+Controla la cantidad de emails de activación que pueden enviarse a una misma dirección.
+
+La key utilizada es:
+
+```js
+`activate-user:email:${email}`
+```
+
+El límite configurado es de 3 solicitudes cada 15 minutos.
+
+Este límite protege específicamente el envío de emails y es independiente del límite aplicado al usuario autenticado.
+---
 ### `mailService.sendAccountActivatedEmail()`
 
 Envía un correo electrónico notificando al usuario que su cuenta fue activada.
 
-El envío se realiza **después de que el service haya completado correctamente la activación**.
+El envío se realiza después de que el service haya completado correctamente la activación y el rate limit por email haya permitido la solicitud.
+
 
 ```ts
 await mailService.sendAccountActivatedEmail(email)

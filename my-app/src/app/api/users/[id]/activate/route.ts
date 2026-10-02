@@ -28,6 +28,19 @@ export const PATCH = async ({ params }: { params: Promise<{ id: string }> }) => 
         }
 
         const { email } = await adminService.activateUserAccount(userId, inactiveUserId)
+
+        const allowedByEmail = rateLimiter(
+            `activate-user:email:${email}`,
+            rateLimitConfig.activateUser.email.limit,
+            rateLimitConfig.activateUser.email.windowMs
+        )
+
+        if (!allowedByEmail) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
         await mailService.sendAccountActivatedEmail(email)
 
         return NextResponse.json({ ok: true }, { status: 200 })

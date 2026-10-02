@@ -1,5 +1,7 @@
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
+import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
+import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { changeUsernameSchema } from "@/lib/schemas/user/change-username.schema"
 import { validateRequest } from "@/lib/validateRequest"
 import { userService } from "@/services/user.service"
@@ -12,6 +14,20 @@ export const PATCH = async (req: Request) => {
         if (!validation.ok) {
             return NextResponse.json({ error: validation.error }, { status: validation.status })
         }
+
+        const allowedByUserId = rateLimiter(
+            `change-username:user:${userId}`,
+            rateLimitConfig.changeUsername.user.limit,
+            rateLimitConfig.changeUsername.user.windowMs
+        )
+
+        if (!allowedByUserId) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
+        
         const { username } = validation.data
         await userService.changeUsername(userId, username)
 

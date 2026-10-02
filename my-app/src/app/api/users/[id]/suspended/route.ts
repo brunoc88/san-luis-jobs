@@ -28,6 +28,20 @@ export const PATCH = async ({ params }: { params: Promise<{ id: string }> }) => 
         }
 
         const { email } = await adminService.activateSuspendedAccount(userId, suspendedUserId)
+
+        const allowedByEmail = rateLimiter(
+            `activate-suspended-account:email:${email}`,
+            rateLimitConfig.activateSuspendedAccount.email.limit,
+            rateLimitConfig.activateSuspendedAccount.email.windowMs
+        )
+
+        if (!allowedByEmail) {
+            return NextResponse.json(
+                { error: "Too many requests" },
+                { status: 429 }
+            )
+        }
+
         await mailService.sendSuspendedAccountActivatedEmail(email)
 
         return NextResponse.json({ ok: true }, { status: 200 })
