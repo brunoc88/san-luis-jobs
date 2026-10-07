@@ -8,7 +8,7 @@ const errorHandler = (error: any) => {
 
     if (error.code === "P2002") {
         return NextResponse.json(
-            { error: `El campo ${error.meta.target} ya está en uso` },
+            { error: `El ${error.meta.target} ya está en uso` },
             { status: 409 }
         )
     }

@@ -1,34 +1,44 @@
 import { z } from "zod"
 
 export const registerUserSchema = z.object({
+
     email: z
         .string()
-        .email('email invalido')
-        .nonempty('debe ingresar un email'),
+        .trim()
+        .nonempty('debe ingresar un email')
+        .email('email invalido'),
 
     username: z
         .string()
         .trim()
+        .nonempty('debe ingresar un nombre de usuario')
         .max(25, 'maximo 25 caracteres')
-        .min(5, 'min 5 caracteres')
-        .nonempty('debe ingresar un nombre de usuario'),
+        .min(5, 'min 5 caracteres'),
 
     password: z
         .string()
         .trim()
-        .min(8, 'minimo 8 caracteres')
-        .nonempty('debe ingresar un password'),
+        .nonempty('debe ingresar un password')
+        .min(8, 'minimo 8 caracteres'),
 
     password2: z
         .string()
         .trim()
-        .min(8, 'minimo 8 caracteres')
-        .nonempty('debe ingresar un password'),
+        .nonempty('debe ingresar un password')
+        .min(8, 'minimo 8 caracteres'),
 
     description: z
         .string()
         .trim()
         .max(150, 'max 150 caracteres')
+        .optional(),
+
+    file: z
+        .custom<FileList>()
+        .optional(),
+
+    cvFile: z
+        .custom<FileList>()
         .optional()
 
 }).refine(data => data.password === data.password2, {
@@ -36,4 +46,5 @@ export const registerUserSchema = z.object({
     path: ['password2'],
 })
 
-export default registerUserSchema.transform(({ password2, ...data }) => data)
+export default registerUserSchema
+//.transform(({ password2, ...data }) => data)

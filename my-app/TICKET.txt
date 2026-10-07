@@ -1,10 +1,10 @@
 Objetivos
 
 - PENDIENTE:
-    
+    BACKEND:
     POSPUESTO POR CONFIGURACION DE clodinary 
     LA NUEVA VERSION DE CLOUDINARY YA ESTA DISPONIBLE EN lib/clodinary.v2.ts
-    
+
     - USER
         /CONFIG:
         RATE LIMIT
@@ -21,6 +21,52 @@ Objetivos
         - TEST
         - DOCUMENTAR
 
+MODIFICAR: 
+    nextauth: EN CASO DE QUE SE REGISTRE
+    CON GOOGLE, DARLE FOTO DE PERFIL default
+FRONTEND:
+
+APLICAR useCase, customHooks
+
+
+1. Base del frontend
+
+estructura de carpetas
+estilos globales
+layout
+cliente/API para comunicarnos con el backend
+manejo base de errores
+
+2. Login
+
+- llamar a registrarse
+- llamar a recuperar password
+
+3. Crear cuenta
+
+formulario
+validaciones
+foto opcional
+integración con Cloudinary
+imagen default propia si no se carga foto
+manejo de errores
+
+4. Perfil / cuenta
+
+visualizar perfil
+editar perfil
+cambiar foto
+cargar/cambiar CV
+acá vamos a reutilizar bastante de lo anterior
+
+5. Jobs
+
+listado
+detalle
+búsqueda/filtros
+guardar
+postularse
+crear/editar Jobs
 
 
 V2:

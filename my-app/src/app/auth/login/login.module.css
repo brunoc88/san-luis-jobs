@@ -1,0 +1,137 @@
+.loginPage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 8%;
+}
+
+.loginPresentation {
+    width: 55%;
+}
+
+.loginPresentation h1 {
+    margin: 0;
+    color: #7B7B7B;
+    font-size: 56px;
+    font-style: italic;
+    line-height: 1.15;
+    max-width: 700px;
+}
+
+.loginForm {
+    width: 400px;
+    padding: 35px;
+    border: 3px solid #D9D9D9;
+    border-radius: 3px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.inputGroup {
+    min-height: 58px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.loginInput {
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+
+    border: 1px solid #D9D9D9;
+    border-radius: 5px;
+
+    font-size: 14px;
+}
+
+.loginInput::placeholder {
+    color: #929292;
+    font-style: italic;
+}
+
+.inputError {
+    color: #d64545;
+    font-size: 12px;
+}
+
+.googleButton {
+    width: 100%;
+    height: 40px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #000;
+    color: #fff;
+
+    cursor: pointer;
+}
+
+.forgotPassword {
+    text-align: center;
+}
+
+.forgotPassword p {
+    margin: 0;
+    color: #929292;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.loginActions {
+    display: flex;
+    gap: 12px;
+}
+
+.loginActions button {
+    flex: 1;
+    height: 40px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #D9D9D9;
+    color: #000;
+
+    cursor: pointer;
+}
+
+.inputGroup {
+    min-height: 58px;
+}
+
+.loginError {
+    min-height: 16px;
+
+    color: #d64545;
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    .loginPage {
+        flex-direction: column;
+        justify-content: center;
+        gap: 40px;
+        padding: 30px 20px;
+    }
+
+    .loginPresentation {
+        width: 100%;
+        text-align: center;
+    }
+
+    .loginPresentation h1 {
+        font-size: 36px;
+        max-width: 100%;
+    }
+
+    .loginForm {
+        width: 100%;
+        max-width: 400px;
+    }
+}

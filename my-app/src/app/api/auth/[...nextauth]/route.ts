@@ -33,7 +33,7 @@ export const authOptions: AuthOptions = {
         )
 
         if (!allowed) {
-          return null
+          throw new Error("RATE_LIMIT")
         }
 
         if (!credentials) return null

@@ -318,5 +318,10 @@ export const rateLimitConfig = {
     }
   },
 
-
+  createUser: {
+    ip: {
+      limit: 3,
+      windowMs: 60 * 60 * 1000
+    }
+  }
 }

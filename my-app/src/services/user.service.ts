@@ -1,6 +1,6 @@
 import { RegisterUserInput, CreateUserData } from "@/types/user/user.register.type"
 import bcrypt from "bcryptjs"
-import { uploadFile, deleteFile } from "@/lib/cloudinary"
+import { uploadFile, deleteFile } from "@/lib/cloudinary.v2"
 import { userRepo } from "@/repositories/user.repository"
 import crypto from 'crypto'
 import { verificationTokenRepo } from "@/repositories/verificationToken.repository"
@@ -11,12 +11,17 @@ import { jobRepo } from "@/repositories/job.repository"
 
 
 export const userService = {
-    createAccount: async (data: RegisterUserInput, imageFile: File | null, cvFile: File | null): Promise<{ email: string, token: string }> => {
-        let { email, username, password, description } = data
+    createAccount: async (
+        data: RegisterUserInput,
+        imageFile: File | null,
+        cvFile: File | null
+    ): Promise<{ email: string; token: string }> => {
 
-        let hashedPassword = await bcrypt.hash(password, 10)
+        const { email, username, password, description } = data
 
-        let imageUrl = process.env.DEFAULT_USER_IMAGE_URL!
+        const hashedPassword = await bcrypt.hash(password, 10)
+
+        let imageUrl = "/default-avatar.png"
         let imagePublicId: string | null = null
 
         let cvUrl: string | null = null
@@ -25,13 +30,33 @@ export const userService = {
         try {
 
             if (imageFile) {
-                const uploadResult = await uploadFile(imageFile, "users")
+                const uploadResult = await uploadFile(imageFile, {
+                    folder: "users",
+                    maxSize: 5 * 1024 * 1024,
+                    allowedMimeTypes: [
+                        "image/jpeg",
+                        "image/png",
+                        "image/webp"
+                    ],
+                    resourceType: "image"
+                })
+
                 imageUrl = uploadResult.url
                 imagePublicId = uploadResult.publicId
             }
 
             if (cvFile) {
-                const uploadResult = await uploadFile(cvFile, "users-cv")
+                const uploadResult = await uploadFile(cvFile, {
+                    folder: "users-cv",
+                    maxSize: 10 * 1024 * 1024,
+                    allowedMimeTypes: [
+                        "application/pdf",
+                        "application/msword",
+                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    ],
+                    resourceType: "raw"
+                })
+
                 cvUrl = uploadResult.url
                 cvPublicId = uploadResult.publicId
             }
@@ -40,7 +65,7 @@ export const userService = {
                 email,
                 username,
                 password: hashedPassword,
-                description: description ? description : 'sin descripcion',
+                description: description || "sin descripcion",
                 pic: imageUrl,
                 picPublicId: imagePublicId,
                 cv: cvUrl,
@@ -56,8 +81,6 @@ export const userService = {
                 .update(token)
                 .digest("hex")
 
-
-
             const expiresAt = new Date(
                 Date.now() + 24 * 60 * 60 * 1000
             )
@@ -68,16 +91,21 @@ export const userService = {
                 expiresAt
             })
 
-            return { email, token }
+            return {
+                email,
+                token
+            }
 
         } catch (error) {
-            // rollback si falla DB
+
             if (imagePublicId) {
-                await deleteFile(imagePublicId)
+                await deleteFile(imagePublicId, "image")
             }
+
             if (cvPublicId) {
-                await deleteFile(cvPublicId)
+                await deleteFile(cvPublicId, "raw")
             }
+
             throw error
         }
     },
@@ -257,54 +285,54 @@ export const userService = {
         await userRepo.changePasswordById(user.id, newHashedPassword)
     },
 
-    requestChangeEmail: async (id:number, email:string) => {
+    requestChangeEmail: async (id: number, email: string) => {
         const user = await requireActiveUserById(id)
-        
-        const userData = await userRepo.findById(id)
-        if(!userData) throw new NotFoundError()
 
-        if(userData.email === email) throw new ForbiddenError('El email es el mismo')
+        const userData = await userRepo.findById(id)
+        if (!userData) throw new NotFoundError()
+
+        if (userData.email === email) throw new ForbiddenError('El email es el mismo')
 
         const emailInUse = await userRepo.findByEmail(email)
-        if(emailInUse) throw new ConflictError('email no disponible')
+        if (emailInUse) throw new ConflictError('email no disponible')
 
         const verificationToken = await verificationTokenRepo.findTokenByUserId(id)
 
-        if(verificationToken) await verificationTokenRepo.delete(verificationToken.token)
+        if (verificationToken) await verificationTokenRepo.delete(verificationToken.token)
 
         const token = crypto.randomBytes(32).toString("hex")
 
-            const tokenHash = crypto
-                .createHash("sha256")
-                .update(token)
-                .digest("hex")
+        const tokenHash = crypto
+            .createHash("sha256")
+            .update(token)
+            .digest("hex")
 
 
 
-            const expiresAt = new Date(
-                Date.now() + 24 * 60 * 60 * 1000
-            )
+        const expiresAt = new Date(
+            Date.now() + 24 * 60 * 60 * 1000
+        )
 
-            await verificationTokenRepo.create({
-                token: tokenHash,
-                userId: user.id,
-                expiresAt
-            })
+        await verificationTokenRepo.create({
+            token: tokenHash,
+            userId: user.id,
+            expiresAt
+        })
 
-            await userRepo.savePendingEmail(user.id, email)
+        await userRepo.savePendingEmail(user.id, email)
 
-            return { token }
+        return { token }
     },
 
-    changeEmailConfirm: async (token:string) => {
+    changeEmailConfirm: async (token: string) => {
         const tokenData = await verificationTokenRepo.findByToken(token)
-        if(!tokenData) throw new NotFoundError()
+        if (!tokenData) throw new NotFoundError()
 
         const userData = await userRepo.findById(tokenData.userId)
-        if(!userData) throw new NotFoundError()
+        if (!userData) throw new NotFoundError()
 
-        if(!userData.pendingEmail) throw new ForbiddenError('No existe mail sustito')
-        
+        if (!userData.pendingEmail) throw new ForbiddenError('No existe mail sustito')
+
         await userRepo.changeEmailById(userData.id, userData.pendingEmail)
         await verificationTokenRepo.delete(tokenData.token)
     }

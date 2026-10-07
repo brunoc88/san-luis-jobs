@@ -21,6 +21,7 @@
     "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.9.1",
     "@prisma/client": "^6.16.2",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.10.0",
@@ -30,6 +31,7 @@
     "prisma": "^6.16.2",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-hook-form": "^7.89.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
