@@ -61,18 +61,25 @@ describe('GET /api/jobs/:id', () => {
             expect(body.job).not.toHaveProperty('locationId')
         })
 
-        it('con session', async () => {
+        it.only('con session', async () => {
             mockAuthenticatedSession(0)
 
-            const res = await GET({ params: { id: jobs[0].id } })
+            const headers = new Headers({
+                "x-forwarded-for": "192.168.1.10, 10.0.0.1"
+            })
+            const res = await GET(new Request(`http://localhost/api/jobs/${jobs[0].id}`, {
+                method: 'GET',
+                headers
+            }), { params: { id: jobs[0].id } })
             const body = await res.json()
-            
+            console.log(body)
             expect(res.status).toBe(200)
             expect(body).toHaveProperty('ok')
             expect(body).toHaveProperty('job')
             expect(body.ok).toBe(true)
             expect(body.job).toHaveProperty('alreadyApplied')
             expect(body.job).toHaveProperty('numberOfApplicants')
+            expect(body.job).toHaveProperty('applicationLimit')
             expect(body.job).not.toHaveProperty('userId')
             expect(body.job).not.toHaveProperty('locationId')
             expect(body.job.alreadyApplied).toBe(false)

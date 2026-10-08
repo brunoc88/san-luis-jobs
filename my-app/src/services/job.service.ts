@@ -280,6 +280,7 @@ export const jobService = {
             }
             if (jobData?.applicationLimit) {
                 let numberOfApplicants = await applicationRepo.count(job.id)
+                jobDetails.applicationLimit = jobData.applicationLimit
                 jobDetails.numberOfApplicants = numberOfApplicants
             }
         }

@@ -57,6 +57,7 @@ Reglas:
 -   Entero positivo.
 -   Puede omitirse para indicar que el empleo no tiene límite de
     postulaciones.
+-   Maximo de 1000 postulaciones (si es que se ingresa una cantidad)
 
 ## modality
 

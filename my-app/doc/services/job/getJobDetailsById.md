@@ -78,6 +78,12 @@ campos:
                                           incluye cuando la publicación posee
                                           un límite de aplicaciones
                                           configurado.
+
+   `ApplicationLimit`     `number`        Cantidad de vacantes. Solo se
+                                          incluye cuando la publicación posee
+                                          un límite de aplicaciones
+                                          configurado.
+                                                                           
   ---------------------------------------------------------------------------
 
 ## Valor de retorno

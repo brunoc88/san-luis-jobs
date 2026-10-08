@@ -4,9 +4,9 @@
 
 Esquema de validación encargado de verificar los datos necesarios para el registro de nuevos usuarios.
 
-La implementación utiliza Zod para validar la estructura, el formato y las reglas de negocio básicas antes de permitir la creación de una cuenta.
+La implementación utiliza Zod para validar la estructura, el formato y las reglas de validación definidas para los datos antes de permitir la creación de una cuenta.
 
-Además de validar los campos individuales, el esquema incorpora validaciones cruzadas entre propiedades y transforma el resultado final para exponer únicamente la información necesaria a las capas superiores.
+Además de validar los campos individuales, el esquema incorpora una validación cruzada entre las contraseñas.
 
 ## Campos validados
 
@@ -14,15 +14,16 @@ Además de validar los campos individuales, el esquema incorpora validaciones cr
 
 Valida que el campo:
 
-- Exista.
+- Sea un `string`.
 - No se encuentre vacío.
 - Posea un formato de correo electrónico válido.
+- Elimine espacios innecesarios mediante `trim()`.
 
 ### Username
 
 Valida que el nombre de usuario:
 
-- Exista.
+- Sea un `string`.
 - No se encuentre vacío.
 - Posea un mínimo de 5 caracteres.
 - No supere los 25 caracteres.
@@ -32,7 +33,7 @@ Valida que el nombre de usuario:
 
 Valida que la contraseña:
 
-- Exista.
+- Sea un `string`.
 - No se encuentre vacía.
 - Posea un mínimo de 8 caracteres.
 - Elimine espacios innecesarios mediante `trim()`.
@@ -41,7 +42,7 @@ Valida que la contraseña:
 
 Valida que el campo de confirmación:
 
-- Exista.
+- Sea un `string`.
 - No se encuentre vacío.
 - Posea un mínimo de 8 caracteres.
 - Elimine espacios innecesarios mediante `trim()`.
@@ -53,6 +54,24 @@ Valida que la descripción:
 - Sea opcional.
 - No supere los 150 caracteres.
 - Elimine espacios innecesarios mediante `trim()`.
+
+### File
+
+Valida que el campo:
+
+- Sea opcional.
+- Corresponda a un `FileList`.
+
+El esquema no realiza en este punto una validación del tipo MIME ni del tamaño del archivo.
+
+### CV File
+
+Valida que el campo:
+
+- Sea opcional.
+- Corresponda a un `FileList`.
+
+El esquema no realiza en este punto una validación del tipo MIME ni del tamaño del archivo.
 
 ## Validación cruzada
 
@@ -69,38 +88,12 @@ Si ambas contraseñas no coinciden, se genera un error asociado al campo `passwo
 
 ## Transformación de datos
 
-Una vez finalizada la validación, el esquema aplica una transformación sobre el resultado.
+El esquema actualmente no realiza una transformación de los datos.
 
-La propiedad:
-
-```ts
-password2
-```
-
-es eliminada antes de que los datos sean consumidos por las capas superiores.
-
-El resultado final contiene únicamente:
-
-```ts
-{
-  email,
-  username,
-  password,
-  description
-}
-```
-
-## Beneficios de la transformación
-
-Este enfoque permite:
-
-- Evitar transportar datos innecesarios.
-- Reducir el riesgo de uso accidental de campos auxiliares.
-- Simplificar los objetos utilizados por la capa de servicios.
-- Mantener una separación clara entre validación y lógica de negocio.
+La eliminación de `password2` se realiza posteriormente en `validateUserRequest`, una vez que la validación mediante este esquema fue completada correctamente.
 
 ## Responsabilidad
 
-La responsabilidad de este esquema es centralizar todas las reglas de validación relacionadas con el registro de usuarios.
+La responsabilidad de este esquema es centralizar las reglas de validación relacionadas con el registro de usuarios.
 
-De esta manera, cualquier componente que utilice este esquema recibe datos consistentes, validados y listos para ser procesados por la lógica de negocio de la aplicación.
+De esta manera, los datos recibidos pueden ser validados antes de ser enviados a la lógica de negocio, manteniendo separadas las reglas de validación de la gestión posterior de la cuenta y de los archivos.

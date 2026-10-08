@@ -1,81 +1,151 @@
-const UserInputs = ({serverError, errors, register, reset, userOptions, setUserOptions, isLoading}) => {
-    return(
-        <div>
-            <div>{serverError.message}</div>
+"use client"
 
-                {/* EMAIL */}
-                <div>
-                    <label>Email</label>
+import { useState } from "react"
 
-                    <input
-                        type="email"
-                        {...register("email")}
-                    />
+import {
+    FieldErrors,
+    UseFormRegister,
+    UseFormReset
+} from "react-hook-form"
 
-                    {errors.email && (
-                        <span>
-                            {errors.email.message}
-                        </span>
-                    )}
+import { UserRegisterFormDto } from "@/types/user/user.register.type"
+import { UserRegisterOptions } from "@/types/user/userRegisterOptions"
+
+import styles from "./userRegister.module.css"
+
+type UserInputsProps = {
+    serverError: {
+        status: number
+        message: string
+    }
+    errors: FieldErrors<UserRegisterFormDto>
+    register: UseFormRegister<UserRegisterFormDto>
+    reset: UseFormReset<UserRegisterFormDto>
+    userOptions: UserRegisterOptions
+    setUserOptions: React.Dispatch<
+        React.SetStateAction<UserRegisterOptions>
+    >
+}
+
+const UserInputs = ({
+    serverError,
+    errors,
+    register,
+    reset,
+    userOptions,
+    setUserOptions
+}: UserInputsProps) => {
+
+    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword2, setShowPassword2] = useState(false)
+
+    return (
+        <div className={styles.inputsContainer}>
+
+            {serverError.message && (
+                <div className={styles.serverError}>
+                    {serverError.message}
                 </div>
+            )}
 
-                {/* USERNAME */}
-                <div>
-                    <label>Nombre de usuario</label>
+            {/* EMAIL */}
+            <div className={styles.inputGroup}>
+                <label>Email</label>
 
+                <input
+                    className={styles.registerInput}
+                    type="email"
+                    {...register("email")}
+                />
+
+                {errors.email && (
+                    <span className={styles.inputError}>
+                        {errors.email.message}
+                    </span>
+                )}
+            </div>
+
+            {/* USERNAME */}
+            <div className={styles.inputGroup}>
+                <label>Nombre de usuario</label>
+
+                <input
+                    className={styles.registerInput}
+                    type="text"
+                    {...register("username")}
+                />
+
+                {errors.username && (
+                    <span className={styles.inputError}>
+                        {errors.username.message}
+                    </span>
+                )}
+            </div>
+
+            {/* PASSWORD */}
+            <div className={styles.inputGroup}>
+                <label>Password</label>
+
+                <div className={styles.passwordWrapper}>
                     <input
-                        type="text"
-                        {...register("username")}
-                    />
-
-                    {errors.username && (
-                        <span>
-                            {errors.username.message}
-                        </span>
-                    )}
-                </div>
-
-                {/* PASSWORD */}
-                <div>
-                    <label>Password</label>
-
-                    <input
-                        type="password"
+                        className={styles.registerInput}
+                        type={showPassword ? "text" : "password"}
                         {...register("password")}
                     />
 
-                    {errors.password && (
-                        <span>
-                            {errors.password.message}
-                        </span>
-                    )}
+                    <button
+                        type="button"
+                        className={styles.passwordButton}
+                        onClick={() => setShowPassword(prev => !prev)}
+                    >
+                        {showPassword ? "Ocultar" : "Ver"}
+                    </button>
                 </div>
 
-                {/* PASSWORD 2 */}
-                <div>
-                    <label>Confirmar password</label>
+                {errors.password && (
+                    <span className={styles.inputError}>
+                        {errors.password.message}
+                    </span>
+                )}
+            </div>
 
+            {/* PASSWORD 2 */}
+            <div className={styles.inputGroup}>
+                <label>Confirmar password</label>
+
+                <div className={styles.passwordWrapper}>
                     <input
-                        type="password"
+                        className={styles.registerInput}
+                        type={showPassword2 ? "text" : "password"}
                         {...register("password2")}
                     />
 
-                    {errors.password2 && (
-                        <span>
-                            {errors.password2.message}
-                        </span>
-                    )}
+                    <button
+                        type="button"
+                        className={styles.passwordButton}
+                        onClick={() => setShowPassword2(prev => !prev)}
+                    >
+                        {showPassword2 ? "Ocultar" : "Ver"}
+                    </button>
                 </div>
 
-                {/* DESCRIPTION */}
-                <div>
-                    <p>¿Querés agregar una descripción?</p>
+                {errors.password2 && (
+                    <span className={styles.inputError}>
+                        {errors.password2.message}
+                    </span>
+                )}
+            </div>
 
+            {/* DESCRIPTION */}
+            <div className={styles.optionGroup}>
+                <p>¿Querés agregar una descripción?</p>
+
+                <div className={styles.radioOptions}>
                     <label>
                         <input
                             type="radio"
                             name="description"
-                            checked={userOptions.description === true}
+                            checked={userOptions.description}
                             onChange={() =>
                                 setUserOptions(prev => ({
                                     ...prev,
@@ -90,7 +160,7 @@ const UserInputs = ({serverError, errors, register, reset, userOptions, setUserO
                         <input
                             type="radio"
                             name="description"
-                            checked={userOptions.description === false}
+                            checked={!userOptions.description}
                             onChange={() =>
                                 setUserOptions(prev => ({
                                     ...prev,
@@ -100,29 +170,32 @@ const UserInputs = ({serverError, errors, register, reset, userOptions, setUserO
                         />
                         No
                     </label>
-
-                    {userOptions.description && (
-                        <textarea
-                            {...register("description")}
-                        />
-                    )}
-
-                    {errors.description && (
-                        <span>
-                            {errors.description.message}
-                        </span>
-                    )}
                 </div>
 
-                {/* PROFILE IMAGE */}
-                <div>
-                    <p>¿Querés agregar una imagen de perfil?</p>
+                {userOptions.description && (
+                    <textarea
+                        className={styles.descriptionInput}
+                        {...register("description")}
+                    />
+                )}
 
+                {errors.description && (
+                    <span className={styles.inputError}>
+                        {errors.description.message}
+                    </span>
+                )}
+            </div>
+
+            {/* PROFILE IMAGE */}
+            <div className={styles.optionGroup}>
+                <p>¿Querés agregar una imagen de perfil?</p>
+
+                <div className={styles.radioOptions}>
                     <label>
                         <input
                             type="radio"
                             name="pic"
-                            checked={userOptions.pic === true}
+                            checked={userOptions.pic}
                             onChange={() =>
                                 setUserOptions(prev => ({
                                     ...prev,
@@ -137,7 +210,7 @@ const UserInputs = ({serverError, errors, register, reset, userOptions, setUserO
                         <input
                             type="radio"
                             name="pic"
-                            checked={userOptions.pic === false}
+                            checked={!userOptions.pic}
                             onChange={() =>
                                 setUserOptions(prev => ({
                                     ...prev,
@@ -147,41 +220,38 @@ const UserInputs = ({serverError, errors, register, reset, userOptions, setUserO
                         />
                         No
                     </label>
-
-                    {userOptions.pic && (
-                        <div>
-                            <p>
-                                Formatos permitidos: JPG, PNG, WEBP
-                            </p>
-
-                            <p>
-                                Tamaño máximo: 5 MB
-                            </p>
-
-                            <input
-                                type="file"
-                                accept=".jpg,.jpeg,.png,.webp"
-                                {...register("file")}
-                            />
-                        </div>
-                    )}
-
-                    {errors.file && (
-                        <span>
-                            {errors.file.message}
-                        </span>
-                    )}
                 </div>
 
-                {/* CV */}
-                <div>
-                    <p>¿Querés agregar un CV?</p>
+                {userOptions.pic && (
+                    <div className={styles.fileSection}>
+                        <p>Formatos permitidos: JPG, PNG, WEBP</p>
+                        <p>Tamaño máximo: 5 MB</p>
 
+                        <input
+                            type="file"
+                            accept=".jpg,.jpeg,.png,.webp"
+                            {...register("file")}
+                        />
+                    </div>
+                )}
+
+                {errors.file && (
+                    <span className={styles.inputError}>
+                        {errors.file.message}
+                    </span>
+                )}
+            </div>
+
+            {/* CV */}
+            <div className={styles.optionGroup}>
+                <p>¿Querés agregar un CV?</p>
+
+                <div className={styles.radioOptions}>
                     <label>
                         <input
                             type="radio"
                             name="cv"
-                            checked={userOptions.cv === true}
+                            checked={userOptions.cv}
                             onChange={() =>
                                 setUserOptions(prev => ({
                                     ...prev,
@@ -196,7 +266,7 @@ const UserInputs = ({serverError, errors, register, reset, userOptions, setUserO
                         <input
                             type="radio"
                             name="cv"
-                            checked={userOptions.cv === false}
+                            checked={!userOptions.cv}
                             onChange={() =>
                                 setUserOptions(prev => ({
                                     ...prev,
@@ -206,53 +276,49 @@ const UserInputs = ({serverError, errors, register, reset, userOptions, setUserO
                         />
                         No
                     </label>
-
-                    {userOptions.cv && (
-                        <div>
-                            <p>
-                                Formatos permitidos: PDF, DOC, DOCX
-                            </p>
-
-                            <p>
-                                Tamaño máximo: 10 MB
-                            </p>
-
-                            <input
-                                type="file"
-                                accept=".pdf,.doc,.docx"
-                                {...register("cvFile")}
-                            />
-                        </div>
-                    )}
-
-                    {errors.cvFile && (
-                        <span>
-                            {errors.cvFile.message}
-                        </span>
-                    )}
                 </div>
 
-                {/* ACTIONS */}
-                <div>
-                    <button type="submit" >
-                        {isLoading ? "Creando cuenta..." : "Registrarse"}
-                    </button>
+                {userOptions.cv && (
+                    <div className={styles.fileSection}>
+                        <p>Formatos permitidos: PDF, DOC, DOCX</p>
+                        <p>Tamaño máximo: 10 MB</p>
 
-                    <button
-                        type="button"
-                        disabled={isLoading}
-                        onClick={() => {
-                            reset()
-                            setUserOptions({
-                                pic: false,
-                                cv: false,
-                                description: false
-                            })
-                        }}
-                    >
-                        Limpiar
-                    </button>
-                </div>
+                        <input
+                            type="file"
+                            accept=".pdf,.doc,.docx"
+                            {...register("cvFile")}
+                        />
+                    </div>
+                )}
+
+                {errors.cvFile && (
+                    <span className={styles.inputError}>
+                        {errors.cvFile.message}
+                    </span>
+                )}
+            </div>
+
+            {/* ACTIONS */}
+            <div className={styles.registerActions}>
+                <button type="submit">
+                    Registrarse
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => {
+                        reset()
+
+                        setUserOptions({
+                            pic: false,
+                            cv: false,
+                            description: false
+                        })
+                    }}
+                >
+                    Limpiar
+                </button>
+            </div>
 
         </div>
     )

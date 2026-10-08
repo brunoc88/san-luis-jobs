@@ -44,6 +44,7 @@ export type JobDetailsDto = BaseJobDto & {
     }
     alreadyApplied?: boolean
     numberOfApplicants?: number
+    applicationLimit?: number
 }
 
 

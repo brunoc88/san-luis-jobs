@@ -28,6 +28,7 @@ export const JobRegisterSchema = z.object({
     .number("debe ingresar un numero")
     .int("El límite debe ser un número entero.")
     .positive("El límite debe ser mayor a 0.")
+    .max(1000, "El límite no puede superar los 1000 postulantes.")
     .optional(),
 
   modality: z.nativeEnum(JobModality, {

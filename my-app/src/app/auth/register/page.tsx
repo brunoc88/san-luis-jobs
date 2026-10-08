@@ -3,30 +3,40 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+
 import userRegisterSchema from "@/lib/schemas/user/user.registerSchema"
+
 import { UserRegisterFormDto } from "@/types/user/user.register.type"
+import { UserRegisterOptions } from "@/types/user/userRegisterOptions"
+
 import { useRouter } from "next/navigation"
+
 import { usersApi } from "@/lib/api/users/users"
 import handleError from "@/lib/errors/handleErrors"
 import createUserFormData from "@/lib/api/users/createUserFormData"
+
 import UserInputs from "@/components/user/userInputs"
 
-const UserRegisterForm = () => {
-    type Options = {
-        pic: boolean
-        cv: boolean
-        description: boolean
-    }
+import styles from "@/components/user/userRegister.module.css"
 
-    const [userOptions, setUserOptions] = useState<Options>({
+const UserRegisterForm = () => {
+
+    const [userOptions, setUserOptions] = useState<UserRegisterOptions>({
         pic: false,
         cv: false,
         description: false
     })
 
-    const [serverError, setServerError] = useState<{ status: number, message: string }>({ status: 0, message: '' })
+    const [serverError, setServerError] = useState<{
+        status: number
+        message: string
+    }>({
+        status: 0,
+        message: ""
+    })
 
     const [isLoading, setIsLoading] = useState(false)
+    const [isRegistered, setIsRegistered] = useState(false)
 
     const {
         register,
@@ -34,7 +44,14 @@ const UserRegisterForm = () => {
         reset,
         formState: { errors }
     } = useForm<UserRegisterFormDto>({
-        resolver: zodResolver(userRegisterSchema)
+        resolver: zodResolver(userRegisterSchema),
+        defaultValues: {
+        email: "",
+        username: "",
+        password: "",
+        password2: "",
+        description: ""
+    }
     })
 
     const router = useRouter()
@@ -46,38 +63,68 @@ const UserRegisterForm = () => {
             const formData = createUserFormData(data)
 
             const result = await usersApi.registerUser(formData)
+
             if (!result.ok) {
                 const error = handleError(result.status, result.error)
                 setServerError(error)
                 return
             }
 
-            router.push('/auth/login')
-        } catch (error) {
+            setIsRegistered(true)
+
+        } finally {
             setIsLoading(false)
         }
+    }
 
+    if (isRegistered) {
+        return (
+            <div className={styles.registerPage}>
+                <div className={styles.registerSuccess}>
+                    <h1>¡Cuenta creada!</h1>
 
+                    <p>
+                        Revisá tu casilla de correo para activar tu cuenta.
+                    </p>
+
+                    <button
+                        type="button"
+                        onClick={() => router.push("/auth/login")}
+                    >
+                        Ir al login
+                    </button>
+                </div>
+            </div>
+        )
     }
 
     return (
-        <div>
-            <h1>
-                Crea tu cuenta y empieza a buscar y ofrecer empleo
+        <div className={styles.registerPage}>
+
+            <h1 className={styles.registerTitle}>
+                Crea tu cuenta y empieza
+                <br />
+                a buscar y ofrecer empleo
             </h1>
 
-            <form onSubmit={handleSubmit(handleRegisterUser)}>
-
-                <UserInputs 
-                serverError={serverError} 
-                errors={errors} 
-                register={register}
-                reset={reset}
-                setUserOptions={setUserOptions}
-                userOptions={userOptions}
-                isLoading={isLoading}
-                />
-
+            <form
+                className={styles.registerForm}
+                onSubmit={handleSubmit(handleRegisterUser)}
+            >
+                {isLoading ? (
+                    <div className={styles.loading}>
+                        <p>Creando tu cuenta...</p>
+                    </div>
+                ) : (
+                    <UserInputs
+                        serverError={serverError}
+                        errors={errors}
+                        register={register}
+                        reset={reset}
+                        setUserOptions={setUserOptions}
+                        userOptions={userOptions}
+                    />
+                )}
             </form>
 
         </div>

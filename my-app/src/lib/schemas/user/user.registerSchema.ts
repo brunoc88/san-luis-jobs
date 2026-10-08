@@ -47,4 +47,3 @@ export const registerUserSchema = z.object({
 })
 
 export default registerUserSchema
-//.transform(({ password2, ...data }) => data)

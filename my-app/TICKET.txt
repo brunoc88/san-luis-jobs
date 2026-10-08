@@ -1,9 +1,7 @@
 Objetivos
 
 - PENDIENTE:
-    BACKEND:
-    POSPUESTO POR CONFIGURACION DE clodinary 
-    LA NUEVA VERSION DE CLOUDINARY YA ESTA DISPONIBLE EN lib/clodinary.v2.ts
+   
 
     - USER
         /CONFIG:
@@ -14,12 +12,6 @@ Objetivos
         - TEST
         - DOCUMENTAR
 
-        /CREATE:
-        RATE LIMIT
-        (CREAR CUENTA DE USUARIO)
-        - MODIFICAR SERVICE()
-        - TEST
-        - DOCUMENTAR
 
 MODIFICAR: 
     nextauth: EN CASO DE QUE SE REGISTRE
@@ -28,28 +20,6 @@ FRONTEND:
 
 APLICAR useCase, customHooks
 
-
-1. Base del frontend
-
-estructura de carpetas
-estilos globales
-layout
-cliente/API para comunicarnos con el backend
-manejo base de errores
-
-2. Login
-
-- llamar a registrarse
-- llamar a recuperar password
-
-3. Crear cuenta
-
-formulario
-validaciones
-foto opcional
-integración con Cloudinary
-imagen default propia si no se carga foto
-manejo de errores
 
 4. Perfil / cuenta
 
@@ -83,12 +53,8 @@ V2:
 DOCUMENTAR:
     - nextauth
     - credentials-authorize
-    - next-auth.d.ts
-    - clodinary(uploadFile)
+    - next-auth.d.ts  
     - todos los repositorios
-    - rateLimiter
-    - getClientIp
-    - re documentar los controllers
     - lo que falte
 
 

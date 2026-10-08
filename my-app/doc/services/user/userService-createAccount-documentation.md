@@ -8,7 +8,7 @@ Además de persistir la información del usuario, esta función se encarga de:
 
 - Hashear la contraseña.
 - Gestionar la imagen de perfil.
-- Gestionar el archico con el cv.
+- Gestionar el archivo con el CV.
 - Crear el registro del usuario.
 - Generar el token de verificación de cuenta.
 - Almacenar el token de forma segura.
@@ -16,20 +16,43 @@ Además de persistir la información del usuario, esta función se encarga de:
 
 ## Flujo de ejecución
 
-1. Se reciben los datos validados del usuario, un archivo de imagen y cv ambos opcionales.
+1. Se reciben los datos validados del usuario, un archivo de imagen y un archivo CV, ambos opcionales.
+
 2. La contraseña es hasheada utilizando `bcrypt` antes de ser almacenada.
-3. Se inicializan los valores de imagen por defecto definidos por la aplicación.
-4. Si el usuario proporciona una imagen y/o cv:
-   - Se carga al servicio de almacenamiento mediante `uploadFile`.
+
+3. Se inicializan los valores de imagen utilizando `/default-avatar.png` como imagen predeterminada.
+
+4. Si el usuario proporciona una imagen:
+   - Se carga mediante `uploadFile`.
+   - Se utiliza la carpeta `users`.
+   - Se establece un tamaño máximo de 5 MB.
+   - Se permiten los tipos `image/jpeg`, `image/png` y `image/webp`.
+   - Se utiliza `resourceType: "image"`.
    - Se obtiene la URL pública del archivo.
    - Se obtiene el identificador público necesario para futuras operaciones.
-5. Se construye el objeto `CreateUserData` con la información definitiva del usuario.
-6. Se crea el usuario mediante `userRepo.create`.
-7. Se genera un token de verificación aleatorio utilizando criptografía segura.
-8. El token generado es hasheado utilizando SHA-256.
-9. Se calcula la fecha de expiración del token.
-10. Se almacena el token hasheado mediante `verificationTokenRepo.create`.
-11. Se devuelve el email del usuario y el token original para su posterior envío por correo electrónico.
+
+5. Si el usuario proporciona un CV:
+   - Se carga mediante `uploadFile`.
+   - Se utiliza la carpeta `users-cv`.
+   - Se establece un tamaño máximo de 10 MB.
+   - Se permiten los tipos `application/pdf`, `application/msword` y `application/vnd.openxmlformats-officedocument.wordprocessingml.document`.
+   - Se utiliza `resourceType: "raw"`.
+   - Se obtiene la URL pública del archivo.
+   - Se obtiene el identificador público necesario para futuras operaciones.
+
+6. Se construye el objeto `CreateUserData` con la información definitiva del usuario.
+
+7. Se crea el usuario mediante `userRepo.create`.
+
+8. Se genera un token de verificación aleatorio utilizando criptografía segura.
+
+9. El token generado es hasheado utilizando SHA-256.
+
+10. Se calcula la fecha de expiración del token.
+
+11. Se almacena el token hasheado mediante `verificationTokenRepo.create`.
+
+12. Se devuelve el email del usuario y el token original para su posterior envío por correo electrónico.
 
 ## Gestión de contraseñas
 
@@ -49,29 +72,48 @@ La función soporta imágenes de perfil opcionales.
 
 Si el usuario no proporciona una imagen:
 
-- Se utiliza una imagen predeterminada configurada mediante variables de entorno.
+- Se utiliza `/default-avatar.png` como imagen predeterminada de la aplicación.
 - No se genera un identificador público asociado.
+- La imagen predeterminada no se sube al proveedor de almacenamiento.
 
 ### Con imagen
 
 Si el usuario proporciona una imagen:
 
-- La imagen es subida al proveedor de almacenamiento configurado.
+- La imagen es subida mediante `uploadFile`.
 - Se almacena la URL pública.
 - Se almacena el identificador público para futuras operaciones de actualización o eliminación.
+- La imagen se almacena en la carpeta `users`.
 
-## Gestión de cv
+Los límites establecidos para la imagen son:
 
-### Sin cv
+- Tamaño máximo: 5 MB.
+- Tipos permitidos: JPEG, PNG y WebP.
 
-- Si el usuario no proporciona un archivo para el cv se guardara como `null`.
+## Gestión de CV
 
-### Con cv
+El CV es opcional.
 
-- El cv es subida al proveedor de almacenamiento configurado.
+### Sin CV
+
+Si el usuario no proporciona un archivo para el CV:
+
+- `cv` se guarda como `null`.
+- `cvPublicId` se mantiene como `null`.
+
+### Con CV
+
+Si el usuario proporciona un CV:
+
+- El archivo es subido mediante `uploadFile`.
 - Se almacena la URL pública.
 - Se almacena el identificador público para futuras operaciones de actualización o eliminación.
+- El archivo se almacena en la carpeta `users-cv`.
 
+Los límites establecidos para el CV son:
+
+- Tamaño máximo: 10 MB.
+- Tipos permitidos: PDF, DOC y DOCX.
 
 ## Generación del token de verificación
 
@@ -110,21 +152,24 @@ Una vez superado este período, el token deja de ser válido.
 
 Toda la operación se encuentra protegida mediante un bloque `try/catch`.
 
-Si ocurre un error después de haber subido una imagen pero antes de completar correctamente el proceso:
+Si ocurre un error después de haber subido una imagen o un CV:
 
-1. Se elimina la imagen previamente subida.
-2. Se evita la generación de recursos huérfanos en el sistema de almacenamiento.
-3. La excepción es propagada para ser gestionada por capas superiores.
+1. Se elimina la imagen previamente subida, si existe.
+2. Se elimina el CV previamente subido, si existe.
+3. Se evita la generación de recursos huérfanos en el sistema de almacenamiento.
+4. La excepción es propagada para ser gestionada por capas superiores.
+
+La imagen predeterminada `/default-avatar.png` no requiere rollback, ya que no se almacena en el proveedor de almacenamiento.
 
 ## Estructura de retorno
 
 ```ts
 {
-  email: string,
-  token: string
+    email: string,
+    token: string
 }
 ```
 
 ## Responsabilidad
 
-Esta función concentra la lógica de negocio necesaria para registrar una nueva cuenta de usuario y preparar el proceso de verificación de correo electrónico, garantizando consistencia entre la base de datos, el almacenamiento de imágenes, cv y el sistema de tokens.
+Esta función concentra la lógica de negocio necesaria para registrar una nueva cuenta de usuario y preparar el proceso de verificación de correo electrónico, garantizando consistencia entre la base de datos, el almacenamiento de imágenes, CV y el sistema de tokens.
