@@ -1,0 +1,139 @@
+
+.confirmPage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.confirmCard {
+    width: 100%;
+    max-width: 480px;
+    padding: 40px 35px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    border: 3px solid #D9D9D9;
+    border-radius: 3px;
+    text-align: center;
+}
+
+.confirmIcon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.successIcon {
+    background-color: #e7f8ee;
+    color: #218653;
+}
+
+.errorIcon {
+    background-color: #fdecec;
+    color: #d64545;
+}
+
+.loadingIcon {
+    border: 4px solid #D9D9D9;
+    border-top-color: #7B7B7B;
+    animation: confirmSpin 0.8s linear infinite;
+}
+
+.confirmTitle {
+    margin: 0;
+    color: #7B7B7B;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.confirmMessage {
+    margin: 0;
+    color: #929292;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.confirmButton {
+    width: 100%;
+    max-width: 280px;
+    min-height: 42px;
+    padding: 10px 16px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #D9D9D9;
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.confirmButton:hover {
+    background-color: #c7c7c7;
+}
+
+.confirmButton:focus-visible {
+    outline: 2px solid #7B7B7B;
+    outline-offset: 3px;
+}
+
+@keyframes confirmSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .confirmPage {
+        padding: 24px 16px;
+    }
+
+    .confirmCard {
+        max-width: 400px;
+        padding: 30px 22px;
+        gap: 16px;
+    }
+
+    .confirmIcon {
+        width: 56px;
+        height: 56px;
+        font-size: 28px;
+    }
+
+    .confirmTitle {
+        font-size: 24px;
+    }
+
+    .confirmMessage {
+        font-size: 14px;
+    }
+
+    .confirmButton {
+        max-width: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loadingIcon {
+        animation: none;
+    }
+
+    .confirmButton {
+        transition: none;
+    }
+}

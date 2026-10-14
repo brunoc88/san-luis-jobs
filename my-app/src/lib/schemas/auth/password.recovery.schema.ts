@@ -3,8 +3,9 @@ import {z} from "zod"
 export const passwordRecoverySchema = z.object({
     email: z
     .string()
-    .email('email invalido')
     .nonempty('debe ingresar un email')
+    .email('email invalido')
+    
 })
 
 export const newPasswordSchema = z.object({

@@ -11,5 +11,14 @@ export const usersApi = {
         })
 
         return await handleResponse(res)
-    }
+    },
+
+    ConfirmAccount: async (token: string | null) => {
+        const res = await fetch(`${url}/confirm?token=${token}`, {
+            method: 'GET'
+        })
+
+        return await handleResponse(res)
+    },
+
 }

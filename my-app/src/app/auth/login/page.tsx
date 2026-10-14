@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from 'react'
 import styles from "./login.module.css"
+import Link from 'next/link'
 
 const LoginPage = () => {
     const [loginError, setLoginError] = useState<string>("")
@@ -91,12 +92,16 @@ const LoginPage = () => {
                 </button>
 
                 <div className={styles.forgotPassword}>
-                    <p>¿Olvidaste tu password?</p>
+
+                    <Link href="/auth/forgot-password" className={styles.confirmButton}>
+                        <p>¿Olvidaste tu password?</p>
+                    </Link>
+
                 </div>
 
                 <div className={styles.loginActions}>
                     <button type="submit">Ingresar</button>
-                    <button type="button" onClick={()=>{router.push('/auth/register')}}>Registrarse</button>
+                    <button type="button" onClick={() => { router.push('/auth/register') }}>Registrarse</button>
                 </div>
 
             </form>

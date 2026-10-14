@@ -41,3 +41,9 @@ Ahí está la diferencia importante:
 updateMany → no falla por no encontrar registros.
 deleteMany → no falla por no encontrar registros.
 update / delete de un registro específico → sí puede dar P2025 si no existe.
+
+V2:
+    - MOVER MAIL SERVICE A controllers
+        - ubicaciones:
+            - suspendJob
+            - applyJob

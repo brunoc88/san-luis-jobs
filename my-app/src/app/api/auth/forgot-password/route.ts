@@ -38,7 +38,7 @@ export const POST = async (req: Request) => {
 
         if (!allowedByIp) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }
@@ -51,7 +51,7 @@ export const POST = async (req: Request) => {
 
         if (!allowedByEmail) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }

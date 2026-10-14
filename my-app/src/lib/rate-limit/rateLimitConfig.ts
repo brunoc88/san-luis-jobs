@@ -323,5 +323,12 @@ export const rateLimitConfig = {
       limit: 3,
       windowMs: 60 * 60 * 1000
     }
+  },
+
+  confirmAccount: {
+    ip: {
+      limit: 10,
+      windowMs: 15 * 60 * 1000
+    }
   }
 }

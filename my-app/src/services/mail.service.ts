@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 
 export const mailService = {
     sendEmailVerification: (email: string, token: string) => {
-        const link = `${process.env.FRONT_URL}/confirm?token=${token}`
+        const link = `${process.env.FRONT_URL}/auth/confirm?token=${token}`
 
         return transporter.sendMail({
             from: '"Soporte" <no-reply@app.com>',

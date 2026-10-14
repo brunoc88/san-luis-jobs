@@ -1,5 +1,19 @@
 Objetivos
 
+FRONTEND:
+
+    FORGOT-PASSOWRD:
+        - UX PARA RECUPERAR PASSOWRD
+
+    MEJORAR:
+        - LOGIN/REGISTER/CONFIRM
+            - CONSIDERAR RENOMBRAR USERAPI A AUTHAPI (POR FUNCIONES DE REGISTRO Y AUTENTICACION)
+            - CASOS DE CAIDA DE SISTEMA
+            - REVISAR EL CREAR FUNCION PARA NO TENER QUE CREAR ESTADOS
+            - DOCUMENTAR 
+            - DOCUMENTAR BACKEND:(RATE-LIMIT CONFIG(CONFIRM ACCOUNT), ACTUALIZAR DOC CONTROLLER)
+            
+
 - PENDIENTE:
    
 
@@ -12,50 +26,22 @@ Objetivos
         - TEST
         - DOCUMENTAR
 
-
-MODIFICAR: 
-    nextauth: EN CASO DE QUE SE REGISTRE
-    CON GOOGLE, DARLE FOTO DE PERFIL default
-FRONTEND:
-
-APLICAR useCase, customHooks
-
-
-4. Perfil / cuenta
-
-visualizar perfil
-editar perfil
-cambiar foto
-cargar/cambiar CV
-acá vamos a reutilizar bastante de lo anterior
-
-5. Jobs
-
-listado
-detalle
-búsqueda/filtros
-guardar
-postularse
-crear/editar Jobs
+    DOCUMENTAR:
+    - nextauth
+    - credentials-authorize
+    - next-auth.d.ts  
+    - todos los repositorios
+    - lo que falte
 
 
-V2:
-    - MOVER MAIL SERVICE A controllers
-        - ubicaciones:
-            - suspendJob
-            - applyJob
+
 
             
     
         
 
 
-DOCUMENTAR:
-    - nextauth
-    - credentials-authorize
-    - next-auth.d.ts  
-    - todos los repositorios
-    - lo que falte
+
 
 
 
