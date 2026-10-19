@@ -27,7 +27,7 @@ export const mailService = {
     },
 
     sendEmailPasswordRecovery: (email: string, token: string) => {
-        const link = `${process.env.FRONT_URL}/reset-password?token=${token}`
+        const link = `${process.env.FRONT_URL}/auth/reset-password?token=${token}`
 
         return transporter.sendMail({
             from: '"Soporte" <no-reply@app.com>',

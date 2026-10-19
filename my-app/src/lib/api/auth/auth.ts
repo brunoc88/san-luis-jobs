@@ -10,5 +10,12 @@ export const authApi = {
         })
 
         return await handleResponse(res)
+    },
+
+    checkToken: async (token: string | null) => {
+        const res = await fetch(`${url}/reset-password?token=${token}`, {
+            method: 'GET'
+        })
+        return await handleResponse(res)
     }
 }
