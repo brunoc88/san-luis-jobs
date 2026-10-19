@@ -5,6 +5,8 @@ import { passwordRecoverySchema } from "@/lib/schemas/auth/password.recovery.sch
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import Link from "next/link"
+import styles from "./forgot-password.module.css"
 
 const ForgotPasswordPage = () => {
     const {
@@ -25,55 +27,93 @@ const ForgotPasswordPage = () => {
             const res = await authApi.forgotPassword(data)
             if (!res.ok) {
                 setServerError({ status: res.status, message: res.error })
+                setTimeout(() => {
+                    setServerError({ status: 0, message: '' })
+                }, 10000);
                 return
             }
-            setMessage({ status: res.status, msg: 'Solicitud enviada' })
-            setTimeout(() => {
-                setMessage({status:0, msg:''})
-            }, 5000)
-            
+            setMessage({
+                status: res.status,
+                msg: "Si el email ingresado corresponde a una cuenta registrada, recibirás instrucciones para recuperar tu contraseña."
+            })
+
         } catch (error) {
             setServerError({
                 status: 0,
                 message: "No se pudo conectar con el servidor. Intentá nuevamente."
             })
         } finally {
-            setLoading(false)    
+            setLoading(false)
+            reset()
         }
 
     }
 
+
     return (
-        <div>
+        <main className={styles.forgotPage}>
+            <section className={styles.forgotPresentation}>
+                <p>
+                    ¿Olvidaste tu contraseña? No te preocupes,
+                    solicitá una nueva y recibirás un email
+                    con las instrucciones para recuperarla.
+                </p>
+            </section>
 
-            <div>
-                <p>Olvidaste tu password?. No te preocupes, solicita uno nuevo y recibiras un email para solicitar una nueva</p>
-            </div>
+            <section className={styles.forgotForm}>
+                {serverError?.message ? (
+                    <p className={styles.forgotServerError} role="alert">
+                        {serverError.message}
+                    </p>
+                ) : message?.msg ? (
+                    <p className={styles.forgotSuccess} role="status">
+                        {message.msg}
+                    </p>
+                ) : null}
 
-            <div>
-                {serverError && <>{serverError.message}</>}
-                {message && <>{message.msg}</>}
                 <form onSubmit={handleSubmit(handlePasswordRequest)}>
-                    <div>
-                        <input type="text"
+                    <div className={styles.forgotInputGroup}>
+                        <input
+                            type="text"
                             {...register("email")}
-                            placeholder="Ingrese un email"
+                            placeholder="Ingrese su email..."
+                            className={styles.forgotInput}
+                            aria-invalid={!!errors.email}
+                            aria-describedby={
+                                errors.email ? "email-error" : undefined
+                            }
+                            disabled={loading}
                         />
+
+                        {errors.email && (
+                            <span
+                                id="email-error"
+                                className={styles.forgotInputError}
+                            >
+                                {String(errors.email.message)}
+                            </span>
+                        )}
                     </div>
-                    {errors.email && (
-                        <span>
-                            {errors.email.message}
-                        </span>
-                    )}
-                    <div>
-                        {!loading ? (<><button type="submit">Enviar</button></>)
-                            : (<p>Cargando...</p>)}
+
+                    <div className={styles.forgotActions}>
+                        <button
+                            type="submit"
+                            className={styles.forgotButton}
+                            disabled={loading}
+                        >
+                            {loading ? "Enviando..." : "Enviar"}
+                        </button>
+
+                        <Link
+                            href="/auth/login"
+                            className={styles.forgotButton}
+                        >
+                            Volver
+                        </Link>
                     </div>
                 </form>
-            </div>
-
-        </div>
-
+            </section>
+        </main>
     )
 }
 
