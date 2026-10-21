@@ -23,21 +23,27 @@ const LoginPage = () => {
     const handleLogin = async (data: AuthorizeInput) => {
         setLoginError('')
 
-        const result = await signIn("credentials", {
-            user: data.user,
-            password: data.password,
-            redirect: false
-        })
+        try {
+            const result = await signIn("credentials", {
+                user: data.user,
+                password: data.password,
+                redirect: false
+            })
 
-        if (result?.error === "RATE_LIMIT") {
-            setLoginError("Demasiados intentos. Intente nuevamente más tarde.")
-            return
-        }
+            if (result?.error === "RATE_LIMIT") {
+                setLoginError("Demasiados intentos. Intente nuevamente más tarde.")
+                return
+            }
 
-        if (result?.ok) {
-            router.push("/")
-        } else {
-            setLoginError("Credenciales inválidas")
+            if (result?.ok) {
+                router.push("/")
+            } else {
+                setLoginError("Credenciales inválidas")
+            }
+        } catch {
+            setLoginError(
+                "No se pudo conectar con el servidor. Intentá nuevamente."
+            )
         }
     }
     return (

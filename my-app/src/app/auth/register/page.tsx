@@ -71,8 +71,15 @@ const UserRegisterForm = () => {
             }
 
             setIsRegistered(true)
+            
+        }catch(error){
+            setServerError({
+                status: 0,
+                message: "No se pudo conectar con el servidor. Intentá nuevamente."
+            })
+        }
 
-        } finally {
+        finally {
             setIsLoading(false)
         }
     }
