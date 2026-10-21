@@ -17,5 +17,14 @@ export const authApi = {
             method: 'GET'
         })
         return await handleResponse(res)
+    },
+
+    resetPassword: async (data: { password: string, password2: string, token: string | null }) => {
+        const res = await fetch(`${url}/reset-password`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        })
+
+        return await handleResponse(res)
     }
 }

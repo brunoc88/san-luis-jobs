@@ -29,4 +29,4 @@ export const newPasswordSchema = z.object({
     message: 'Las contraseñas no coinciden',
     path: ['password2'],
 })
-.transform(({ password2, ...data }) => data)
+//.transform(({ password2, ...data }) => data)
