@@ -11,7 +11,8 @@ const handleResponse = async (res:Response) => {
 
     return {
         ok: true,
-        status: res.status
+        status: res.status,
+        data: body
     }
 }
 

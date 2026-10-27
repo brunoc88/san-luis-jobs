@@ -50,3 +50,8 @@ export type JobDetailsDto = BaseJobDto & {
 
 export type EditJobDto = CreateJobDto
 export type EditJobData = CreateJobDto
+
+export type jobOptions = {
+    salary: boolean,
+    applicationLimit: boolean
+}

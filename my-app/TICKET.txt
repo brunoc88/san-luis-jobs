@@ -5,6 +5,9 @@ FRONTEND:
     AHORA:
         JOBS:
             UX REGISTRAR JOB
+                - API(ENVIAR JOB)
+                - Errores de SERVICE
+                - CSS
     PROXIMO:
         auth block:
         - LOGIN/REGISTER/CONFIRM/FORGOT-PASSWORD/RESET-PASSWORDS
