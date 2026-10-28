@@ -1,231 +1,324 @@
+
 'use client'
 
 import { JobRegisterSchema } from "@/lib/schemas/job/job.register.schema"
 import { jobOptions } from "@/types/job/job.type"
 import { Locations } from "@/types/location/location.types"
-
 import type {
-    FieldErrors,
-    UseFormRegister,
-    UseFormReset
+  FieldErrors,
+  UseFormRegister,
+  UseFormReset
 } from "react-hook-form"
 import { z } from "zod"
+import styles from "./jobInputs.module.css"
 
 type JobFormInput = z.input<typeof JobRegisterSchema>
 
 type JobInputsProps = {
-    errors: FieldErrors<JobFormInput>
-    register: UseFormRegister<JobFormInput>
-    reset: UseFormReset<JobFormInput>
-    locations: Locations
-    jobOptions: jobOptions
-    setJobOptions: React.Dispatch<
-        React.SetStateAction<jobOptions>
-    >
-    sending: boolean
+  errors: FieldErrors<JobFormInput>
+  register: UseFormRegister<JobFormInput>
+  reset: UseFormReset<JobFormInput>
+  locations: Locations
+  jobOptions: jobOptions
+  setJobOptions: React.Dispatch<
+    React.SetStateAction<jobOptions>
+  >
+  sending: boolean
 }
 
-const JobInputs = ({ register, errors, locations, jobOptions, setJobOptions, sending, reset }: JobInputsProps) => {
+const JobInputs = ({
+  register,
+  errors,
+  locations,
+  jobOptions,
+  setJobOptions,
+  sending,
+  reset
+}: JobInputsProps) => {
+  const clearForm = () => {
+    reset()
+    setJobOptions({
+      salary: false,
+      applicationLimit: false
+    })
+  }
 
-    return (
-        <div>
-            {/*TITULO*/}
-            <div>
-                <label>Titulo:</label>
-                <input type="text"
-                    {...register('title')}
-                />
-                {errors.title && (
-                    <span>
-                        {errors.title.message}
-                    </span>
-                )}
-            </div>
+  return (
+    <div className={styles.container}>
+      {/* TÍTULO */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="title">
+          Título
+        </label>
 
-            {/*LOCALIDAD*/}
-            <div>
-                <label>Localidad:</label>
-                <select {...register("locationId", { valueAsNumber: true })}>
-                    <option value=""></option>
-                    {locations.map((l) => (
-                        <option key={l.id} value={l.id}>
-                            {l.name}
-                        </option>
-                    ))}
-                </select>
-                {errors.locationId && (
-                    <span>{errors.locationId.message}</span>
-                )}
-            </div>
+        <input
+          id="title"
+          className={styles.input}
+          type="text"
+          placeholder="Ej. Desarrollador backend"
+          {...register("title")}
+        />
 
-            {/*MODALIDAD*/}
-            <div>
-                <label>Modadilad:</label>
-                <select {...register('modality')}>
-                    <option value=""></option>
-                    <option value="remote">Remoto</option>
-                    <option value="hybrid">Hibrida</option>
-                    <option value="onSite">Presencial</option>
-                </select>
-                {errors.modality && (
-                    <span>{errors.modality.message}</span>
-                )}
-            </div>
+        {errors.title && (
+          <span className={styles.error}>
+            {errors.title.message}
+          </span>
+        )}
+      </div>
 
-            {/*JORNADA*/}
-            <div>
-                <label>Jornada:</label>
-                <select {...register("schedule")}>
-                    <option value=""></option>
-                    <option value="partTime">Media jornada</option>
-                    <option value="fullTime">Jornada completa</option>
-                </select>
+      {/* LOCALIDAD */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="locationId">
+          Localidad
+        </label>
 
-                {errors.schedule && (
-                    <span>{errors.schedule.message}</span>
-                )}
-            </div>
+        <select
+          id="locationId"
+          className={styles.select}
+          {...register("locationId", { valueAsNumber: true })}
+        >
+          <option value="">Seleccioná una localidad</option>
 
-            {/*SALARIO*/}
-            <div>
-                <p>¿Querés agregar una salario?</p>
+          {locations.map((location) => (
+            <option key={location.id} value={location.id}>
+              {location.name}
+            </option>
+          ))}
+        </select>
 
-                <div>
-                    <label>
-                        <input
-                            type="radio"
-                            name="salary"
-                            checked={jobOptions.salary}
-                            onChange={() =>
-                                setJobOptions(prev => ({
-                                    ...prev,
-                                    salary: true
-                                }))
-                            }
-                        />
-                        Sí
-                    </label>
+        {errors.locationId && (
+          <span className={styles.error}>
+            {errors.locationId.message}
+          </span>
+        )}
+      </div>
 
-                    <label>
-                        <input
-                            type="radio"
-                            name="salary"
-                            checked={!jobOptions.salary}
-                            onChange={() =>
-                                setJobOptions(prev => ({
-                                    ...prev,
-                                    salary: false
-                                }))
-                            }
-                        />
-                        No
-                    </label>
+      {/* MODALIDAD */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="modality">
+          Modalidad
+        </label>
 
-                    {jobOptions.salary && (
-                        <div>
-                            <label >Salario:</label>
-                            <input
-                                placeholder="En pesos argentinos"
-                                {...register("salary", { valueAsNumber: true })}
-                            />
-                        </div>
+        <select
+          id="modality"
+          className={styles.select}
+          {...register("modality")}
+        >
+          <option value="">Seleccioná una modalidad</option>
+          <option value="remote">Remoto</option>
+          <option value="hybrid">Híbrida</option>
+          <option value="onSite">Presencial</option>
+        </select>
 
-                    )}
+        {errors.modality && (
+          <span className={styles.error}>
+            {errors.modality.message}
+          </span>
+        )}
+      </div>
 
-                    {errors.salary && (
-                        <span >
-                            {errors.salary.message}
-                        </span>
-                    )}
-                </div>
-            </div>
+      {/* JORNADA */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="schedule">
+          Jornada laboral
+        </label>
 
-            {/*N APLICANTES*/}
-            <div>
-                <p>¿Querés poner limite de aplicantes?</p>
+        <select
+          id="schedule"
+          className={styles.select}
+          {...register("schedule")}
+        >
+          <option value="">Seleccioná una jornada</option>
+          <option value="partTime">Media jornada</option>
+          <option value="fullTime">Jornada completa</option>
+        </select>
 
-                <div>
-                    <label>
-                        <input
-                            type="radio"
-                            name="apply"
-                            checked={jobOptions.applicationLimit}
-                            onChange={() =>
-                                setJobOptions(prev => ({
-                                    ...prev,
-                                    applicationLimit: true
-                                }))
-                            }
-                        />
-                        Sí
-                    </label>
+        {errors.schedule && (
+          <span className={styles.error}>
+            {errors.schedule.message}
+          </span>
+        )}
+      </div>
 
-                    <label>
-                        <input
-                            type="radio"
-                            name="apply"
-                            checked={!jobOptions.applicationLimit}
-                            onChange={() =>
-                                setJobOptions(prev => ({
-                                    ...prev,
-                                    applicationLimit: false
-                                }))
-                            }
-                        />
-                        No
-                    </label>
+      {/* SALARIO */}
+      <div className={styles.optionalSection}>
+        <p className={styles.question}>
+          ¿Querés agregar un salario?
+        </p>
 
-                    {jobOptions.applicationLimit && (
-                        <div>
-                            <label >N aplicantes:</label>
-                            <input
-                                placeholder="maximo 1000"
-                                {...register("applicationLimit", { valueAsNumber: true })}
-                            />
-                        </div>
+        <div className={styles.radioGroup}>
+          <label className={styles.radioLabel}>
+            <input
+              className={styles.radio}
+              type="radio"
+              name="salaryOption"
+              checked={jobOptions.salary}
+              onChange={() =>
+                setJobOptions((prev) => ({
+                  ...prev,
+                  salary: true
+                }))
+              }
+            />
+            Sí
+          </label>
 
-                    )}
-
-                    {errors.applicationLimit && (
-                        <span >
-                            {errors.applicationLimit.message}
-                        </span>
-                    )}
-                </div>
-            </div>
-
-            {/*DESCRIPTION*/}
-            <div>
-                <label>Descripcion:</label>
-                <textarea
-                    {...register('description')}
-                ></textarea>
-                {errors.description && (
-                    <span>
-                        {errors.description.message}
-                    </span>
-                )}
-            </div>
-
-            {/*BOTONES */}
-            {!sending ? (<div>
-                <button type="submit">Crear</button>
-                <button 
-                    type="button"
-                    onClick={() => {
-                        reset()
-
-                        setJobOptions({
-                            salary:false,
-                            applicationLimit:false
-                        })
-                    }}
-                >Limpiar</button>
-            </div>) : (
-                <p>Enviando...</p>
-            )}
+          <label className={styles.radioLabel}>
+            <input
+              className={styles.radio}
+              type="radio"
+              name="salaryOption"
+              checked={!jobOptions.salary}
+              onChange={() =>
+                setJobOptions((prev) => ({
+                  ...prev,
+                  salary: false
+                }))
+              }
+            />
+            No
+          </label>
         </div>
-    )
+
+        {jobOptions.salary && (
+          <div className={styles.optionalField}>
+            <label className={styles.label} htmlFor="salary">
+              Salario (ARS)
+            </label>
+
+            <input
+              id="salary"
+              className={styles.input}
+              type="number"
+              min="0"
+              placeholder="Ingresá el salario"
+              {...register("salary", { valueAsNumber: true })}
+            />
+
+            {errors.salary && (
+              <span className={styles.error}>
+                {errors.salary.message}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* LÍMITE DE POSTULANTES */}
+      <div className={styles.optionalSection}>
+        <p className={styles.question}>
+          ¿Querés establecer un límite de postulantes?
+        </p>
+
+        <div className={styles.radioGroup}>
+          <label className={styles.radioLabel}>
+            <input
+              className={styles.radio}
+              type="radio"
+              name="applicationLimitOption"
+              checked={jobOptions.applicationLimit}
+              onChange={() =>
+                setJobOptions((prev) => ({
+                  ...prev,
+                  applicationLimit: true
+                }))
+              }
+            />
+            Sí
+          </label>
+
+          <label className={styles.radioLabel}>
+            <input
+              className={styles.radio}
+              type="radio"
+              name="applicationLimitOption"
+              checked={!jobOptions.applicationLimit}
+              onChange={() =>
+                setJobOptions((prev) => ({
+                  ...prev,
+                  applicationLimit: false
+                }))
+              }
+            />
+            No
+          </label>
+        </div>
+
+        {jobOptions.applicationLimit && (
+          <div className={styles.optionalField}>
+            <label
+              className={styles.label}
+              htmlFor="applicationLimit"
+            >
+              Máximo de postulantes
+            </label>
+
+            <input
+              id="applicationLimit"
+              className={styles.input}
+              type="number"
+              min="1"
+              max="1000"
+              placeholder="Máximo 1000"
+              {...register("applicationLimit", {
+                valueAsNumber: true
+              })}
+            />
+
+            {errors.applicationLimit && (
+              <span className={styles.error}>
+                {errors.applicationLimit.message}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* DESCRIPCIÓN */}
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="description">
+          Descripción del trabajo
+        </label>
+
+        <textarea
+          id="description"
+          className={styles.textarea}
+          placeholder="Describí las responsabilidades, requisitos y condiciones del puesto..."
+          {...register("description")}
+        />
+
+        {errors.description && (
+          <span className={styles.error}>
+            {errors.description.message}
+          </span>
+        )}
+      </div>
+
+      {/* BOTONES */}
+      {!sending ? (
+        <div className={styles.actions}>
+          <button
+            className={styles.button}
+            type="submit"
+          >
+            Crear trabajo
+          </button>
+
+          <button
+            className={styles.button}
+            type="button"
+            onClick={clearForm}
+          >
+            Limpiar
+          </button>
+        </div>
+      ) : (
+        <p role="status" aria-live="polite">
+          Enviando trabajo...
+        </p>
+      )}
+    </div>
+  )
 }
 
 export default JobInputs

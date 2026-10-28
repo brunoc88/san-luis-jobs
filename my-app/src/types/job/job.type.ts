@@ -55,3 +55,13 @@ export type jobOptions = {
     salary: boolean,
     applicationLimit: boolean
 }
+
+export type CreateJobPayload = {
+  title: string;
+  description: string;
+  modality: JobModality;
+  schedule: JobSchedule;
+  locationId: number;
+  salary?: number | null;
+  applicationLimit?: number | null;
+};

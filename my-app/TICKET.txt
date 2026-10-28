@@ -4,10 +4,12 @@ FRONTEND:
 
     AHORA:
         JOBS:
-            UX REGISTRAR JOB
-                - API(ENVIAR JOB)
-                - Errores de SERVICE
+            CREATE:
+                - IMPLEMENTAR REDIRIGIR A JOBS/ID
+            ID:
+                - UX
                 - CSS
+        
     PROXIMO:
         auth block:
         - LOGIN/REGISTER/CONFIRM/FORGOT-PASSWORD/RESET-PASSWORDS
