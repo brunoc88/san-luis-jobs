@@ -4,12 +4,13 @@ import { prisma } from "@/lib/prisma"
 import { afterEach } from "node:test"
 import { mailService } from "@/services/mail.service"
 import { getUsers, loadUsers } from "../fake.user"
+import { getServerSession } from "next-auth"
+import clearTestDb from "../clearTestDb"
 
 let users: any[]
 
 beforeEach(async () => {
-    await prisma.emailVerificationToken.deleteMany()
-    await prisma.user.deleteMany()
+    await clearTestDb()
     await loadUsers()
     users = await getUsers()
 })
@@ -22,6 +23,24 @@ vi.mock('@/services/mail.service', () => ({
     }
 }))
 
+vi.mock('next-auth', async () => {
+    const actual = await vi.importActual<any>('next-auth')
+    return {
+        ...actual,
+        getServerSession: vi.fn(),
+    }
+})
+
+const mockAuthenticatedSession = (i: number) => {
+    (getServerSession as any).mockResolvedValue({
+        user: {
+            id: users[i].id,
+            email: users[i].email,
+            name: users[i].username,
+            role: users[i].role
+        }
+    })
+}
 
 const makeRequest = (data: { email: string }) => {
     return new Request('http://localhost/api/auth/forgot-password', {
@@ -122,12 +141,13 @@ describe('POST /api/auth/forgot-password', () => {
         it('usuario activo sin token', async () => {
 
             // verificamos token 
-            const verifyToken = await prisma.emailVerificationToken.findUnique({where:{userId:users[0].id}})
-            
-            const res = await POST(makeRequest({ email: users[0].email }))
+            const verifyToken = await prisma.emailVerificationToken.findUnique({ where: { userId: users[0].id } })
 
+            const res = await POST(makeRequest({ email: users[0].email }))
+            
+            
             // verificamos si se creo token
-            const newToken = await prisma.emailVerificationToken.findUnique({where:{userId:users[0].id}})
+            const newToken = await prisma.emailVerificationToken.findUnique({ where: { userId: users[0].id } })
 
             expect(res.status).toBe(200)
             expect(verifyToken).toBeNull()
@@ -135,6 +155,18 @@ describe('POST /api/auth/forgot-password', () => {
             expect(mailService.sendInactiveAccountEmail).not.toHaveBeenCalled()
             expect(mailService.sendSuspendedAccountEmail).not.toHaveBeenCalled()
             expect(mailService.sendEmailPasswordRecovery).toHaveBeenCalled()
+
+        })
+
+        it('Solicitar cuando esta en sesion', async () => {
+            mockAuthenticatedSession(0)
+
+            const res = await POST(makeRequest({ email: users[0].email }))
+            const body = await res.json()
+
+            expect(res.status).toBe(403)
+            expect(body).toHaveProperty('error')
+            expect(body.error).toBe("No podés realizar esta acción con una sesión activa.")
 
         })
     })

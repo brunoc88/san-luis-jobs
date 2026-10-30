@@ -16,6 +16,7 @@
     "test:c": "dotenv -e .env.test -- vitest test/complaint/complaint.details.test.ts",
     "test:ad": "dotenv -e .env.test -- vitest test/admin/admin.activate.account.test.ts",
     "test:r": "dotenv -e .env.test -- vitest test/rate-limit/create.job.test.ts",
+    "test:load": "dotenv -e .env.test -- tsx test/loadDb.ts",
     "prisma:generate:test": "dotenv -e .env.test -- prisma generate",
     "prisma:migrate:test": "dotenv -e .env.test -- prisma migrate dev",
     "prisma:migrate:reset:test": "dotenv -e .env.test -- prisma migrate reset"
@@ -25,6 +26,7 @@
     "@prisma/client": "^6.16.2",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.10.0",
+    "date-fns": "^4.4.0",
     "next": "16.2.6",
     "next-auth": "^4.24.14",
     "nodemailer": "^7.0.13",
@@ -41,6 +43,7 @@
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "dotenv-cli": "^11.0.0",
+    "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^4.1.7"
   }

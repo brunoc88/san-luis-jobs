@@ -7,9 +7,12 @@ import { NextResponse } from "next/server"
 import { getClientIp } from "@/lib/rate-limit/getClientIp"
 import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { rateLimitConfig } from "@/lib/rate-limit/rateLimitConfig"
+import { requireGuest } from "@/domain/auth/requireGuest"
 
 export const POST = async (req: Request) => {
     try {
+
+        await requireGuest()
         const clientIp = getClientIp(req.headers)
 
         if (!clientIp) {

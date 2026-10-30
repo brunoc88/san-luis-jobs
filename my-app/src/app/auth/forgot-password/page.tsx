@@ -7,6 +7,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
 import styles from "./forgot-password.module.css"
+import GuestOnly from "@/components/auth/GuestOnly"
 
 const ForgotPasswordPage = () => {
     const {
@@ -51,69 +52,71 @@ const ForgotPasswordPage = () => {
 
 
     return (
-        <main className={styles.forgotPage}>
-            <section className={styles.forgotPresentation}>
-                <p>
-                    ¿Olvidaste tu contraseña? No te preocupes,
-                    solicitá una nueva y recibirás un email
-                    con las instrucciones para recuperarla.
-                </p>
-            </section>
-
-            <section className={styles.forgotForm}>
-                {serverError?.message ? (
-                    <p className={styles.forgotServerError} role="alert">
-                        {serverError.message}
+        <GuestOnly>
+            <main className={styles.forgotPage}>
+                <section className={styles.forgotPresentation}>
+                    <p>
+                        ¿Olvidaste tu contraseña? No te preocupes,
+                        solicitá una nueva y recibirás un email
+                        con las instrucciones para recuperarla.
                     </p>
-                ) : message?.msg ? (
-                    <p className={styles.forgotSuccess} role="status">
-                        {message.msg}
-                    </p>
-                ) : null}
+                </section>
 
-                <form onSubmit={handleSubmit(handlePasswordRequest)}>
-                    <div className={styles.forgotInputGroup}>
-                        <input
-                            type="text"
-                            {...register("email")}
-                            placeholder="Ingrese su email..."
-                            className={styles.forgotInput}
-                            aria-invalid={!!errors.email}
-                            aria-describedby={
-                                errors.email ? "email-error" : undefined
-                            }
-                            disabled={loading}
-                        />
+                <section className={styles.forgotForm}>
+                    {serverError?.message ? (
+                        <p className={styles.forgotServerError} role="alert">
+                            {serverError.message}
+                        </p>
+                    ) : message?.msg ? (
+                        <p className={styles.forgotSuccess} role="status">
+                            {message.msg}
+                        </p>
+                    ) : null}
 
-                        {errors.email && (
-                            <span
-                                id="email-error"
-                                className={styles.forgotInputError}
+                    <form onSubmit={handleSubmit(handlePasswordRequest)}>
+                        <div className={styles.forgotInputGroup}>
+                            <input
+                                type="text"
+                                {...register("email")}
+                                placeholder="Ingrese su email..."
+                                className={styles.forgotInput}
+                                aria-invalid={!!errors.email}
+                                aria-describedby={
+                                    errors.email ? "email-error" : undefined
+                                }
+                                disabled={loading}
+                            />
+
+                            {errors.email && (
+                                <span
+                                    id="email-error"
+                                    className={styles.forgotInputError}
+                                >
+                                    {String(errors.email.message)}
+                                </span>
+                            )}
+                        </div>
+
+                        <div className={styles.forgotActions}>
+                            <button
+                                type="submit"
+                                className={styles.forgotButton}
+                                disabled={loading}
                             >
-                                {String(errors.email.message)}
-                            </span>
-                        )}
-                    </div>
+                                {loading ? "Enviando..." : "Enviar"}
+                            </button>
 
-                    <div className={styles.forgotActions}>
-                        <button
-                            type="submit"
-                            className={styles.forgotButton}
-                            disabled={loading}
-                        >
-                            {loading ? "Enviando..." : "Enviar"}
-                        </button>
-
-                        <Link
-                            href="/auth/login"
-                            className={styles.forgotButton}
-                        >
-                            Volver
-                        </Link>
-                    </div>
-                </form>
-            </section>
-        </main>
+                            <Link
+                                href="/auth/login"
+                                className={styles.forgotButton}
+                            >
+                                Volver
+                            </Link>
+                        </div>
+                    </form>
+                </section>
+            </main>
+        </GuestOnly>
     )
 }
 

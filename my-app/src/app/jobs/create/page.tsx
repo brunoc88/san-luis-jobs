@@ -105,11 +105,8 @@ const CreateJobFormPage = () => {
         return
       }
 
-      reset()
-      setJobOptions({
-        salary: false,
-        applicationLimit: false
-      })
+      router.push(`/jobs/${res.data.jobId}`)
+
     } catch {
       setServerError({
         status: 0,

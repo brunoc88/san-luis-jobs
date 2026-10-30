@@ -11,5 +11,12 @@ export const jobsApi = {
             credentials: "include"
         })
         return await handleResponse(res)
+    },
+
+    jobInfo: async (id:number) => {
+        const res = await fetch(`${url}/${id}`,{
+            method:'GET'
+        })
+        return await handleResponse(res)
     }
 }

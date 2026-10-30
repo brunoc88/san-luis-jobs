@@ -64,7 +64,7 @@ export const GET = async (req:Request, { params }: { params: Promise<{ id: strin
 
         if (!allowedByIp) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }

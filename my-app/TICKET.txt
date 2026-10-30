@@ -2,19 +2,54 @@ Objetivos
 
 FRONTEND:
 
+    IMPORTANTE: 
+        EMPEZAR A ANOTAR LAS REGLAS PARA EL README
     AHORA:
+        REGISTER/FORGOT-PASSWORD/LOGIN 
+            - SI EL USUARIO YA ESTA EN SESSION NO PERMITIRLE IR A ESAS UX (BACKEND/FRONTED)
+
+        FORGOT-PASSWORD:
+            - CONTROLLER/TEST
+            - DOCUMENTAR
+            - VIDEO
+
+    SIGUIENTE:
+        REGISTER:
+            - CONTROLLER/TEST(AGREGAR REQUIREGUESTONLY)
+            - DOCUMENTAR
+            - VIDEO
+
         JOBS:
             CREATE:
-                - IMPLEMENTAR REDIRIGIR A JOBS/ID
+                - ARREGLAR REDIRIGIR A JOBS/ID
             ID:
-                - UX
+                - UX:
+                    - AGREGAR EL MENU DE ACCIONES (REPORTAR, SUSPENDER, CANCELAR, PAUSAR, FINALIZAR, EDITAR,ELIMINAR)
+                    - AGREGAR SERVERERRORS (DIFERENTES A 401,403,404)
                 - CSS
+                - BACKEND:
+                    - RETOCAR SERVICE DE GETJOBDETAILSBYID: 
+                        - SI EL USUARIO ESTA EN SESSION Y NO EL OWNER DEVOLVER JSON CON BOOLEAN DE QUE YA APLICO Y
+                        DE SI YA GUARDO EL EMPLEO
+                        Y SI ES OWNER
+                    - RETOCAR DOC DE BACKEND DE ESTA ENDPOINT /JOBS/:ID
+                
+    DESPUES:
+        - NOTFOUDPAGE:
+            DARLE ESTILO        
+        - CONSIDERAR HACER COMPONENTE PARA MANEJO DE ERRORES:
+                    - EJ: 401, 403
+        
+        
+                
+                   
         
     PROXIMO:
         auth block:
         - LOGIN/REGISTER/CONFIRM/FORGOT-PASSWORD/RESET-PASSWORDS
             - DOCUMENTAR FRONTEND
-            - DOCUMENTAR BACKEND:(RATE-LIMIT CONFIG(CONFIRM ACCOUNT), ACTUALIZAR DOC CONTROLLER)
+            - DOCUMENTAR BACKEND:(RATE-LIMIT CONFIG(CONFIRM ACCOUNT), ACTUALIZAR DOC CONTROLLERS)
+            - VIDEO
             
 
 - PENDIENTE:
