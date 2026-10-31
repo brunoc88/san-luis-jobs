@@ -127,7 +127,11 @@ export const userService = {
         const userData = await userRepo.findByUsername(username)
 
         if (!userData) {
-            throw new NotFoundError()
+            throw new NotFoundError('Perfil no encontrado')
+        }
+
+        if(!userData.isActive || userData.isSuspended) {
+            throw new ForbiddenError('Perfil no disponible')
         }
 
         const userInfo: UserInfoDto = {

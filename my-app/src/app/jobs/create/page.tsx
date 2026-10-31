@@ -51,7 +51,9 @@ const CreateJobFormPage = () => {
   })
 
   useEffect(() => {
-    if (status !== "authenticated") return
+    if (status !== "authenticated") {
+      router.push('/auth/login')
+    }
 
     const loadLocations = async () => {
       try {

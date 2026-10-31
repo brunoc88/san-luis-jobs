@@ -192,6 +192,15 @@ describe('GET /api/users/username', () => {
             expect(body.user.isPublic).toBe(false)
 
         })
+
+        it('ver jobs de usuario inactivo o suspendido', async () => {
+            mockAuthenticatedSession(0)
+            const res = await mackeRequest('admin2')
+            const body = await res.json()
+            
+            expect(res.status).toBe(403)
+           
+        })
     })
 })
 
@@ -267,7 +276,7 @@ describe('GET /api/users/:username/jobs', () => {
 
         const res = await mackeRequest2('admin2', null, null, 2)
         const body = await res.json()
-        
+
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('userJobsInfo')
         expect(body.userJobsInfo).toHaveProperty('jobs')
@@ -284,6 +293,8 @@ describe('GET /api/users/:username/jobs', () => {
         expect(body.error).toHaveProperty('page')
         expect(body.error.page).toContain('Debe ingresar un numero')
     })
+
+
 })
 
 describe('GET /api/users/:username/saved-jobs', () => {
@@ -300,7 +311,7 @@ describe('GET /api/users/:username/saved-jobs', () => {
 
         const res = await mackeRequest3('admin2')
         const body = await res.json()
-        
+
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('savedJobsInfo')
         expect(body.savedJobsInfo).toHaveProperty('jobs')
@@ -313,7 +324,7 @@ describe('GET /api/users/:username/saved-jobs', () => {
         const res = await mackeRequest3('admin2', 'alphabetical')
         const body = await res.json()
 
-        
+
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('savedJobsInfo')
         expect(body.savedJobsInfo).toHaveProperty('jobs')
@@ -336,7 +347,7 @@ describe('GET /api/users/:username/saved-jobs', () => {
 
         const res = await mackeRequest3('admin2', null, null, 2)
         const body = await res.json()
-        
+
         expect(res.status).toBe(200)
         expect(body).toHaveProperty('savedJobsInfo')
         expect(body.savedJobsInfo).toHaveProperty('jobs')

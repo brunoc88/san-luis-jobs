@@ -8,7 +8,8 @@
 
 1. Verifica que el usuario que realiza la petición exista y se encuentre activo mediante `requireActiveUserById(id)`.
 2. Busca al usuario solicitado mediante `userRepo.findByUsername(username)`.
-3. Si el usuario solicitado no existe, lanza `NotFoundError`.
+3. Si el usuario solicitado no existe, lanza `NotFoundError`. Si esta inactivo o suspendido
+   lanza un `ForbidenError`.
 4. Construye un objeto `UserInfoDto` inicial con:
    - `username`
    - `pic`
