@@ -6,8 +6,12 @@ import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { jobService } from "@/services/job.service"
 import { NextResponse } from "next/server"
 
-export const POST = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const POST = async (
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) => {
     try {
+        
         const userId = await requireSession()
 
         let { id } = await params

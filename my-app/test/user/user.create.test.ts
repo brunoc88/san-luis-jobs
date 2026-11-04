@@ -4,18 +4,26 @@ import { POST } from "@/app/api/users/route"
 import path from "path"
 import fs from "fs"
 import bcrypt from "bcryptjs"
+import clearTestDb from "../clearTestDb"
+import { getServerSession } from "next-auth"
+import { getUsers, loadUsers } from "../fake.user"
 
+let users:any = []
 
 beforeEach(async () => {
   process.env.DEFAULT_USER_IMAGE_URL = "https://res.cloudinary.com/fake/default.png"
-   await prisma.job.deleteMany()
-  await prisma.user.deleteMany()
+  await clearTestDb()
+  await loadUsers()
+  users = await getUsers()
 })
 
 const makeRequest = (formData: FormData) => {
-  return new Request('http://localhost/api/user', {
-    method: 'POST',
-    body: formData
+  return new Request("http://localhost/api/user", {
+    method: "POST",
+    headers: {
+      "x-forwarded-for": "192.168.1.100",
+    },
+    body: formData,
   })
 }
 
@@ -34,7 +42,24 @@ vi.mock("@/lib/cloudinary", () => {
   }
 })
 
+vi.mock('next-auth', async () => {
+    const actual = await vi.importActual<any>('next-auth')
+    return {
+        ...actual,
+        getServerSession: vi.fn(),
+    }
+})
 
+const mockAuthenticatedSession = (i: number) => {
+    (getServerSession as any).mockResolvedValue({
+        user: {
+            id: users[i].id,
+            email: users[i].email,
+            name: users[i].username,
+            role: users[i].role
+        }
+    })
+}
 // *IMPORTANTE*:
 
 // Descomentar el mock de mail.service para recibir email real
@@ -209,7 +234,7 @@ describe('POST /api/user', () => {
 
     })
 
-    it.only('crear usuario con cv', async () => {
+    it('crear usuario con cv', async () => {
       const formData = new FormData()
 
       formData.append('email', 'bruno4@test.com')
@@ -230,7 +255,7 @@ describe('POST /api/user', () => {
 
       const res = await POST(makeRequest(formData))
 
-      const user = await prisma.user.findFirst({where:{email:'bruno4@test.com'}})
+      const user = await prisma.user.findFirst({ where: { email: 'bruno4@test.com' } })
 
       expect(res.status).toBe(201)
       expect(user).not.toBeNull()
@@ -240,6 +265,21 @@ describe('POST /api/user', () => {
 
   })
 
+  it.only("crear cuenta estando en session", async () => {
+    mockAuthenticatedSession(0)
+
+    const formData = new FormData()
+    formData.append("email", "bruno1@test.com")
+    formData.append("username", "bruno1")
+    formData.append("password", "sekretsx")
+    formData.append("password2", "sekretsx")
+
+    const res = await POST(makeRequest(formData))
+    const body = await res.json()
+   
+    expect(res.status).toBe(403)
+    expect(body.error).toBe("No podés realizar esta acción con una sesión activa.")
+  })
 })
 
 

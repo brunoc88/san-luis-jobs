@@ -5,7 +5,7 @@ export const requireActiveUserById = async (userId: number) => {
     
     let user = await prisma.user.findUnique({where:{id:userId}})
     
-    if(!user) throw new NotFoundError()
+    if(!user) throw new NotFoundError('Usuario no encontrado')
     if(!user.isActive) throw new ForbiddenError("Usuario inactivo")
     
     return {

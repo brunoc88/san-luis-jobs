@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useState } from 'react'
 import styles from "./login.module.css"
 import Link from 'next/link'
+import GuestOnly from '@/components/auth/GuestOnly'
 
 const LoginPage = () => {
     const [loginError, setLoginError] = useState<string>("")
@@ -47,72 +48,74 @@ const LoginPage = () => {
         }
     }
     return (
-        <div className={styles.loginPage}>
+        <GuestOnly>
+            <div className={styles.loginPage}>
 
-            <div className={styles.loginPresentation}>
-                <h1>Busca y ofrece trabajo de forma fácil y rápida</h1>
+                <div className={styles.loginPresentation}>
+                    <h1>Busca y ofrece trabajo de forma fácil y rápida</h1>
+                </div>
+
+                <form className={styles.loginForm} onSubmit={handleSubmit(handleLogin)}>
+
+                    <div className={styles.loginError}>
+                        {loginError}
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <input
+                            className={styles.loginInput}
+                            type="text"
+                            {...register("user")}
+                            placeholder="Ingrese un email o nombre de usuario"
+                        />
+
+                        {errors.user && (
+                            <span className={styles.inputError}>
+                                {errors.user.message}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className={styles.inputGroup}>
+                        <input
+                            className={styles.loginInput}
+                            type="password"
+                            {...register("password")}
+                            placeholder="Password"
+                        />
+
+                        {errors.password && (
+                            <span className={styles.inputError}>
+                                {errors.password.message}
+                            </span>
+                        )}
+                    </div>
+
+                    <button
+                        className={styles.googleButton}
+                        type="button"
+                        onClick={() => signIn("google", { callbackUrl: "/" })}
+                    >
+                        Continuar con Google
+                    </button>
+
+                    <div className={styles.forgotPassword}>
+
+                        <Link href="/auth/forgot-password" className={styles.confirmButton}>
+                            <p>¿Olvidaste tu password?</p>
+                        </Link>
+
+                    </div>
+
+                    <div className={styles.loginActions}>
+                        <button type="submit">Ingresar</button>
+                        <button type="button" onClick={() => { router.push('/auth/register') }}>Registrarse</button>
+                    </div>
+
+                </form>
+
             </div>
-
-            <form className={styles.loginForm} onSubmit={handleSubmit(handleLogin)}>
-
-                <div className={styles.loginError}>
-                    {loginError}
-                </div>
-
-                <div className={styles.inputGroup}>
-                    <input
-                        className={styles.loginInput}
-                        type="text"
-                        {...register("user")}
-                        placeholder="Ingrese un email o nombre de usuario"
-                    />
-
-                    {errors.user && (
-                        <span className={styles.inputError}>
-                            {errors.user.message}
-                        </span>
-                    )}
-                </div>
-
-                <div className={styles.inputGroup}>
-                    <input
-                        className={styles.loginInput}
-                        type="password"
-                        {...register("password")}
-                        placeholder="Password"
-                    />
-
-                    {errors.password && (
-                        <span className={styles.inputError}>
-                            {errors.password.message}
-                        </span>
-                    )}
-                </div>
-
-                <button
-                    className={styles.googleButton}
-                    type="button"
-                    onClick={() => signIn("google", { callbackUrl: "/" })}
-                >
-                    Continuar con Google
-                </button>
-
-                <div className={styles.forgotPassword}>
-
-                    <Link href="/auth/forgot-password" className={styles.confirmButton}>
-                        <p>¿Olvidaste tu password?</p>
-                    </Link>
-
-                </div>
-
-                <div className={styles.loginActions}>
-                    <button type="submit">Ingresar</button>
-                    <button type="button" onClick={() => { router.push('/auth/register') }}>Registrarse</button>
-                </div>
-
-            </form>
-
-        </div>
+        </GuestOnly>
     )
 }
 

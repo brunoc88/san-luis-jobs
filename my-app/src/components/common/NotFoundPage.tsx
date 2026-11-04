@@ -4,11 +4,9 @@
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 
-type NFactionDto = {
-    action: "job"
-}
 
-const NotFoundPage = ({ action }: NFactionDto) => {
+
+const NotFoundPage = ({message}:{message:string}) => {
     const router = useRouter()
     const { status } = useSession()
 
@@ -16,10 +14,10 @@ const NotFoundPage = ({ action }: NFactionDto) => {
         return <p>Cargando...</p>
     }
 
-    if (action === "job") {
+   
         return (
             <div>
-                <p>Publicación no encontrada</p>
+                <p>{message}</p>
 
                 <button onClick={() => router.push("/")}>
                     Volver al inicio
@@ -34,7 +32,6 @@ const NotFoundPage = ({ action }: NFactionDto) => {
         )
     }
 
-    return null
-}
+
 
 export default NotFoundPage

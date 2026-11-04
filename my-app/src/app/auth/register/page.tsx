@@ -18,6 +18,7 @@ import createUserFormData from "@/lib/api/users/createUserFormData"
 import UserInputs from "@/components/user/userInputs"
 
 import styles from "@/components/user/userRegister.module.css"
+import GuestOnly from "@/components/auth/GuestOnly"
 
 const UserRegisterForm = () => {
 
@@ -46,12 +47,12 @@ const UserRegisterForm = () => {
     } = useForm<UserRegisterFormDto>({
         resolver: zodResolver(userRegisterSchema),
         defaultValues: {
-        email: "",
-        username: "",
-        password: "",
-        password2: "",
-        description: ""
-    }
+            email: "",
+            username: "",
+            password: "",
+            password2: "",
+            description: ""
+        }
     })
 
     const router = useRouter()
@@ -71,8 +72,8 @@ const UserRegisterForm = () => {
             }
 
             setIsRegistered(true)
-            
-        }catch(error){
+
+        } catch (error) {
             setServerError({
                 status: 0,
                 message: "No se pudo conectar con el servidor. Intentá nuevamente."
@@ -106,35 +107,38 @@ const UserRegisterForm = () => {
     }
 
     return (
-        <div className={styles.registerPage}>
+        <GuestOnly>
+            <div className={styles.registerPage}>
 
-            <h1 className={styles.registerTitle}>
-                Crea tu cuenta y empieza
-                <br />
-                a buscar y ofrecer empleo
-            </h1>
+                <h1 className={styles.registerTitle}>
+                    Crea tu cuenta y empieza
+                    <br />
+                    a buscar y ofrecer empleo
+                </h1>
 
-            <form
-                className={styles.registerForm}
-                onSubmit={handleSubmit(handleRegisterUser)}
-            >
-                {isLoading ? (
-                    <div className={styles.loading}>
-                        <p>Creando tu cuenta...</p>
-                    </div>
-                ) : (
-                    <UserInputs
-                        serverError={serverError}
-                        errors={errors}
-                        register={register}
-                        reset={reset}
-                        setUserOptions={setUserOptions}
-                        userOptions={userOptions}
-                    />
-                )}
-            </form>
+                <form
+                    className={styles.registerForm}
+                    onSubmit={handleSubmit(handleRegisterUser)}
+                >
+                    {isLoading ? (
+                        <div className={styles.loading}>
+                            <p>Creando tu cuenta...</p>
+                        </div>
+                    ) : (
+                        <UserInputs
+                            serverError={serverError}
+                            errors={errors}
+                            register={register}
+                            reset={reset}
+                            setUserOptions={setUserOptions}
+                            userOptions={userOptions}
+                        />
+                    )}
+                </form>
 
-        </div>
+            </div>
+        </GuestOnly>
+
     )
 }
 

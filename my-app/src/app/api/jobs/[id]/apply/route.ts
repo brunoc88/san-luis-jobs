@@ -6,7 +6,7 @@ import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { jobService } from "@/services/job.service"
 import { NextResponse } from "next/server"
 
-export const POST = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const POST = async (request: Request, { params }: { params: Promise<{ id: string }> }) => {
     try {
         const userId = await requireSession()
         const { id } = await params
@@ -20,7 +20,7 @@ export const POST = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         if (!allowedByUserId) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }

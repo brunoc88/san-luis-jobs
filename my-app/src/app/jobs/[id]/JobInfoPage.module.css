@@ -1,0 +1,251 @@
+.page {
+    min-height: 100vh;
+    padding: 35px 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.jobCard {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 50%;
+    padding: 25px;
+
+    border: 2px solid #D9D9D9;
+    border-radius: 3px;
+
+    background-color: #fff;
+}
+
+.topSection {
+    display: flex;
+    align-items: center;
+}
+
+.author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: #000;
+    font-size: 15px;
+}
+
+.avatar,
+.avatarPlaceholder {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    background-color: #D9D9D9;
+}
+
+
+
+.titleRow {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 25px;
+}
+
+.jobTitle {
+    margin: 12px 0 3px;
+    color: #000;
+    font-size: 23px;
+    font-weight: 400;
+}
+
+.operations {
+    flex-shrink: 0;
+}
+
+.statusRow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    min-height: 18px;
+}
+
+.jobState {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+}
+
+.statusDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.active {
+    color: #20B84B;
+}
+
+.active .statusDot {
+    background-color: #20B84B;
+}
+
+.paused {
+    color: #D6A300;
+}
+
+.paused .statusDot {
+    background-color: #D6A300;
+}
+
+.finished {
+    color: #D64545;
+}
+
+.finished .statusDot {
+    background-color: #D64545;
+}
+
+.infoMessage {
+    color: #929292;
+    font-size: 11px;
+}
+
+.jobMetadata {
+    margin-top: 7px;
+    color: #929292;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.jobMetadata p {
+    margin: 0;
+}
+
+.descriptionSection {
+    margin-top: 22px;
+}
+
+.descriptionSection h2 {
+    margin: 0 0 14px;
+    color: #000;
+    font-size: 19px;
+    font-weight: 400;
+}
+
+.descriptionSection p {
+    margin: 0;
+    color: #222;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+
+.actionButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    
+    .titleRow {
+        position: static;
+        display: block;
+    }
+
+    .operations {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .page {
+        padding: 20px 10px;
+    }
+
+    .jobCard {
+        width: 100%;
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .avatar,
+    .avatarPlaceholder {
+        width: 34px;
+        height: 34px;
+    }
+
+    .jobTitle {
+        font-size: 20px;
+    }
+
+    .descriptionSection {
+        margin-top: 18px;
+    }
+
+    .descriptionSection h2 {
+        font-size: 17px;
+    }
+
+    .descriptionSection p {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 380px) {
+    .page {
+        padding: 15px 8px;
+    }
+
+    .jobCard {
+        padding: 8px;
+    }
+
+    .jobTitle {
+        font-size: 19px;
+    }
+}
+
+@media (min-width: 769px) {
+    .jobState {
+        font-size: 13px;
+    }
+
+    .infoMessage {
+        font-size: 13px;
+    }
+
+    .jobMetadata {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .descriptionSection h2 {
+        font-size: 21px;
+    }
+
+    .descriptionSection p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .titleRow {
+        align-items: center;
+    }
+
+    .operations {
+        transform: translateY(12px);
+    }
+}

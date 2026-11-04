@@ -48,7 +48,8 @@ export const jobRepo = {
                 user: {
                     select: {
                         username: true,
-                        pic: true
+                        pic: true,
+                        id: true
                     }
                 },
                 location: {

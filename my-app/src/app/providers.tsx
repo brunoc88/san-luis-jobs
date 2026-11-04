@@ -1,5 +1,6 @@
 'use client'
 
+import NavBar from "@/components/common/NavBar"
 import { SessionProvider } from "next-auth/react"
 
 type ProvidersProps = {
@@ -9,7 +10,9 @@ type ProvidersProps = {
 const Providers = ({ children }: ProvidersProps) => {
     return (
         <SessionProvider>
-            {children}
+            <NavBar>
+                {children}
+            </NavBar>
         </SessionProvider>
     )
 }

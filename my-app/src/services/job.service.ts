@@ -263,26 +263,47 @@ export const jobService = {
             schedule: jobData.schedule,
             modality: jobData.modality,
             salary: jobData.salary,
-            description: jobData.description
+            description: jobData.description,
+            owner: false
         }
 
 
 
         if (userId) {
             const user = await requireActiveUserById(userId)
-            const alreadyApplied = await applicationRepo.findByUserAndJob(user.id, job.id)
 
-            if (alreadyApplied) {
-                jobDetails.alreadyApplied = true
+            jobDetails.owner = user.id === jobData.user.id
+
+            if (!jobDetails.owner) {
+                const alreadyApplied = await applicationRepo.findByUserAndJob(user.id, job.id)
+                const alreadySaved = await jobRepo.getSavedJob(userId, jobData.id)
+
+                if (alreadyApplied) {
+                    jobDetails.alreadyApplied = true
+                }
+                else {
+                    jobDetails.alreadyApplied = false
+                    if (jobData?.applicationLimit) {
+                        let numberOfApplicants = await applicationRepo.count(job.id)
+                        jobDetails.applicationLimit = jobData.applicationLimit
+                        jobDetails.numberOfApplicants = numberOfApplicants
+                    }
+                }
+
+                if (alreadySaved) {
+                    jobDetails.alreadySaved = true
+                }
+                else {
+                    jobDetails.alreadySaved = false
+                }
+            } else {
+                if (jobData?.applicationLimit) {
+                    let numberOfApplicants = await applicationRepo.count(job.id)
+                    jobDetails.applicationLimit = jobData.applicationLimit
+                    jobDetails.numberOfApplicants = numberOfApplicants
+                }
             }
-            else {
-                jobDetails.alreadyApplied = false
-            }
-            if (jobData?.applicationLimit) {
-                let numberOfApplicants = await applicationRepo.count(job.id)
-                jobDetails.applicationLimit = jobData.applicationLimit
-                jobDetails.numberOfApplicants = numberOfApplicants
-            }
+
         }
 
 
@@ -387,7 +408,7 @@ export const jobService = {
 
         const jobApplicants = await applicationRepo.count(job.id)
 
-        
+
         if (
             job.state === JobState.active &&
             data.applicationLimit !== undefined &&

@@ -4,40 +4,27 @@ FRONTEND:
 
     IMPORTANTE: 
         EMPEZAR A ANOTAR LAS REGLAS PARA EL README
+   
     AHORA:
-    
-        FORGOT-PASSWORD:
-            
-            - DOCUMENTAR
-            - VIDEO(BACKEND/FRONTEND)
-           
-
-    SIGUIENTE:
-        REGISTER:
-            - CONTROLLER/TEST(AGREGAR REQUIREGUESTONLY)
-            - DOCUMENTAR
-            - VIDEO
 
         JOBS:
-            CREATE:
-                - ARREGLAR REDIRIGIR A JOBS/ID
             ID:
+                
                 - UX:
-                    - AGREGAR EL MENU DE ACCIONES (REPORTAR, SUSPENDER, CANCELAR, PAUSAR, FINALIZAR, EDITAR,ELIMINAR)
-                    - AGREGAR SERVERERRORS (DIFERENTES A 401,403,404)
-                - CSS
+                    - AGREGAR FUNCIONES CUANDO SE HAGA CLICK BOTONES (REPORTAR, CANCELAR, CAMBIOS DE ESTADO JOB)
                 - BACKEND:
-                    - RETOCAR SERVICE DE GETJOBDETAILSBYID: 
-                        - SI EL USUARIO ESTA EN SESSION Y NO EL OWNER DEVOLVER JSON CON BOOLEAN DE QUE YA APLICO Y
-                        DE SI YA GUARDO EL EMPLEO
-                        Y SI ES OWNER
-                    - RETOCAR DOC DE BACKEND DE ESTA ENDPOINT /JOBS/:ID
+                    APPLYJOB:
+                        - EL PDF ENVIADO NO SIRVE
+                    
+                - CSS
+
+            *NOTA: HUBO MODIFICACIONES EN MENSAJES DE REQUIEREACTIVEUSERBYID & REQUIEREACTIVEJOBBYID
+                
                 
     DESPUES:
         - NOTFOUDPAGE:
             DARLE ESTILO        
-        - CONSIDERAR HACER COMPONENTE PARA MANEJO DE ERRORES:
-                    - EJ: 401, 403
+        
         
         
                 
@@ -48,7 +35,7 @@ FRONTEND:
         - LOGIN/REGISTER/CONFIRM/FORGOT-PASSWORD/RESET-PASSWORDS
             - DOCUMENTAR FRONTEND
             - DOCUMENTAR BACKEND:(RATE-LIMIT CONFIG(CONFIRM ACCOUNT), ACTUALIZAR DOC CONTROLLERS)
-            - VIDEO
+            
             
 
 - PENDIENTE:

@@ -1,3 +1,4 @@
+import { requireGuest } from "@/domain/auth/requireGuest"
 import requireSession from "@/domain/auth/requireSession"
 import errorHandler from "@/lib/errors/errorHandler"
 import { getClientIp } from "@/lib/rate-limit/getClientIp"
@@ -12,6 +13,8 @@ import { NextRequest, NextResponse } from "next/server"
 
 export const POST = async (req: Request) => {
     try {
+
+        await requireGuest()
 
         const clientIp = getClientIp(req.headers)
 
