@@ -34,11 +34,16 @@ export async function uploadFile(
 
   const buffer = Buffer.from(await file.arrayBuffer())
 
+  const publicId = options.resourceType === "raw"
+    ? file.name
+    : undefined
+
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload_stream(
       {
         folder: options.folder,
         resource_type: options.resourceType,
+        ...(publicId && { public_id: publicId }),
       },
       (error, result) => {
         if (error || !result) {
@@ -48,9 +53,16 @@ export async function uploadFile(
         resolve({
           url: result.secure_url,
           publicId: result.public_id,
+
+        })
+        console.log({
+          url: result.secure_url,
+          publicId: result.public_id,
+          originalName: file.name
         })
       }
     ).end(buffer)
+
   })
 }
 

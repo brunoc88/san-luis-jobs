@@ -10,6 +10,8 @@ import RelativeDate from "@/components/common/RelativeDate"
 import NotFoundPage from "@/components/common/NotFoundPage"
 import JobOperations from "@/components/job/JobOperations"
 import styles from "./JobInfoPage.module.css"
+import { UserRole } from "@prisma/client"
+import ServerErrorPage from "@/components/common/ServerErrorPage"
 
 const JobInfoPage = () => {
 
@@ -19,10 +21,11 @@ const JobInfoPage = () => {
     const [loading, setLoading] = useState<boolean>(true)
     const [authenticated, setAuthenticated] = useState<boolean>(false)
     const [serverError, setServerError] = useState<{ status: number, message: string }>()
-    const [role, setRole] = useState()
+    const [role, setRole] = useState<UserRole>()
     const [isAuth, setIsAuth] = useState<boolean>(false)
+    const [actionError, setActionError] = useState<string>()
     const jobId = Number(id)
-    const router = useRouter()
+
     const modalityLabels = {
         remote: "Remoto",
         hybrid: "Híbrido",
@@ -73,14 +76,15 @@ const JobInfoPage = () => {
     if (serverError?.status === 404) {
         return <NotFoundPage message={serverError.message} />
     }
-    if (serverError && (serverError.status === 401 || serverError.status === 403)) {
+    if (serverError &&
+        (
+            serverError.status === 401 ||
+            serverError.status === 403 ||
+            serverError.status === 429
+        )
+    ) {
         return (
-            <div>
-                <p>{serverError.message}</p>
-                <button onClick={() => router.push("/")}>
-                    Volver al inicio
-                </button>
-            </div>
+            <ServerErrorPage message={serverError.message} />
         )
     }
 
@@ -115,6 +119,10 @@ const JobInfoPage = () => {
                             jobState={job.state}
                             role={role}
                             isAuth={isAuth}
+                            jobId={jobId}
+                            setJob={setJob}
+                            setServerError={setServerError}
+                            setActionError={setActionError}
                         />
                     </div>
                 </div>
@@ -153,7 +161,7 @@ const JobInfoPage = () => {
                     <p>{job.description}</p>
                 </section>
 
-                {/* Botones */}
+                {/* Botones Postular/Guardar*/}
                 <div className={styles.actionButtons}>
                     <JobActionsButton
                         authenticated={authenticated}
@@ -163,7 +171,16 @@ const JobInfoPage = () => {
                         alreadyApply={job.alreadyApplied}
                         alreadySaved={job.alreadySaved}
                         jobId={job.id}
+                        setJob={setJob}
+                        setServerError={setServerError}
+
                     />
+
+                    {actionError && (
+                        <p className={styles.errorActions}>
+                            {actionError}
+                        </p>
+                    )}
                 </div>
 
             </section>

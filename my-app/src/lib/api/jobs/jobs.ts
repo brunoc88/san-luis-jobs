@@ -1,5 +1,6 @@
 import handleResponse from "@/lib/handleResponse"
 import { CreateJobPayload } from "@/types/job/job.type"
+import { JobState } from "@prisma/client"
 
 let url = '/api/jobs'
 
@@ -36,7 +37,15 @@ export const jobsApi = {
         })
 
         return await handleResponse(res)
+    },
+
+    changeJobStatus: async (id: number, data: { state: JobState }) => {
+        const res = await fetch(`${url}/${id}/state`, {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            credentials: "include"
+        })
+
+        return await handleResponse(res)
     }
-
-
 }

@@ -146,6 +146,7 @@
     font-size: 14px;
     line-height: 1.5;
     white-space: pre-line;
+    overflow-wrap: anywhere;
 }
 
 .actionButtons {
@@ -153,6 +154,17 @@
     flex-wrap: wrap;
     gap: 8px;
     margin-top: 22px;
+}
+
+.errorActions {
+    flex-basis: 100%;
+    padding: 10px 12px;
+    color: #b42318;
+    background-color: #fef3f2;
+    border: 1px solid #fecdca;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
 /* MOBILE */
