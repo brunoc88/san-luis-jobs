@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import { JobDetailsDto } from "@/types/job/job.type"
 import { jobsApi } from "@/lib/api/jobs/jobs"
 import { useSession } from "next-auth/react"
@@ -12,6 +12,8 @@ import JobOperations from "@/components/job/JobOperations"
 import styles from "./JobInfoPage.module.css"
 import { UserRole } from "@prisma/client"
 import ServerErrorPage from "@/components/common/ServerErrorPage"
+import ReportJobForm from "@/components/job/report/ReportJobForm"
+import JobSuspend from "@/components/job/suspend/JobSuspend"
 
 const JobInfoPage = () => {
 
@@ -24,6 +26,10 @@ const JobInfoPage = () => {
     const [role, setRole] = useState<UserRole>()
     const [isAuth, setIsAuth] = useState<boolean>(false)
     const [actionError, setActionError] = useState<string>()
+    const [hide, setHide] = useState<boolean>(false)
+    const [hide2, setHide2] = useState<boolean>(false)
+    const [reported, setReported] = useState<boolean>()
+
     const jobId = Number(id)
 
     const modalityLabels = {
@@ -89,7 +95,7 @@ const JobInfoPage = () => {
     }
 
 
-    if (job) return (
+    if (job && !hide && !hide2) return (
         <main className={styles.page}>
             <section className={styles.jobCard}>
 
@@ -117,12 +123,15 @@ const JobInfoPage = () => {
                         <JobOperations
                             owner={job.owner}
                             jobState={job.state}
-                            role={role}
                             isAuth={isAuth}
                             jobId={jobId}
                             setJob={setJob}
                             setServerError={setServerError}
                             setActionError={setActionError}
+                            setHide={setHide}
+                            reported={reported ?? job.hasReportedJob}
+                            setHide2={setHide2}
+                            canSuspendJob = {job.canSuspendJob}
                         />
                     </div>
                 </div>
@@ -173,7 +182,6 @@ const JobInfoPage = () => {
                         jobId={job.id}
                         setJob={setJob}
                         setServerError={setServerError}
-
                     />
 
                     {actionError && (
@@ -187,6 +195,29 @@ const JobInfoPage = () => {
         </main>
     )
 
+    if (job && hide && !hide2) return (
+        <div className={styles.reportWrapper}>
+            <ReportJobForm
+                setHide={setHide}
+                jobId={jobId}
+                setReported={setReported}
+                setServerError={setServerError}
+            />
+        </div>
+    )
+
+    if(job && !hide && hide2) return(
+        <div>
+            <JobSuspend
+                jobId={jobId}
+                author={job.author.username}
+                title={job.title}
+                setHide2={setHide2}
+                setServerError={setServerError}
+            />
+        </div>
+    )
+    
     return <p>No se pudo cargar la publicación.</p>
 }
 

@@ -1,0 +1,225 @@
+.container {
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    background-color: #fff;
+    border: 3px solid #D9D9D9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.topBar {
+    height: 12px;
+    background-color: #D9D9D9;
+}
+
+.header {
+    padding: 18px 20px 10px;
+}
+
+.header p {
+    margin: 0;
+    color: #7B7B7B;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.jobInfo {
+    margin: 0 20px;
+    padding: 15px;
+    background-color: #F5F5F5;
+    border-radius: 6px;
+}
+
+.description {
+    margin: 0 0 12px;
+    color: #929292;
+    font-size: 14px;
+}
+
+.author {
+    margin: 0 0 5px;
+    color: #7B7B7B;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.title {
+    margin: 0;
+    color: #929292;
+    font-size: 14px;
+}
+
+.form {
+    padding: 20px;
+}
+
+.reasonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reasonContainer label {
+    color: #7B7B7B;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.reasonContainer textarea {
+    width: 100%;
+    min-height: 110px;
+    padding: 12px;
+    resize: vertical;
+    border: 2px solid #D9D9D9;
+    border-radius: 6px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: #7B7B7B;
+}
+
+.reasonContainer textarea:focus {
+    border-color: #929292;
+}
+
+.reasonContainer textarea::placeholder {
+    color: #A5A5A5;
+}
+
+.error {
+    color: #d64545;
+    font-size: 13px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.buttons button {
+    flex: 1;
+    padding: 11px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.submitButton {
+    background-color: #D9D9D9;
+    color: #7B7B7B;
+}
+
+.submitButton:hover {
+    background-color: #CFCFCF;
+}
+
+.backButton {
+    background-color: #929292;
+    color: white;
+}
+
+.backButton:hover {
+    background-color: #7B7B7B;
+}
+
+.success {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+    text-align: center;
+    color: #7B7B7B;
+    background-color: white;
+    border: 3px solid #D9D9D9;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: calc(100% - 24px);
+        max-width: none;
+        margin: 16px auto;
+        border-width: 2px;
+        border-radius: 7px;
+    }
+
+    .topBar {
+        height: 10px;
+    }
+
+    .header {
+        padding: 14px 14px 10px;
+    }
+
+    .header p {
+        font-size: 17px;
+    }
+
+    .jobInfo {
+        margin: 0 14px;
+        padding: 12px;
+    }
+
+    .description {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .author {
+        font-size: 13px;
+    }
+
+    .title {
+        font-size: 12px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .form {
+        padding: 14px;
+    }
+
+    .reasonContainer {
+        gap: 7px;
+    }
+
+    .reasonContainer label {
+        font-size: 12px;
+    }
+
+    .reasonContainer textarea {
+        min-height: 100px;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .error {
+        font-size: 11px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 9px;
+        margin-top: 16px;
+    }
+
+    .buttons button {
+        width: 100%;
+        min-height: 42px;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .success {
+        width: calc(100% - 24px);
+        margin: 16px auto;
+        padding: 16px;
+        border-width: 2px;
+        font-size: 14px;
+    }
+}

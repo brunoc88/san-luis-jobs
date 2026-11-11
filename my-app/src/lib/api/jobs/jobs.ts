@@ -1,6 +1,16 @@
 import handleResponse from "@/lib/handleResponse"
 import { CreateJobPayload } from "@/types/job/job.type"
 import { JobState } from "@prisma/client"
+import { ComplaintRegisterSchema } from "@/lib/schemas/complaint/complaint.create.schema"
+import {z} from "zod"
+import { SuspensionReasonSchema } from "@/lib/schemas/warning/warnigSchema"
+
+export type ComplaintRegisterDto = z.infer<
+    typeof ComplaintRegisterSchema
+>
+export type SuspensionReasonDto = z.infer<
+    typeof SuspensionReasonSchema
+>
 
 let url = '/api/jobs'
 
@@ -42,6 +52,26 @@ export const jobsApi = {
     changeJobStatus: async (id: number, data: { state: JobState }) => {
         const res = await fetch(`${url}/${id}/state`, {
             method: 'PATCH',
+            body: JSON.stringify(data),
+            credentials: "include"
+        })
+
+        return await handleResponse(res)
+    },
+
+    reportJob: async (id:number, data:ComplaintRegisterDto) => {
+        const res = await fetch(`${url}/${id}/complaint`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            credentials: "include"
+        })
+
+        return await handleResponse(res)
+    },
+
+    suspendJob: async(id:number, data:SuspensionReasonDto) => {
+        const res = await fetch(`${url}/${id}/suspend`, {
+            method: 'POST',
             body: JSON.stringify(data),
             credentials: "include"
         })

@@ -64,5 +64,9 @@ export const complaintRepo = {
             where:{isActive:true}
         }
         )
+    },
+
+    hasUserReportedJob: async (jobId:number, userId:number) => {
+        return await prisma.complaint.findFirst({where:{jobId, userId}})
     }
 }

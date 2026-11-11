@@ -56,9 +56,9 @@ export const jobService = {
         }
 
 
-        const author = await requireActiveUserById(job.autorId)
-
-
+        const author = await userRepo.findById(job.autorId)
+        if(!author) throw new NotFoundError()
+        
         const sameRole = user.role === author.role
         const adminSuspendingSuperAdmin =
             user.role === "admin" &&
@@ -296,6 +296,29 @@ export const jobService = {
                 else {
                     jobDetails.alreadySaved = false
                 }
+
+                const hasReportedJob = await complaintRepo.hasUserReportedJob(jobData.id, user.id)
+                if (hasReportedJob) {
+                    jobDetails.hasReportedJob = true
+                }
+                else {
+                    jobDetails.hasReportedJob = false
+                }
+
+                const authorRole = await userRepo.findById(jobData.user.id)
+
+                if (user.role !== "common" && authorRole) {
+                    const canSuspend =
+                        (user.role === "admin" && authorRole.role === "common") ||
+                        (user.role === "superAdmin" && authorRole.role !== "superAdmin")
+
+                    if (canSuspend) {
+                        jobDetails.canSuspendJob = true
+                    }
+                    else jobDetails.canSuspendJob = false
+                }
+
+
             } else {
                 if (jobData?.applicationLimit) {
                     let numberOfApplicants = await applicationRepo.count(job.id)

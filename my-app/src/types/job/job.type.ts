@@ -47,6 +47,8 @@ export type JobDetailsDto = BaseJobDto & {
     numberOfApplicants?: number
     applicationLimit?: number
     owner:boolean
+    hasReportedJob?: boolean
+    canSuspendJob?: boolean
 }
 
 

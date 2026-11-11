@@ -11,7 +11,7 @@ type ServerError = {
     message: string
 }
 
-type JobButtonDto = {
+type JobButtonProps = {
     authenticated: boolean
     jobState: JobState | undefined
     author: string | undefined
@@ -33,7 +33,7 @@ const JobActionsButton = ({
     jobId,
     setJob,
     setServerError
-}: JobButtonDto) => {
+}: JobButtonProps) => {
 
     const [sending, setSending] = useState<boolean>(false)
     const [saveOk, setSaveOk] = useState<boolean>(false)
@@ -129,6 +129,7 @@ const JobActionsButton = ({
                         {cvError}
                     </p>
                 )}
+                
             </div>
         )
     }

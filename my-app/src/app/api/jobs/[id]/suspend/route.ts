@@ -26,7 +26,7 @@ export const POST = async (req: Request, { params }: { params: Promise<{ id: str
 
         if (!allowedByUserId) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }

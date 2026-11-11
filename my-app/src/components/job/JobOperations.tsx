@@ -11,8 +11,7 @@ type ServerError = {
     message: string
 }
 
-type JobOperationsDto = {
-    role: UserRole | undefined
+type JobOperationsProps = {
     owner: boolean
     jobState: JobState
     isAuth: boolean,
@@ -20,9 +19,14 @@ type JobOperationsDto = {
     jobId: number
     setServerError: Dispatch<SetStateAction<ServerError | undefined>>
     setActionError: Dispatch<SetStateAction<string | undefined>>
+    setHide: Dispatch<SetStateAction<boolean>>
+    setHide2: Dispatch<SetStateAction<boolean>>
+    reported: boolean | undefined
+    canSuspendJob: boolean | undefined
 }
 
-const JobOperations = ({ owner, isAuth, role, jobState, jobId, setJob, setServerError, setActionError }: JobOperationsDto) => {
+const JobOperations = (
+    { owner, isAuth,  jobState, jobId, setJob, setServerError, setActionError, setHide, reported, setHide2, canSuspendJob }: JobOperationsProps) => {
 
     const handleChangeJobStatus = async (status: JobState) => {
         let res: any
@@ -132,14 +136,23 @@ const JobOperations = ({ owner, isAuth, role, jobState, jobId, setJob, setServer
     // Usuario autenticado y no propietario
     return (
         <div>
-            {(role === 'admin' || role === 'superAdmin') && (
+            {/* Suspender */}
+            {(canSuspendJob) && (
                 <div>
-                    <button className={styles.operationButton}>Suspender</button>
+                    <button 
+                    onClick={()=>setHide2(true)}
+                    className={styles.operationButton}>Suspender</button>
                 </div>
             )}
 
+            {/* Reporte */}
             <div>
-                <button className={styles.operationButton}>Reportar</button>
+                {!reported ? (
+                    <button
+                        onClick={() => setHide(true)}
+                        className={styles.operationButton}>Reportar</button>
+                ) : ('')}
+
             </div>
         </div>
     )
