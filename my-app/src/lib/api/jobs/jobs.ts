@@ -77,5 +77,14 @@ export const jobsApi = {
         })
 
         return await handleResponse(res)
+    },
+
+    deleteJob: async (id:number) => {
+        const res = await fetch(`${url}/${id}`, {
+            method: 'DELETE',
+            credentials: "include"
+        })
+
+        return await handleResponse(res)
     }
 }

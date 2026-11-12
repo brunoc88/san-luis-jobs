@@ -1,10 +1,11 @@
 'use client'
 
-import { JobState, UserRole } from "@prisma/client"
+import { JobState } from "@prisma/client"
 import styles from "./JobOperations.module.css"
 import { JobDetailsDto } from "@/types/job/job.type"
 import { jobsApi } from "@/lib/api/jobs/jobs"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
+import { useRouter } from "next/navigation"
 
 type ServerError = {
     status: number
@@ -26,7 +27,8 @@ type JobOperationsProps = {
 }
 
 const JobOperations = (
-    { owner, isAuth,  jobState, jobId, setJob, setServerError, setActionError, setHide, reported, setHide2, canSuspendJob }: JobOperationsProps) => {
+    { owner, isAuth, jobState, jobId, setJob, setServerError, setActionError, setHide, reported, setHide2, canSuspendJob }: JobOperationsProps) => {
+    const router = useRouter()
 
     const handleChangeJobStatus = async (status: JobState) => {
         let res: any
@@ -60,7 +62,7 @@ const JobOperations = (
                     break
             }
 
-            // Acá manejás la respuesta de la API.
+
             if (res.ok) {
                 setJob(prev =>
                     prev ? { ...prev, state: status } : prev
@@ -84,8 +86,34 @@ const JobOperations = (
         }
     }
 
+    const handleDeleteJob = async (jobId: number) => {
+        try {
+            const confirmed = window.confirm(
+                "¿Estás seguro de que querés eliminar esta publicación?"
+            )
+            if (confirmed) {
+                const res = await jobsApi.deleteJob(jobId)
+                if (res.ok) {
+                    router.push('/')
+                    return
+                }
+                else {
+                    setServerError({ status: res.status, message: res.error })
+                }
+            }
+            return
+        } catch (error) {
+            setServerError({
+                status: 0,
+                message: "No se pudo conectar con el servidor. Intentá nuevamente."
+            })
+        }
+    }
+
     // Usuario no autenticado
     if (!isAuth) return null
+
+    
 
     // Usuario propietario
     if (owner) {
@@ -127,8 +155,10 @@ const JobOperations = (
                 )}
 
                 <button className={styles.operationButton}>Editar</button>
-                <button className={styles.operationButton}>Eliminar</button>
-
+                <button
+                    onClick={() => handleDeleteJob(jobId)}
+                    className={styles.operationButton}>Elimina
+                </button>
             </div>
         )
     }
@@ -139,9 +169,9 @@ const JobOperations = (
             {/* Suspender */}
             {(canSuspendJob) && (
                 <div>
-                    <button 
-                    onClick={()=>setHide2(true)}
-                    className={styles.operationButton}>Suspender</button>
+                    <button
+                        onClick={() => setHide2(true)}
+                        className={styles.operationButton}>Suspender</button>
                 </div>
             )}
 

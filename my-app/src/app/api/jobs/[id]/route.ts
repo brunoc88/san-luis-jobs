@@ -10,7 +10,7 @@ import { validateRequest } from "@/lib/validateRequest"
 import { jobService } from "@/services/job.service"
 import { NextResponse } from "next/server"
 
-export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const DELETE = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     try {
         const userId = await requireSession()
 
@@ -39,7 +39,7 @@ export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) =>
     }
 }
 
-export const GET = async (req:Request, { params }: { params: Promise<{ id: string }> }) => {
+export const GET = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     try {
 
         const clientIp = getClientIp(req.headers)
