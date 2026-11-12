@@ -1,6 +1,7 @@
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { getLogoutRedirect } from "@/lib/utils/auth/logout.utils"
 import styles from "./navbar.module.css"
 
 const NavBar = ({ children }: { children: React.ReactNode }) => {
@@ -29,7 +30,9 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
                 {session?.user.id ? (
                     <button
                         className={styles.logoutButton}
-                        onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                        onClick={() => signOut({
+                            callbackUrl: getLogoutRedirect(pathname)
+                        })}
                     >
                         Salir
                     </button>
@@ -37,7 +40,7 @@ const NavBar = ({ children }: { children: React.ReactNode }) => {
                     !hideLoginButton && (
                         <button
                             className={styles.logoutButton}
-                            onClick={() => router.push("/auth/login")}
+                            onClick={() => router.push(`/auth/login?callbackUrl=${encodeURIComponent(pathname)}`)}
                         >
                             Iniciar sesión
                         </button>

@@ -113,51 +113,72 @@ const JobOperations = (
     // Usuario no autenticado
     if (!isAuth) return null
 
-    
-
     // Usuario propietario
     if (owner) {
         return (
             <div className={styles.menu}>
-
                 {jobState === JobState.active && (
-                    <div>
+                    <>
                         <button
                             onClick={() => handleChangeJobStatus('paused')}
-                            className={styles.operationButton}>Pausar
+                            className={styles.operationButton}
+                        >
+                            Pausar
                         </button>
                         <button
                             onClick={() => handleChangeJobStatus('finished')}
-                            className={styles.operationButton}>Finalizar</button>
-                    </div>
+                            className={styles.operationButton}
+                        >
+                            Finalizar
+                        </button>
+                    </>
                 )}
 
                 {jobState === JobState.paused && (
-                    <div>
+                    <>
                         <button
                             onClick={() => handleChangeJobStatus('active')}
-                            className={styles.operationButton}>Activar</button>
+                            className={styles.operationButton}
+                        >
+                            Activar
+                        </button>
                         <button
                             onClick={() => handleChangeJobStatus('finished')}
-                            className={styles.operationButton}>Finalizar</button>
-                    </div>
+                            className={styles.operationButton}
+                        >
+                            Finalizar
+                        </button>
+                    </>
                 )}
 
                 {jobState === JobState.finished && (
-                    <div>
+                    <>
                         <button
                             onClick={() => handleChangeJobStatus('active')}
-                            className={styles.operationButton}>Activar</button>
+                            className={styles.operationButton}
+                        >
+                            Activar
+                        </button>
                         <button
                             onClick={() => handleChangeJobStatus('paused')}
-                            className={styles.operationButton}>Pausar</button>
-                    </div>
+                            className={styles.operationButton}
+                        >
+                            Pausar
+                        </button>
+                    </>
                 )}
 
-                <button className={styles.operationButton}>Editar</button>
+                <button 
+                onClick={()=>router.push(`/jobs/${jobId}/edit`)}
+                className={styles.operationButton}>
+                    Editar
+                </button>
+
                 <button
                     onClick={() => handleDeleteJob(jobId)}
-                    className={styles.operationButton}>Elimina
+                    className={styles.operationButton}
+                >
+                    Eliminar
                 </button>
             </div>
         )
@@ -165,25 +186,24 @@ const JobOperations = (
 
     // Usuario autenticado y no propietario
     return (
-        <div>
-            {/* Suspender */}
-            {(canSuspendJob) && (
-                <div>
-                    <button
-                        onClick={() => setHide2(true)}
-                        className={styles.operationButton}>Suspender</button>
-                </div>
+        <div className={styles.moderationMenu}>
+            {canSuspendJob && (
+                <button
+                    onClick={() => setHide2(true)}
+                    className={styles.moderationButton}
+                >
+                    Suspender
+                </button>
             )}
 
-            {/* Reporte */}
-            <div>
-                {!reported ? (
-                    <button
-                        onClick={() => setHide(true)}
-                        className={styles.operationButton}>Reportar</button>
-                ) : ('')}
-
-            </div>
+            {!reported && (
+                <button
+                    onClick={() => setHide(true)}
+                    className={styles.moderationButton}
+                >
+                    Reportar
+                </button>
+            )}
         </div>
     )
 }

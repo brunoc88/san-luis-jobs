@@ -1,8 +1,8 @@
 .menu {
-    width: 110px;
+    width: 103px;
     display: flex;
     flex-direction: column;
-    border: 1px solid #000;
+    border: 1px solid #D9D9D9;
     background-color: #fff;
 }
 
@@ -11,9 +11,9 @@
     min-height: 22px;
     padding: 3px 5px;
     border: none;
-    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #D9D9D9;
     background-color: #fff;
-    color: #000;
+    color: #7B7B7B;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 11px;
     font-weight: 600;
@@ -28,3 +28,29 @@
     background-color: #D9D9D9;
 }
 
+.moderationMenu {
+    width: 103px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+}
+
+.moderationButton {
+    width: 100%;
+    min-height: 24px;
+    padding: 4px 5px;
+    border: 1px solid #D9D9D9;
+    border-radius: 3px;
+    background-color: #fff;
+    color: #7B7B7B;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.moderationButton:hover {
+    background-color: #D9D9D9;
+}

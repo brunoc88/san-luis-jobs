@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import LoginSchema from "@/lib/schemas/auth/login.schema"
 import { AuthorizeInput } from '@/types/auth/user.auth.types'
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from 'react'
 import styles from "./login.module.css"
 import Link from 'next/link'
@@ -13,6 +13,8 @@ import GuestOnly from '@/components/auth/GuestOnly'
 const LoginPage = () => {
     const [loginError, setLoginError] = useState<string>("")
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get("callbackUrl") || "/"
     const {
         register,
         handleSubmit,
@@ -37,7 +39,7 @@ const LoginPage = () => {
             }
 
             if (result?.ok) {
-                router.push("/")
+                router.push(callbackUrl)
             } else {
                 setLoginError("Credenciales inválidas")
             }
@@ -48,7 +50,7 @@ const LoginPage = () => {
         }
     }
     return (
-        <GuestOnly>
+        <GuestOnly redirectTo={callbackUrl}>
             <div className={styles.loginPage}>
 
                 <div className={styles.loginPresentation}>
@@ -94,7 +96,7 @@ const LoginPage = () => {
                     <button
                         className={styles.googleButton}
                         type="button"
-                        onClick={() => signIn("google", { callbackUrl: "/" })}
+                        onClick={() => signIn("google", { callbackUrl })}
                     >
                         Continuar con Google
                     </button>

@@ -7,27 +7,23 @@ FRONTEND:
         HUBO MODIFICACIONES EN MENSAJES DE REQUIEREACTIVEUSERBYID & REQUIEREACTIVEJOBBYID\
         SE MODIFICO SERVICE SUSPENDJOB(NO PERMITIA SUSPENDER SI EL AUTOR ESTABA INACTIVO O SUSPENDIDO)
    
-    AHORA:
+    PENDIENTE:
 
         JOBS:
             ID:
         
             - UX:
-
-                FALTA:
-                - AGRAR DIRECCIONAMIENTO A PERFIL DE USUARIO
-                - AGRAR DIRECCIONAMIENTO A EDITAR JOB
+                -INFO:
+                    -FALTA:
+                        - AGRAR DIRECCIONAMIENTO A PERFIL DE USUARIO
+                        - ALGUNAS FOTOS NO SE CARGAN
                 
-
-                - AGREGAR REDIRECCIONAMIENTO CUANDO EL USUARIO TENGA QUE HACER INICIO DE SESION
-                (EJ: SI EL USUARIO ESTA VIENDO UN JOB E INICIA SESSION QUE LO VUELVA A REDIGIR AL JOB QUE ESTA VIENDO)
-                - ALGUNAS FOTOS NO SE CARGAN
+                -EDIT:
+                    - FORM
+                    - LLAMADO A API
+                    - ServerError
+                    - CSS
                     
-                - CSS:
-                    ARREGLAR LA TABLA DE OPERATIONS
-                    BOTON REPORTAR
-
-            - MORE TESTING
                 
     SIGUIENTE:
         ### [AUTH] Validación global de sesión y actualización de permisos
