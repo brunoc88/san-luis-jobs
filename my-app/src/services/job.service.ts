@@ -57,8 +57,8 @@ export const jobService = {
 
 
         const author = await userRepo.findById(job.autorId)
-        if(!author) throw new NotFoundError()
-        
+        if (!author) throw new NotFoundError()
+
         const sameRole = user.role === author.role
         const adminSuspendingSuperAdmin =
             user.role === "admin" &&
@@ -252,12 +252,14 @@ export const jobService = {
             id: jobData.id,
             author: {
                 username: jobData.user.username,
-                pic: jobData.user.pic
+                pic: jobData.user.pic,
+                id: jobData.user.id
             },
             title: jobData.title,
             state: jobData.state,
             date: jobData.createdAt,
             location: {
+                id: jobData.location.id,
                 name: jobData.location.name
             },
             schedule: jobData.schedule,
@@ -443,10 +445,19 @@ export const jobService = {
         }
 
 
+        const newState =
+            job.state === JobState.finished &&
+                data.applicationLimit != null &&
+                data.applicationLimit > jobApplicants
+                ? JobState.active
+                : job.state
+
         await jobRepo.editJobById(job.id, {
             ...data,
+            state: newState,
             applicationLimit: data.applicationLimit ?? null,
             salary: data.salary ?? null
         })
+        
     }
 }

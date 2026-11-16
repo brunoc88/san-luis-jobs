@@ -7,10 +7,12 @@ import { Locations } from "@/types/location/location.types"
 import type {
   FieldErrors,
   UseFormRegister,
-  UseFormReset
+  UseFormReset,
+  UseFormSetValue
 } from "react-hook-form"
 import { z } from "zod"
 import styles from "./jobInputs.module.css"
+import { useRouter } from "next/navigation"
 
 type JobFormInput = z.input<typeof JobRegisterSchema>
 
@@ -18,12 +20,15 @@ type JobInputsProps = {
   errors: FieldErrors<JobFormInput>
   register: UseFormRegister<JobFormInput>
   reset: UseFormReset<JobFormInput>
+  setValue: UseFormSetValue<JobFormInput>
   locations: Locations
   jobOptions: jobOptions
   setJobOptions: React.Dispatch<
     React.SetStateAction<jobOptions>
   >
   sending: boolean
+  editMode?: boolean | null
+  jobId?: number | null
 }
 
 const JobInputs = ({
@@ -33,18 +38,53 @@ const JobInputs = ({
   jobOptions,
   setJobOptions,
   sending,
-  reset
+  reset,
+  editMode,
+  jobId,
+  setValue
 }: JobInputsProps) => {
+  const router = useRouter()
+
   const clearForm = () => {
-    reset()
+    reset({})
+
     setJobOptions({
       salary: false,
       applicationLimit: false
     })
   }
 
+  const toggleSalary = (enabled: boolean) => {
+    setJobOptions(prev => ({
+      ...prev,
+      salary: enabled
+    }))
+
+    if (!enabled) {
+      setValue("salary", undefined, {
+        shouldValidate: true,
+        shouldDirty: true
+      })
+    }
+  }
+
+  const toggleApplicationLimit = (enabled: boolean) => {
+  setJobOptions(prev => ({
+    ...prev,
+    applicationLimit: enabled
+  }))
+
+  if (!enabled) {
+    setValue("applicationLimit", undefined, {
+      shouldValidate: true,
+      shouldDirty: true
+    })
+  }
+}
+
   return (
     <div className={styles.container}>
+
       {/* TÍTULO */}
       <div className={styles.field}>
         <label className={styles.label} htmlFor="title">
@@ -75,11 +115,14 @@ const JobInputs = ({
         <select
           id="locationId"
           className={styles.select}
-          {...register("locationId", { valueAsNumber: true })}
+          {...register("locationId", {
+            setValueAs: value =>
+              value === "" ? undefined : Number(value)
+          })}
         >
           <option value="">Seleccioná una localidad</option>
 
-          {locations.map((location) => (
+          {locations.map(location => (
             <option key={location.id} value={location.id}>
               {location.name}
             </option>
@@ -153,12 +196,7 @@ const JobInputs = ({
               type="radio"
               name="salaryOption"
               checked={jobOptions.salary}
-              onChange={() =>
-                setJobOptions((prev) => ({
-                  ...prev,
-                  salary: true
-                }))
-              }
+              onChange={() => toggleSalary(true)}
             />
             Sí
           </label>
@@ -169,12 +207,7 @@ const JobInputs = ({
               type="radio"
               name="salaryOption"
               checked={!jobOptions.salary}
-              onChange={() =>
-                setJobOptions((prev) => ({
-                  ...prev,
-                  salary: false
-                }))
-              }
+              onChange={() => toggleSalary(false)}
             />
             No
           </label>
@@ -192,7 +225,9 @@ const JobInputs = ({
               type="number"
               min="0"
               placeholder="Ingresá el salario"
-              {...register("salary", { valueAsNumber: true })}
+              {...register("salary", {
+                valueAsNumber: true
+              })}
             />
 
             {errors.salary && (
@@ -217,12 +252,7 @@ const JobInputs = ({
               type="radio"
               name="applicationLimitOption"
               checked={jobOptions.applicationLimit}
-              onChange={() =>
-                setJobOptions((prev) => ({
-                  ...prev,
-                  applicationLimit: true
-                }))
-              }
+              onChange={() => toggleApplicationLimit(true)}
             />
             Sí
           </label>
@@ -233,12 +263,7 @@ const JobInputs = ({
               type="radio"
               name="applicationLimitOption"
               checked={!jobOptions.applicationLimit}
-              onChange={() =>
-                setJobOptions((prev) => ({
-                  ...prev,
-                  applicationLimit: false
-                }))
-              }
+              onChange={() => toggleApplicationLimit(false)}
             />
             No
           </label>
@@ -301,20 +326,24 @@ const JobInputs = ({
             className={styles.button}
             type="submit"
           >
-            Crear trabajo
+            {editMode ? "Guardar cambios" : "Crear trabajo"}
           </button>
 
           <button
             className={styles.button}
             type="button"
-            onClick={clearForm}
+            onClick={
+              editMode
+                ? () => router.push(`/jobs/${jobId}`)
+                : clearForm
+            }
           >
-            Limpiar
+            {editMode ? "Volver" : "Limpiar"}
           </button>
         </div>
       ) : (
         <p role="status" aria-live="polite">
-          Enviando trabajo...
+          Enviando...
         </p>
       )}
     </div>

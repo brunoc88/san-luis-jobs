@@ -97,7 +97,7 @@ export const PUT = async (req: Request, { params }: { params: Promise<{ id: stri
 
         if (!allowedByUserId) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }

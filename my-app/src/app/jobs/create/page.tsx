@@ -45,6 +45,7 @@ const CreateJobFormPage = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors }
   } = useForm<JobFormInput, unknown, JobFormOutput>({
     resolver: zodResolver(JobRegisterSchema)
@@ -198,6 +199,7 @@ const CreateJobFormPage = () => {
               jobOptions={jobOptions}
               setJobOptions={setJobOptions}
               sending={sending}
+              setValue={setValue}
             />
           )}
         </form>

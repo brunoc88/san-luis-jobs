@@ -76,7 +76,18 @@ const JobActionsButton = ({
             if (res.ok) {
                 setApplyOk(true)
                 setJob(prev =>
-                    prev ? { ...prev, alreadyApplied: true } : prev
+                    prev
+                        ? {
+                            ...prev,
+                            alreadyApplied: true,
+                            state:
+                                prev.applicationLimit != null &&
+                                    prev.numberOfApplicants != null &&
+                                    prev.numberOfApplicants + 1 >= prev.applicationLimit
+                                    ? JobState.finished
+                                    : prev.state
+                        }
+                        : prev
                 )
             } else if (res.status === 400) {
                 setCvError(res.error)
@@ -129,7 +140,7 @@ const JobActionsButton = ({
                         {cvError}
                     </p>
                 )}
-                
+
             </div>
         )
     }
@@ -150,7 +161,7 @@ const JobActionsButton = ({
         )
     }
 
-    
+
     return null
 }
 

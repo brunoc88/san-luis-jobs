@@ -36,10 +36,12 @@ export type JobDetailsDto = BaseJobDto & {
     author: {
         username: string
         pic: string
+        id: number
     }
     state: JobState
     date: Date
     location: {
+        id: number
         name: string
     }
     alreadyApplied?: boolean
@@ -53,7 +55,7 @@ export type JobDetailsDto = BaseJobDto & {
 
 
 export type EditJobDto = CreateJobDto
-export type EditJobData = CreateJobDto
+export type EditJobData = CreateJobDto & {state:JobState}
 
 export type jobOptions = {
     salary: boolean,

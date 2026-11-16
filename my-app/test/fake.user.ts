@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 
 
 export const loadUsers = async () => {
-    const passwordHash = await bcrypt.hash('sekrets', 10)
+    const passwordHash = await bcrypt.hash('sekretss', 10)
     const fakePic = 'fakepic.png'
 
     // admins

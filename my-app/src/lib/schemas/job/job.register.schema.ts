@@ -41,7 +41,7 @@ export const JobRegisterSchema = z.object({
 
   locationId: z
     .coerce
-    .number("debe ingresar un numero")
+    .number("debe seleccionar una localidad")
     .int("La ubicación es inválida.")
     .positive("La ubicación es inválida.")
 });

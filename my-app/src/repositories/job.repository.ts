@@ -54,6 +54,7 @@ export const jobRepo = {
                 },
                 location: {
                     select: {
+                        id: true,
                         name: true
                     }
                 }
