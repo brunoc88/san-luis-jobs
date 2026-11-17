@@ -364,28 +364,29 @@ export const jobService = {
             where.modality = filter.modality
         }
 
-        let orderBy: Prisma.JobOrderByWithRelationInput
+        let orderBy: Prisma.JobOrderByWithRelationInput[]
 
         switch (filter.sort) {
             case "alphabetical":
-                orderBy = {
-                    title: "asc"
-                }
+                orderBy = [
+                    { title: "asc" },
+                    { id: "asc" }
+                ]
                 break
 
             case "popular":
-                orderBy = {
-                    applications: {
-                        _count: "desc"
-                    }
-                }
+                orderBy = [
+                    { applications: { _count: "desc" } },
+                    { id: "asc" }
+                ]
                 break
 
             case "recent":
             default:
-                orderBy = {
-                    createdAt: "desc"
-                }
+                orderBy = [
+                    { createdAt: "desc" },
+                    { id: "desc" }
+                ]
                 break
         }
 
@@ -458,6 +459,6 @@ export const jobService = {
             applicationLimit: data.applicationLimit ?? null,
             salary: data.salary ?? null
         })
-        
+
     }
 }

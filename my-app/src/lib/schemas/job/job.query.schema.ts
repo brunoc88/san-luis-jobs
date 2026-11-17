@@ -24,19 +24,27 @@ export const JobQuerySchema = z.object({
         .trim()
         .optional(),
 
-    locationId: z.coerce
-        .number('Debe ingresar un numero')
-        .int("La ubicación debe ser un número entero.")
-        .positive("La ubicación debe ser mayor a 0.")
-        .optional(),
+    locationId: z.preprocess(
+        value => value === "" ? undefined : value,
+        z.coerce.number()
+            .int("La ubicación debe ser un número entero.")
+            .positive("La ubicación debe ser mayor a 0.")
+            .optional()
+    ),
 
-    schedule: z.nativeEnum(JobSchedule, {
-        error: "Jornada inválida."
-    }).optional(),
+    schedule: z.preprocess(
+        value => value === "" ? undefined : value,
+        z.nativeEnum(JobSchedule, {
+            error: "Jornada inválida."
+        }).optional()
+    ),
 
-    modality: z.nativeEnum(JobModality, {
-        error: "Modalidad inválida."
-    }).optional(),
+    modality: z.preprocess(
+        value => value === "" ? undefined : value,
+        z.nativeEnum(JobModality, {
+            error: "Modalidad inválida."
+        }).optional()
+    ),
 
     sort: JobSort.optional()
 })

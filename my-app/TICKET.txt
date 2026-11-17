@@ -8,6 +8,8 @@ FRONTEND:
         SE MODIFICO SERVICE SUSPENDJOB(NO PERMITIA SUSPENDER SI EL AUTOR ESTABA INACTIVO O SUSPENDIDO)
         SE MODIFICO QUE SI SE ALCANZO EL LIMITE DE APLICANTES Y SE VOLVIA A INGRESAR UNO NUEVO LA PUBLICACION
         PASABA DE FINISH A ACTIVE
+        SE MODIFICO EL GERJOBS EN SERVICE (Prisma.JobOrderByWithRelationInput[])
+        
    
     PENDIENTE:
 
@@ -19,7 +21,9 @@ FRONTEND:
                     -FALTA:
                         - AGRAR DIRECCIONAMIENTO A PERFIL DE USUARIO
                         - ALGUNAS FOTOS NO SE CARGAN
-        
+    
+        ADMIN PANEL:
+            UX
 
                     
                     

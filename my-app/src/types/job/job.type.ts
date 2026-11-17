@@ -48,14 +48,14 @@ export type JobDetailsDto = BaseJobDto & {
     alreadySaved?: boolean
     numberOfApplicants?: number
     applicationLimit?: number
-    owner:boolean
+    owner: boolean
     hasReportedJob?: boolean
     canSuspendJob?: boolean
 }
 
 
 export type EditJobDto = CreateJobDto
-export type EditJobData = CreateJobDto & {state:JobState}
+export type EditJobData = CreateJobDto & { state: JobState }
 
 export type jobOptions = {
     salary: boolean,
@@ -63,11 +63,33 @@ export type jobOptions = {
 }
 
 export type CreateJobPayload = {
-  title: string;
-  description: string;
-  modality: JobModality;
-  schedule: JobSchedule;
-  locationId: number;
-  salary?: number | null;
-  applicationLimit?: number | null;
+    title: string;
+    description: string;
+    modality: JobModality;
+    schedule: JobSchedule;
+    locationId: number;
+    salary?: number | null;
+    applicationLimit?: number | null;
 };
+
+export type JobInfo = {
+    id: number
+    title: string
+    createdAt: Date
+    modality: JobModality
+    schedule: JobSchedule
+    username: string
+    locationName: string
+    applicants: number | null
+}
+
+export type Pagination = {
+    page:number
+    limit:number
+    hasNextPage:boolean
+}
+export type Jobs = {
+    ok: true
+    jobs: JobInfo[]
+    pagination: Pagination
+}

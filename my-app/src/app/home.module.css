@@ -1,0 +1,367 @@
+
+.page {
+    height: calc(100vh - 70px);
+    padding: 15px 24px;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.homeContainer {
+    width: 100%;
+    max-width: 1250px;
+    height: 100%;
+    min-height: 0;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid #c9c3c3;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Panel de búsqueda */
+
+.searchPanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 35px;
+    border-right: 1px solid #c9c3c3;
+}
+
+.searchContent {
+    width: 100%;
+    max-width: 440px;
+}
+
+.searchTitle {
+    margin-bottom: 20px;
+    color: #817a7a;
+    font-size: 21px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.searchForm {
+    width: 100%;
+}
+
+.searchRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #dedada;
+    border-radius: 7px;
+    outline: none;
+    font-size: 13px;
+}
+
+.searchInput:focus,
+.filterGroup select:focus {
+    border-color: #938989;
+}
+
+.searchInput::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.searchButton {
+    height: 35px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 5px;
+    background: #dedede;
+    color: #111;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.searchButton:hover {
+    background: #c9c9c9;
+}
+
+/* Filtros */
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.filterGroup label {
+    color: #817a7a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.filterGroup select {
+    width: 100%;
+    height: 36px;
+    padding: 0 8px;
+    border: 1px solid #dedada;
+    border-radius: 7px;
+    background: white;
+    color: #444;
+    outline: none;
+    font-size: 12px;
+}
+
+/* Listado de empleos */
+
+.jobsPanel {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 28px;
+}
+
+.jobsHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.jobsTitle {
+    color: #817a7a;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sortButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #dedada;
+    border-radius: 7px;
+    background: white;
+    color: #817a7a;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.sortButton:hover {
+    background: #f3f1f1;
+}
+
+.jobsList {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.jobCard {
+    flex: none;
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    padding: 10px 4px;
+    border-bottom: 1px solid #eeeaea;
+    transition: background 0.2s;
+}
+
+.jobCard:last-child {
+    border-bottom: none;
+}
+
+.jobCard:hover {
+    background: #faf9f9;
+}
+
+.jobLink {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+}
+
+.jobName {
+    margin-bottom: 2px;
+    color: #817a7a;
+    font-size: 17px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.username {
+    display: block;
+    color: #b5afaf;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.jobDetails {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 3px;
+    color: #333;
+    font-size: 12px;
+}
+
+.location {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Estados */
+
+.emptyState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    color: #817a7a;
+    font-size: 15px;
+}
+
+.statusPage {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #817a7a;
+}
+.loadMoreButton {
+    align-self: center;
+    flex-shrink: 0;
+    margin-top: 14px;
+    padding: 9px 28px;
+    border: 1px solid #dedada;
+    border-radius: 7px;
+    background: #dedede;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.loadMoreButton:hover {
+    background: #c9c9c9;
+}
+
+.loadMoreButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.sortSelect {
+  padding: 7px 10px;
+  border: 1px solid #dedada;
+  border-radius: 7px;
+  background: white;
+  color: #333;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Tablet */
+
+@media (max-width: 850px) {
+    .page {
+        height: auto;
+        padding: 24px 16px;
+    }
+
+    .homeContainer {
+        height: auto;
+        grid-template-columns: 1fr;
+        overflow: visible;
+    }
+
+    .jobCard {
+        flex: none;
+        padding: 12px 4px;
+    }
+
+    .jobName {
+        white-space: normal;
+        overflow-wrap: anywhere;
+        font-size: 19px;
+    }
+
+    /* ...el resto de tus reglas de tablet queda igual */
+}
+
+/* Mobile */
+
+@media (max-width: 520px) {
+    .page {
+        padding: 16px 12px;
+    }
+
+    .searchPanel {
+        padding: 30px 18px;
+    }
+
+    .searchTitle {
+        font-size: 20px;
+    }
+
+    .searchRow {
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+
+    .searchInput {
+        font-size: 13px;
+    }
+
+    .searchButton {
+        padding: 0 14px;
+        font-size: 13px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .filterGroup select {
+        height: 42px;
+    }
+
+    .jobsPanel {
+        padding: 20px 18px;
+    }
+
+    .jobsTitle {
+        font-size: 17px;
+    }
+
+    .jobCard {
+        padding: 12px 4px;
+    }
+
+    .jobName {
+        font-size: 17px;
+    }
+
+    .jobDetails {
+        font-size: 13px;
+    }
+}

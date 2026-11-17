@@ -4,6 +4,7 @@ import { JobState } from "@prisma/client"
 import { ComplaintRegisterSchema } from "@/lib/schemas/complaint/complaint.create.schema"
 import { z } from "zod"
 import { SuspensionReasonSchema } from "@/lib/schemas/warning/warnigSchema"
+import { JobQuerySchema } from "@/lib/schemas/job/job.query.schema"
 
 export type ComplaintRegisterDto = z.infer<
     typeof ComplaintRegisterSchema
@@ -11,6 +12,7 @@ export type ComplaintRegisterDto = z.infer<
 export type SuspensionReasonDto = z.infer<
     typeof SuspensionReasonSchema
 >
+export type JobFilters = z.input<typeof JobQuerySchema>
 
 let url = '/api/jobs'
 
@@ -88,13 +90,32 @@ export const jobsApi = {
         return await handleResponse(res)
     },
 
-    editJob: async (id: number, data:CreateJobPayload) => {
-        
+    editJob: async (id: number, data: CreateJobPayload) => {
+
         const res = await fetch(`${url}/${id}`, {
             method: 'PUT',
             body: JSON.stringify(data),
             credentials: "include"
         })
+
+        return await handleResponse(res)
+    },
+
+    getJobs: async (filters?: JobFilters) => {
+        const params = new URLSearchParams()
+
+        if (filters) {
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value !== undefined && value !== "") {
+                    params.append(key, String(value))
+                }
+            })
+        }
+
+        const res = await fetch(
+            `${url}?${params.toString()}`,
+            { method: "GET" }
+        )
 
         return await handleResponse(res)
     }

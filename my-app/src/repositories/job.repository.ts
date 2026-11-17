@@ -66,7 +66,7 @@ export const jobRepo = {
         where: Prisma.JobWhereInput,
         skip: number,
         take: number,
-        orderBy: Prisma.JobOrderByWithRelationInput
+        orderBy: Prisma.JobOrderByWithRelationInput[]
     ) => {
 
         return await prisma.job.findMany({
