@@ -168,14 +168,14 @@ export const jobService = {
             }
 
 
-            mailService.sendApplicationEmail(author?.email, userData.email, job.title, userData.cv)
+            await mailService.sendApplicationEmail(author?.email, userData.email, job.title, userData.cv)
 
             return
         }
 
         await applicationRepo.create(job.id, user.id)
 
-        mailService.sendApplicationEmail(author?.email, userData.email, job.title, userData.cv)
+        await mailService.sendApplicationEmail(author?.email, userData.email, job.title, userData.cv)
         return
     },
 

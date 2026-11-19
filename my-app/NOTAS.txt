@@ -19,3 +19,15 @@ V2:
         - ubicaciones:
             - suspendJob
             - applyJob
+
+APRENDER/MEJORAR:
+    - TRANSACCION
+    - MEJORAR MANEJO DE ERRORES:
+        - CLASES DEBERIAN TENER:
+            EJ: 
+            {
+                status: 403,
+                message: "El administrador no tiene permiso para eliminar esto",
+                code: "ADMIN_TO_SUPER_ADMIN"
+            }
+    - CONCEPTOS TEORICOS

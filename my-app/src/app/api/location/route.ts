@@ -36,7 +36,7 @@ export const POST = async (req: Request) => {
     }
 }
 
-export const GET = async () => {
+export const GET = async (req: Request) => {
     try {
         const userId = await requireSession()
 

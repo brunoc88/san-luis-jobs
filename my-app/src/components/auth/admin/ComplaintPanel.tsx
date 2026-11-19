@@ -5,10 +5,9 @@ import { Dispatch, SetStateAction, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 
-
-type AdminPanelProps = {
-  mode: 'complaints' | 'feedback' | 'locations'
-  dataDB: Complaints[]
+type ComplaintPanelProps = {
+  
+  dataDB: Complaints[] 
   hasNextPage: boolean
   setComplaints: Dispatch<SetStateAction<Complaints[]>>
   setHasNextPage: Dispatch<SetStateAction<boolean>>
@@ -27,14 +26,13 @@ const reason = {
   OTHER: 'Otro'
 }
 
-const AdminPanel = ({
-  mode,
+const ComplaintPanel = ({
   dataDB,
   hasNextPage,
   setComplaints,
   setHasNextPage,
   setServerError
-}: AdminPanelProps) => {
+}: ComplaintPanelProps) => {
   const [page, setPage] = useState<number>(1)
   const [loadingPage, setLoadingPage] = useState<boolean>(false)
   const [deleteError, setDeleteError] = useState<string | null>(null)
@@ -110,7 +108,7 @@ const AdminPanel = ({
     setPage(currentPage)
   }
 
-  if(mode && mode ==='complaints')return (
+  if (data) return (
     <div>
       <div className={styles.container}>
         <table className={styles.table}>
@@ -124,7 +122,7 @@ const AdminPanel = ({
           </thead>
 
           <tbody>
-            {dataDB.map(d => (
+            {dataDB?.map(d => (
               <tr key={d.id}>
                 <td>
                   {new Date(d.date).toLocaleDateString('es-AR')}
@@ -174,14 +172,8 @@ const AdminPanel = ({
         </p>
       )}
     </div>
-
   )
 
-  if(mode && mode === 'locations') return (
-    <div>
-      Listado de locaciones
-    </div>
-  )
 }
 
-export default AdminPanel
+export default ComplaintPanel

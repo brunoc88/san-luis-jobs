@@ -8,5 +8,13 @@ export const locationApi = {
             method: 'GET'
         })
         return await handleResponse(res)
+    },
+
+    getAllLocations: async () => {
+        const res = await fetch(url, {
+            method: 'GET',
+            credentials:'include'
+        })
+        return await handleResponse(res)
     }
 }

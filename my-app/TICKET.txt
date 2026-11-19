@@ -25,11 +25,15 @@ FRONTEND:
                     -FALTA:
                         - AGRAR DIRECCIONAMIENTO A PERFIL DE USUARIO
                         - ALGUNAS FOTOS NO SE CARGAN
-    
+            
         ADMIN PANEL:
+            COMPLAINT:
+                ESTILO EMPTY
             Locations:
                 - PANEL
                 - UX
+                - CSS 
+                - ESTILO EMPTY
                 - errores
                 - TESTING
            

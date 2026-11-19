@@ -1,29 +1,38 @@
-import AdminPanel from "@/components/auth/admin/AdminPanel"
+'use client'
+
+import LocationsPanel from "@/components/auth/admin/LocationsPanel"
 import AdminOnly from "@/components/auth/AdminOnly"
-import { useEffect } from "react"
+import { locationApi } from "@/lib/api/location/location"
+import { Locations } from "@/types/location/location.types"
+import { useEffect, useState } from "react"
 
 const LocationsListPage = () => {
+    const [loading, setLoading] = useState<boolean>(true)
+    const [locations, setLocations] = useState<Locations>([])
 
     useEffect(() => {
         const loadLocations = async () => {
             try {
-                
+                const res = await locationApi.getAllLocations()
+                if(res.ok){
+                    setLocations(res.data.locations)
+                }
             } catch (error) {
-                
+                console.log(error)
+            } finally{
+                setLoading(false)
             }
         }
         loadLocations()
     }, [])
 
+    if(loading) return <p>Cargando...</p>
     return (
-        <div>
-            <AdminOnly>
-                <AdminPanel 
-                mode = 'locations'
-                dataDB={}
-                />
-            </AdminOnly>
-        </div>
+        <AdminOnly>
+            <LocationsPanel 
+                locations={locations}
+            />
+        </AdminOnly>
     )
 }
 

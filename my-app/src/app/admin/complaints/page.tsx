@@ -1,12 +1,12 @@
 'use client'
 
-import AdminPanel from "@/components/auth/admin/AdminPanel"
 import AdminOnly from "@/components/auth/AdminOnly"
 import { complaintsApi } from "@/lib/api/complaints/complaints"
 import { Complaints } from "@/types/complaint/complaint.types"
 import { useEffect, useState } from "react"
 import styles from './ComplaintListPage.module.css'
 import ServerErrorPage from "@/components/common/ServerErrorPage"
+import ComplaintPanel from "@/components/auth/admin/ComplaintPanel"
 
 const ComplaintListPage = () => {
     const [loading, setLoading] = useState<boolean>(true)
@@ -53,8 +53,7 @@ const ComplaintListPage = () => {
                             {empty ? (
                                 <p>No hay quejas disponibles</p>
                             ) : (
-                                <AdminPanel
-                                    mode="complaints"
+                                <ComplaintPanel
                                     dataDB={complaints}
                                     hasNextPage={hasNextPage}
                                     setComplaints={setComplaints}
