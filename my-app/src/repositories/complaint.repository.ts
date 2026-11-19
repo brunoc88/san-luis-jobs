@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { CreateComplaintData } from "@/types/complaint/complaint.types"
-import { Complaint } from "@prisma/client"
+import { Complaint, UserRole } from "@prisma/client"
 
 
 export const complaintRepo = {
@@ -42,17 +42,17 @@ export const complaintRepo = {
         await prisma.complaint.updateMany({ data: { isActive: false }, where: { id } })
     },
 
-    findAllActiveComplaints: async (skip: number, take: number) => {
+    findAllActiveComplaints: async (
+        skip: number,
+        take: number,
+        userRole?: UserRole
+    ) => {
         return await prisma.complaint.findMany({
             skip,
             take,
             orderBy: [
-                {
-                    createdAt: "desc"
-                },
-                {
-                    id: "desc"
-                }
+                { createdAt: "desc" },
+                { id: "desc" }
             ],
             include: {
                 user: {
@@ -61,12 +61,18 @@ export const complaintRepo = {
                     }
                 }
             },
-            where:{isActive:true}
-        }
-        )
+            where: {
+                isActive: true,
+                ...(userRole && {
+                    user: {
+                        role: userRole
+                    }
+                })
+            }
+        })
     },
 
-    hasUserReportedJob: async (jobId:number, userId:number) => {
-        return await prisma.complaint.findFirst({where:{jobId, userId}})
+    hasUserReportedJob: async (jobId: number, userId: number) => {
+        return await prisma.complaint.findFirst({ where: { jobId, userId } })
     }
 }

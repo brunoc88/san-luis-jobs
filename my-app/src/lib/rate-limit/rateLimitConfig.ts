@@ -166,7 +166,7 @@ export const rateLimitConfig = {
   },
 
   getAllActiveLocations: {
-    user: {
+    ip: {
       limit: 60,
       windowMs: 60 * 1000
     }

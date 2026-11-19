@@ -31,7 +31,7 @@ export const GET = async (req: NextRequest) => {
 
     if (!allowedByUserId) {
       return NextResponse.json(
-        { error: "Too many requests" },
+        { error: "Demasiados intentos. Intente nuevamente más tarde."  },
         { status: 429 }
       )
     }

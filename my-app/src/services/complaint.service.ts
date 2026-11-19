@@ -41,12 +41,12 @@ export const complaintService = {
             complaintAuthorData?.role === 'superAdmin' &&
             user.role === 'admin'
 
-        if (sameRole || adminDeletingSuperAdmin) throw new ForbiddenError()
+        if (sameRole || adminDeletingSuperAdmin) throw new ForbiddenError('No tienes permisos para eliminar esta denuncia')
 
         await complaintRepo.deleteById(complaintData.id)
     },
 
-    getAllActiveComplaints: async (userId:number, page:number) => {
+    getAllActiveComplaints: async (userId: number, page: number) => {
         const user = await requireActiveUserById(userId)
         requireAdmin(user.role)
 
@@ -54,7 +54,12 @@ export const complaintService = {
         const take = limit + 1
         const skip = (page - 1) * limit
 
-        const complaints = await complaintRepo.findAllActiveComplaints(skip, take)
+        const userRole = user.role === 'admin'
+            ? 'common'
+            : undefined
+
+
+        const complaints = await complaintRepo.findAllActiveComplaints(skip, take, userRole)
 
         const hasNextPage = complaints.length > limit
 

@@ -21,7 +21,7 @@ export const GET = async ({ params }: { params: Promise<{ id: string }> }) => {
 
         if (!allowedByUserId) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }
@@ -35,7 +35,7 @@ export const GET = async ({ params }: { params: Promise<{ id: string }> }) => {
     }
 }
 
-export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const DELETE = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     try {
         const userId = await requireSession()
 
@@ -50,7 +50,7 @@ export const DELETE = async ({ params }: { params: Promise<{ id: string }> }) =>
 
         if (!allowedByUserId) {
             return NextResponse.json(
-                { error: "Too many requests" },
+                { error: "Demasiados intentos. Intente nuevamente más tarde." },
                 { status: 429 }
             )
         }

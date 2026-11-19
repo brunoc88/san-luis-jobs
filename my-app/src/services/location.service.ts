@@ -45,9 +45,7 @@ export const locationService = {
         return await locationRepo.renameLocation(locationId, name)
     },
 
-    getAllActiveLocations: async (userId: number): Promise<Locations> => {
-        await requireActiveUserById(userId)
-
+    getAllActiveLocations: async (): Promise<Locations> => {
         return await locationRepo.findAllActiveLocations()
     }
 }

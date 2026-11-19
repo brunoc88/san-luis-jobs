@@ -6,3 +6,9 @@ export type CreateComplaintData = {
     reason: ComplaintReason,
     explanation?: string | null
 }
+
+export type Complaints = CreateComplaintData & {
+    user:string
+    id:number
+    date: Date
+}
