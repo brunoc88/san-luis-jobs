@@ -6,7 +6,7 @@ import { rateLimiter } from "@/lib/rate-limit/rateLimiter"
 import { complaintService } from "@/services/complaint.service"
 import { NextResponse } from "next/server"
 
-export const GET = async ({ params }: { params: Promise<{ id: string }> }) => {
+export const GET = async (req: Request, { params }: { params: Promise<{ id: string }> }) => {
     try {
         const userId = await requireSession()
 

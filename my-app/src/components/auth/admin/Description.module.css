@@ -1,0 +1,134 @@
+.page {
+  width: 100%;
+  max-width: 850px;
+  margin: 35px auto;
+  padding: 0 20px;
+}
+
+.title {
+  margin-bottom: 8px;
+  color: #444;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.date {
+  margin-bottom: 16px;
+  color: #777;
+  font-size: 13px;
+  text-align: right;
+}
+
+.card {
+  padding: 24px;
+  background: #e5e5e5;
+  border-radius: 12px;
+}
+
+.field {
+  margin-bottom: 22px;
+}
+
+.field span,
+.explanation span {
+  color: #555;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.field p {
+  margin-top: 6px;
+  color: #222;
+  font-size: 15px;
+}
+
+.field a {
+  display: inline-block;
+  margin-top: 6px;
+  color: #444;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.explanation p {
+  margin-top: 12px;
+  color: #222;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin: 14px 4px;
+}
+
+.actions button {
+  min-width: 120px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #d6d6d6;
+  color: #444;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .page {
+    margin: 24px auto;
+    padding: 0 16px;
+  }
+
+  .title {
+    margin-bottom: 8px;
+    font-size: 22px;
+  }
+
+  .date {
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .field {
+    margin-bottom: 18px;
+  }
+
+  .field span,
+  .explanation span {
+    font-size: 13px;
+  }
+
+  .field p {
+    font-size: 14px;
+  }
+
+  .field a {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .explanation p {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  .actions {
+    gap: 10px;
+    margin: 12px 4px;
+  }
+
+  .actions button {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+}

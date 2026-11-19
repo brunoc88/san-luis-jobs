@@ -27,17 +27,13 @@ FRONTEND:
                         - ALGUNAS FOTOS NO SE CARGAN
     
         ADMIN PANEL:
-            Complaints list
-            
-            - VER (COMPLAINTS/ID)
+            Locations:
+                - PANEL
+                - UX
+                - errores
+                - TESTING
            
-            - ARREGLAR CSS ESCRITORIO
-
-            COMPLAINTS/ID:
-            - UX
-            - ELIMINAR(ACCION DE ELIMIAR)
-            - TESTING
-            - CSS
+           
 
                     
                     

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 
 type AdminPanelProps = {
-  mode: 'complaints' | 'feedback'
+  mode: 'complaints' | 'feedback' | 'locations'
   dataDB: Complaints[]
   hasNextPage: boolean
   setComplaints: Dispatch<SetStateAction<Complaints[]>>
@@ -110,7 +110,7 @@ const AdminPanel = ({
     setPage(currentPage)
   }
 
-  return (
+  if(mode && mode ==='complaints')return (
     <div>
       <div className={styles.container}>
         <table className={styles.table}>
@@ -137,7 +137,7 @@ const AdminPanel = ({
                       onClick={() => deleteComplaint(d.id)}
                       className={styles.deleteButton}>Eliminar</button>
                     <button
-                      onClick={() => router.push(`/complaints/${d.id}`)}
+                      onClick={() => router.push(`/admin/complaints/${d.id}`)}
                       className={styles.viewButton}>Ver</button>
                   </div>
                 </td>
@@ -175,6 +175,12 @@ const AdminPanel = ({
       )}
     </div>
 
+  )
+
+  if(mode && mode === 'locations') return (
+    <div>
+      Listado de locaciones
+    </div>
   )
 }
 

@@ -26,6 +26,7 @@ export const complaintRepo = {
                 },
                 job: {
                     select: {
+                        id: true,
                         title: true,
                         user: {
                             select: {

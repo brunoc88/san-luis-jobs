@@ -86,7 +86,8 @@ const JobInfoPage = () => {
         (
             serverError.status === 401 ||
             serverError.status === 403 ||
-            serverError.status === 429
+            serverError.status === 429 ||
+            serverError.status === 400
         )
     ) {
         return (
@@ -99,6 +100,7 @@ const JobInfoPage = () => {
         <main className={styles.page}>
             <section className={styles.jobCard}>
 
+                {/* Autor info */}
                 <div className={styles.topSection}>
                     <div className={styles.author}>
                         {job.author.pic ? (
@@ -131,7 +133,7 @@ const JobInfoPage = () => {
                             setHide={setHide}
                             reported={reported ?? job.hasReportedJob}
                             setHide2={setHide2}
-                            canSuspendJob = {job.canSuspendJob}
+                            canSuspendJob={job.canSuspendJob}
                         />
                     </div>
                 </div>
@@ -206,7 +208,7 @@ const JobInfoPage = () => {
         </div>
     )
 
-    if(job && !hide && hide2) return(
+    if (job && !hide && hide2) return (
         <div>
             <JobSuspend
                 jobId={jobId}
@@ -217,7 +219,7 @@ const JobInfoPage = () => {
             />
         </div>
     )
-    
+
     return <p>No se pudo cargar la publicación.</p>
 }
 

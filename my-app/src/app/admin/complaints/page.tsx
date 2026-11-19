@@ -1,6 +1,6 @@
 'use client'
 
-import AdminPanel from "@/components/auth/admin/AdminList"
+import AdminPanel from "@/components/auth/admin/AdminPanel"
 import AdminOnly from "@/components/auth/AdminOnly"
 import { complaintsApi } from "@/lib/api/complaints/complaints"
 import { Complaints } from "@/types/complaint/complaint.types"

@@ -15,6 +15,7 @@ export const complaintService = {
         const complaintDetails = {
             id: complaintData.id,
             date: complaintData.createdAt,
+            jobId: complaintData.job.id,
             reportedBy: complaintData.user.username,
             jobReported: complaintData.job.title,
             jobAuthor: complaintData.job.user.username,

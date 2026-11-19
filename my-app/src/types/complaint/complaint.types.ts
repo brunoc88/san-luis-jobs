@@ -12,3 +12,14 @@ export type Complaints = CreateComplaintData & {
     id:number
     date: Date
 }
+
+export type ComplaintInfo = {
+    id: number
+    date: Date
+    reportedBy: string
+    jobId:number
+    jobReported: string
+    jobAuthor: string
+    reason: string
+    explanation:string
+}
